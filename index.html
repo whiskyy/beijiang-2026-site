@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F6F3ED" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141310" media="(prefers-color-scheme: dark)">
+<title>北疆十日</title>
+<style>
+:root{
+  --bg:#F6F3ED; --card:#FFFFFF; --soft:#F1EDE5; --ink:#1E1B17; --ink2:#5F584F; --ink3:#928979;
+  --rule:#E3DDD3; --gold:#A66E17; --green:#2D6A4E; --red:#B1392A; --blue:#23587A;
+  --d1:#C8892B; --d2:#8A9A3B; --d3:#3F7A5E; --d4:#2C6E75; --d5:#3B5F91;
+  --d6:#6B4E8C; --d7:#9E3E70; --d8:#B03A38; --d9:#C06A22; --d10:#7A6A3A;
+  --route:#1F5B85; --halo:rgba(252,250,245,.9); --dim:rgba(255,255,255,.8); --mapimg:url(img/map-light.jpg);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141310; --card:#1C1B17; --soft:#22201A; --ink:#ECE6DA; --ink2:#A59C8C; --ink3:#736B5D;
+    --rule:#2C2A23; --gold:#E0A94A; --green:#79B39B; --red:#E08A72; --blue:#79A8CC;
+    --d1:#E3A94E; --d2:#AFC155; --d3:#5FA684; --d4:#4E97A0; --d5:#6A8FC4;
+    --d6:#9B7CC0; --d7:#CE6E9C; --d8:#DE6A64; --d9:#E39346; --d10:#A99457;
+    --route:#8FC1E8; --halo:rgba(22,21,17,.85); --dim:rgba(255,255,255,.35); --mapimg:url(img/map-dark.jpg);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141310; --card:#1C1B17; --soft:#22201A; --ink:#ECE6DA; --ink2:#A59C8C; --ink3:#736B5D;
+  --rule:#2C2A23; --gold:#E0A94A; --green:#79B39B; --red:#E08A72; --blue:#79A8CC;
+  --d1:#E3A94E; --d2:#AFC155; --d3:#5FA684; --d4:#4E97A0; --d5:#6A8FC4;
+  --d6:#9B7CC0; --d7:#CE6E9C; --d8:#DE6A64; --d9:#E39346; --d10:#A99457;
+  --route:#8FC1E8; --halo:rgba(22,21,17,.85); --dim:rgba(255,255,255,.35); --mapimg:url(img/map-dark.jpg);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;min-width:0}
+html{scroll-behavior:smooth}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:60px;
+}
+.wrap{max-width:660px;margin:0 auto;padding:0 16px}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.01em}
+a{color:inherit}
+b{font-weight:600}
+.mono{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.warn{color:var(--red);font-weight:600}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px}
+
+/* 吸顶导航 */
+.topnav{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--rule);padding-top:env(safe-area-inset-top);
+  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px)}
+.topnav .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.topnav .wrap::-webkit-scrollbar{display:none}
+.topnav a{flex:none;font-size:13px;font-weight:600;color:var(--ink3);text-decoration:none;padding:12px 10px 10px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.topnav a.on{color:var(--ink);border-color:var(--gold)}
+
+/* 头部 */
+header{padding:28px 0 14px}
+header .eyebrow{font-size:12px;color:var(--ink3);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+header h1{font-size:28px;margin:4px 0}
+header .sub{font-size:14px;color:var(--ink2)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden}
+.stats div{padding:11px 4px 10px;text-align:center;border-left:1px solid var(--rule)}
+.stats div:first-child{border-left:none}
+.stats b{display:block;font-size:19px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.stats span{font-size:11px;color:var(--ink3);letter-spacing:.04em}
+
+/* 区块 */
+section{margin:30px 0;scroll-margin-top:52px}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.sh h2{font-size:17px}
+.sh .n{font-size:12px;color:var(--ink3)}
+
+/* 下一个节点 */
+.now{padding:16px 16px 14px;margin-top:14px;border-left:3px solid var(--gold)}
+.now .lbl{font-size:11px;color:var(--gold);letter-spacing:.14em;font-weight:700;text-transform:uppercase}
+.now .ev{font-size:18px;font-weight:700;margin:6px 0 2px;line-height:1.35}
+.now .when{font-size:13px;color:var(--ink2);margin-bottom:12px}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.cd div{text-align:center;background:var(--soft);border-radius:8px;padding:8px 2px;overflow:hidden}
+.cd b{display:block;font-size:22px;font-weight:700;line-height:1.1;letter-spacing:-.03em}
+.cd span{font-size:10.5px;color:var(--ink3)}
+.now .tz{font-size:11.5px;color:var(--ink3);margin-top:10px}
+
+/* 路线图 */
+.mapbox{padding:8px 8px 2px}
+.mapbox .cap{font-size:11.5px;color:var(--ink3);padding:8px 6px 8px}
+.mapwrap{position:relative;width:100%;aspect-ratio:900/825;background:var(--mapimg) center/100% 100% no-repeat;border-radius:8px;overflow:hidden}
+.mapwrap svg{position:absolute;inset:0;width:100%;height:100%;display:block;font-family:inherit}
+.mapwrap .altcas{fill:none;stroke:var(--halo);stroke-width:9;stroke-linejoin:round;stroke-linecap:round;opacity:.8}
+.mapwrap .alt{fill:none;stroke:var(--ink2);stroke-width:3.5;stroke-dasharray:12 9;stroke-linejoin:round}
+.mapwrap .cas path,.mapwrap .cas{fill:none;stroke:var(--halo);stroke-width:12;stroke-linejoin:round;stroke-linecap:round;opacity:.85}
+.mapwrap .rt path{fill:none;stroke:var(--route);stroke-width:6;stroke-linejoin:round;stroke-linecap:round}
+.mapwrap .dim path{fill:none;stroke:var(--dim);stroke-width:5;stroke-linejoin:round;stroke-linecap:round}
+.mapwrap .lb{font-size:25px;font-weight:700;fill:var(--ink);stroke:var(--halo);stroke-width:7;paint-order:stroke;stroke-linejoin:round}
+.mapwrap .tg{font-size:18px;font-weight:600;fill:var(--ink2);stroke:var(--halo);stroke-width:6;paint-order:stroke;stroke-linejoin:round;font-variant-numeric:tabular-nums}
+.mapwrap .rg{font-size:21px;font-weight:600;fill:var(--ink2);letter-spacing:.3em;opacity:.75;stroke:var(--halo);stroke-width:5;paint-order:stroke}
+.mapwrap .vb{font-size:17px;fill:var(--ink2);stroke:var(--halo);stroke-width:5;paint-order:stroke}
+.mapwrap .sb path{stroke:var(--ink);stroke-width:3;fill:none}
+.mapwrap .sb text{font-size:17px;fill:var(--ink2);stroke:var(--halo);stroke-width:5;paint-order:stroke}
+.minimap .mapwrap{margin-bottom:6px}
+
+/* 分组列表 */
+.rows .row{display:grid;grid-template-columns:52px 1fr auto;gap:2px 12px;padding:12px 14px;border-top:1px solid var(--rule);align-items:start}
+.rows .row:first-child{border-top:none}
+.row .dt{font-size:12px;color:var(--ink3);font-weight:600;padding-top:2px;line-height:1.4}
+.row .dt em{display:block;font-style:normal;font-size:10.5px;letter-spacing:.04em}
+.row .nm{font-size:14.5px;font-weight:600;line-height:1.4}
+.row .meta{font-size:13px;color:var(--ink2);line-height:1.55;margin-top:2px}
+.row .meta b{color:var(--ink)}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.03em;white-space:nowrap}
+.tag.ok{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--green)}
+.tag.wait{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red)}
+.miss{border-color:color-mix(in srgb,var(--red) 30%,transparent);background:color-mix(in srgb,var(--red) 6%,transparent);
+  padding:11px 14px;font-size:13.5px;margin-bottom:10px;line-height:1.55}
+.miss b{color:var(--red)}
+.sum{padding:12px 14px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink2);display:flex;justify-content:space-between;gap:6px 12px;flex-wrap:wrap}
+.sum b{color:var(--ink)}
+
+/* 高德链接 */
+.nav{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--blue);text-decoration:none;
+  padding:2px 7px 2px 5px;border:1px solid color-mix(in srgb,var(--blue) 28%,transparent);border-radius:6px;margin-top:6px;
+  background:color-mix(in srgb,var(--blue) 5%,transparent);white-space:nowrap}
+.nav:active{background:color-mix(in srgb,var(--blue) 15%,transparent)}
+.nav svg{width:11px;height:11px;flex:none}
+
+/* 门票 */
+.tkt{padding:14px}
+.tkt table{width:100%;border-collapse:collapse;font-size:13px}
+.tkt th{text-align:left;font-size:11px;color:var(--ink3);font-weight:600;padding:0 10px 7px 0;border-bottom:1px solid var(--rule)}
+.tkt td{padding:8px 10px 8px 0;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
+.tkt td:last-child,.tkt th:last-child{padding-right:0}
+.tkt td.n,.tkt th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tkt td.n{font-weight:600}
+.tkt td.g{color:var(--ink2)}
+.tkt .d{font-size:10.5px;color:var(--ink3);font-weight:600;margin-left:3px}
+.tkt .d.pre{display:inline-block;white-space:nowrap;color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);padding:0 4px;border-radius:3px}
+.prelist{border:1px solid color-mix(in srgb,var(--red) 30%,transparent);border-radius:8px;padding:10px 12px 4px;margin-bottom:14px}
+.prelist .ph{font-size:11px;font-weight:700;color:var(--red);letter-spacing:.06em;margin-bottom:6px}
+.prelist .pr{display:grid;grid-template-columns:74px 1fr;gap:10px;font-size:13px;line-height:1.5;padding:6px 0;border-top:1px solid var(--rule)}
+.prelist .pr>b{color:var(--red);font-size:12.5px;padding-top:1px}
+.prelist .pr span{color:var(--ink2)}
+.prelist .pr span b{color:var(--ink)}
+.tkt .best{background:color-mix(in srgb,var(--gold) 9%,transparent);border:1px solid color-mix(in srgb,var(--gold) 28%,transparent);
+  border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.55;margin-bottom:12px}
+.tkt .tot{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:10px 0 0;font-size:13.5px;border-top:2px solid var(--rule)}
+.tkt .tot b{text-align:right;font-variant-numeric:tabular-nums}
+.tkt .note{font-size:12.5px;color:var(--ink2);line-height:1.55;margin:10px 0 0}
+
+/* 逐日 */
+.day{margin-bottom:8px;overflow:hidden}
+.day>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:11px}
+.day>summary::-webkit-details-marker{display:none}
+.dn{flex:none;width:30px;height:30px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.dti{flex:1;min-width:0}
+.dti .r{font-size:15px;font-weight:600;line-height:1.35}
+.dti .m{font-size:12px;color:var(--ink3);margin-top:1px}
+.chev{flex:none;color:var(--ink3);transition:transform .2s}
+.day[open] .chev{transform:rotate(90deg)}
+.dbody{padding:12px 14px 14px;border-top:1px solid var(--rule)}
+.minimap{margin:0 0 12px;background:var(--soft);border-radius:8px;padding:6px}
+.dayroute{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;background:var(--card);
+  border:1px solid color-mix(in srgb,var(--blue) 30%,transparent);color:var(--blue);text-decoration:none}
+.dayroute:active{background:color-mix(in srgb,var(--blue) 12%,transparent)}
+.dayroute svg{width:16px;height:16px;flex:none}
+.dayroute span{min-width:0;line-height:1.35}
+.dayroute b{display:block;font-size:12.5px;font-weight:700}
+.dayroute em{display:block;font-style:normal;font-size:11px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl{display:grid;grid-template-columns:44px 1fr;gap:0 10px}
+.tl .tm{font-size:12px;font-weight:600;color:var(--ink2);padding-top:2px;line-height:1.5}
+.tl .ct{font-size:14px;line-height:1.6;padding:0 0 12px 13px;border-left:2px solid var(--rule);margin-left:-1px;position:relative}
+.tl .ct::before{content:"";position:absolute;left:-5px;top:8px;width:8px;height:8px;border-radius:50%;background:var(--rule)}
+.tl .ct.hot::before{background:var(--gold)}
+.tl .ct.bk::before{background:var(--red);box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 18%,transparent)}
+.tl .ct:last-child{padding-bottom:2px}
+.bkflag{display:block;width:max-content;max-width:100%;font-size:10.5px;font-weight:700;color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);
+  padding:1px 6px;border-radius:4px;margin:2px 0 4px;line-height:1.5}
+.stay{margin-top:12px;padding:10px 12px;background:var(--soft);border-radius:8px;font-size:13.5px;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.stay .k{font-size:11px;color:var(--ink3);letter-spacing:.1em;font-weight:700;margin-right:8px}
+.stay .nav{margin-top:0}
+.meals{margin-top:12px;background:var(--soft);border-radius:8px;padding:8px 12px 2px}
+.meals .mh{font-size:11px;color:var(--ink3);letter-spacing:.1em;font-weight:700;padding:2px 0 4px}
+.meal{display:grid;grid-template-columns:20px 1fr 56px;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--rule)}
+.meal .ml{font-size:12px;font-weight:700;color:var(--ink3)}
+.meal .mt{font-size:13.5px;line-height:1.55;color:var(--ink2)}
+.meal .mt b{color:var(--ink)}
+.meal .mi{width:56px;height:56px;border-radius:8px;object-fit:cover;background:var(--card);display:block}
+.meal.noimg{grid-template-columns:20px 1fr}
+.xhs{display:inline-block;font-size:11px;font-weight:700;color:#fff;text-decoration:none;margin-left:5px;white-space:nowrap;border-radius:4px;padding:1px 5px;background:#FF2442;vertical-align:1px;line-height:1.5}
+.xhs:active{opacity:.75}
+
+/* 概述与照片 */
+figure.photo{margin:0;background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+figure.photo img{display:block;width:100%;height:auto;background:var(--soft)}
+figure.photo figcaption{font-size:11.5px;color:var(--ink3);line-height:1.5;padding:8px 12px}
+figure.hero{margin-top:14px}
+.dbody figure.photo{margin:12px 0 0}
+.pics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.pics figure.photo figcaption{padding:6px 9px;font-size:10.5px}
+
+/* 作息表 */
+.sched{padding:6px 14px 10px;margin-bottom:10px}
+.sched table{width:100%;border-collapse:collapse;font-size:12.5px}
+.sched th{text-align:left;font-size:11px;color:var(--ink3);font-weight:600;padding:6px 8px 6px 0;border-bottom:1px solid var(--rule)}
+.sched td{padding:6px 8px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top;font-variant-numeric:tabular-nums;color:var(--ink2);line-height:1.45}
+.sched td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+.sched td:last-child,.sched th:last-child{padding-right:0}
+.sched tr.x td{color:var(--ink);font-weight:600}
+.sched tr.x td:first-child{color:var(--red)}
+.sched .note{font-size:12px;color:var(--ink2);padding:9px 0 0;line-height:1.55}
+
+/* 费用 */
+.cost{padding:12px 14px 14px}
+.cost table{width:100%;border-collapse:collapse;font-size:13px}
+.cost th{text-align:left;font-size:11px;color:var(--ink3);font-weight:600;padding:0 8px 7px 0;border-bottom:1px solid var(--rule)}
+.cost td{padding:8px 8px 8px 0;border-bottom:1px solid var(--rule);color:var(--ink2);line-height:1.45}
+.cost td.n,.cost th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cost td:last-child,.cost th:last-child{padding-right:0}
+.cost tr.tot td{border-bottom:none;border-top:2px solid var(--rule);color:var(--ink);font-weight:700}
+.cost .note{font-size:12.5px;color:var(--ink2);margin:10px 0 0;line-height:1.55}
+.sh h3{font-size:15px}
+
+/* 待办 */
+.todo .row{grid-template-columns:78px 1fr}
+.todo .dt.hot{color:var(--red)}
+.todo .c{font-size:14px;line-height:1.55}
+
+/* 贴士 */
+dl.tips{margin:0;padding:2px 14px}
+dl.tips dt{font-size:14px;font-weight:700;margin:12px 0 3px}
+dl.tips dd{margin:0 0 12px;font-size:13.5px;color:var(--ink2);line-height:1.6}
+dl.tips dd b{color:var(--ink)}
+
+footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-size:11.5px;color:var(--ink3);line-height:1.7}
+</style>
+</head>
+<body>
+
+<nav class="topnav" id="topnav"><div class="wrap">
+  <a href="#top" class="on">概览</a><a href="#book">预订</a><a href="#tkt">费用</a><a href="#days">行程</a><a href="#todo">待办</a><a href="#tips">贴士</a>
+</div></nav>
+
+<main class="wrap">
+
+<header id="top">
+  <div class="eyebrow">2026 · Xinjiang</div>
+  <h1>北疆十日</h1>
+  <div class="sub">9 月 25 日 — 10 月 5 日 · 逆时针环线</div>
+</header>
+
+<div class="card stats">
+  <div><b>11</b><span>天</span></div>
+  <div><b>3140</b><span>公里</span></div>
+  <div><b>6 人</b><span>1 台 7 座</span></div>
+  <div><b id="stBook">–</b><span>晚已订</span></div>
+</div>
+
+<div class="card now">
+  <div class="lbl">下一个节点</div>
+  <div class="ev" id="nowEv">—</div>
+  <div class="when" id="nowWhen">—</div>
+  <div class="cd">
+    <div><b class="mono" id="cdD">–</b><span>天</span></div>
+    <div><b class="mono" id="cdH">–</b><span>时</span></div>
+    <div><b class="mono" id="cdM">–</b><span>分</span></div>
+    <div><b class="mono" id="cdS">–</b><span>秒</span></div>
+  </div>
+  <div class="tz" id="tzNote">全部时间为北京时间</div>
+</div>
+
+<figure class="photo hero"><img src="img/00.jpg" alt="秋日的喀纳斯湖，湖水呈墨绿色，两岸是泛黄的山林"><figcaption>喀纳斯湖。摄影 Muye Ma，Wikimedia Commons，CC0</figcaption></figure>
+
+<section id="route">
+  <div class="sh"><h2>路线</h2><span class="n">逆时针 · 高德实测约 3140 km</span></div>
+  <div class="card mapbox">
+    <div class="mapwrap"><svg viewBox="0 0 900 825" role="img" aria-label="北疆十日自驾路线图，真实道路走线"><path d="M355,727 L374,720 L407,721 L419,715 L444,720 L467,717 L487,717 L489,720 L495,720 L503,725 L511,726 L513,728 L513,732 L517,737 L526,739 L532,743 L533,748 L530,756 L539,745 L553,742 L560,738 L571,737 L582,719 L590,716 L593,711 L593,706 L602,694 L602,684 L611,670 L614,661 L617,658 L620,659 L626,654 L630,655 L634,641" class="altcas"/><path d="M355,727 L374,720 L407,721 L419,715 L444,720 L467,717 L487,717 L489,720 L495,720 L503,725 L511,726 L513,728 L513,732 L517,737 L526,739 L532,743 L533,748 L530,756 L539,745 L553,742 L560,738 L571,737 L582,719 L590,716 L593,711 L593,706 L602,694 L602,684 L611,670 L614,661 L617,658 L620,659 L626,654 L630,655 L634,641" class="alt"/><g class="cas"><path d="M634,642 L632,633 L634,622 L640,613 L641,607 L666,603 L690,604 L706,608 L720,607 L724,586 L729,580 L731,573 L733,552 L731,538 L733,529 L748,518 L751,511 L776,484 L780,460 L785,452 L789,439 L786,394 L792,351 L791,343 L795,313 L793,307 L790,304 L791,301 L789,299 L793,285 L788,277 L791,276 L790,273 L793,273 L797,270 L806,272 L805,262 L809,251 L808,251"/><path d="M808,251 L819,248 L810,250 L805,262 L806,272 L797,270 L793,273 L790,273 L791,276 L787,277 L793,285 L790,294 L790,304 L783,297 L754,286 L731,271 L724,264 L708,255 L696,252 L693,247 L683,246 L668,238 L650,233 L638,225 L618,223 L607,213 L590,208 L576,196 L573,191"/><path d="M573,191 L558,175 L563,180 L568,178 L569,170 L572,169 L571,155 L573,152 L578,150 L583,151 L583,145 L588,138 L585,134 L587,130 L586,125 L592,122 L602,104 L607,102 L610,102 L613,98 L611,97 L612,93 L624,91 L627,87"/><path d="M627,87 L624,91 L612,93 L611,97 L613,99 L610,103 L607,102 L602,104 L599,100 L596,99 L595,95 L597,96"/><path d="M597,96 L596,99 L601,103 L601,106 L595,114 L592,122 L586,125 L587,130 L585,134 L588,138 L587,141 L583,144 L583,151 L578,150 L573,152 L571,155 L573,172 L568,190 L578,198 L578,208 L571,213 L567,236 L561,250 L557,252 L557,260 L553,262 L544,284 L529,296 L521,305 L509,315 L507,332 L504,332 L503,333 L496,362 L481,377 L480,380 L474,378 L470,385 L453,395 L438,421 L431,425 L432,426 L429,432 L424,436 L418,438 L416,442"/><path d="M416,442 L418,446 L410,457 L400,496 L403,511 L412,520 L416,549 L415,564 L410,574 L387,576 L383,574 L374,577 L355,579 L340,569 L332,567 L315,566 L312,561 L306,557 L297,558 L282,550 L270,550 L260,546 L257,552 L246,556 L244,558 L236,557 L230,561 L204,558 L196,551 L189,548 L137,550 L134,551 L129,559 L113,565 L115,567 L113,566 L107,570 L92,590 L87,594 L82,596 L82,598"/><path d="M82,598 L85,596 L87,608 L94,612 L97,618 L109,623 L119,621 L128,626 L127,627 L130,626 L132,623 L136,624 L140,627 L148,627 L156,631 L169,640 L175,647 L180,648 L196,661 L215,662 L227,665 L243,664 L281,670 L285,669 L288,671 L301,672 L308,676 L315,677 L323,684 L346,695"/><path d="M346,695 L345,703 L346,694 L360,696 L367,700 L370,704 L368,706 L370,705 L372,707 L369,709 L374,712 L371,714 L370,722 L355,727"/><path d="M355,727 L370,722 L371,714 L374,713 L369,709 L372,707 L370,705 L368,706 L370,704 L366,699 L372,694 L372,689 L373,690 L374,689 L374,682 L379,679 L378,673 L381,673 L372,668 L368,658 L376,657 L377,654 L376,654 L380,652 L376,648 L381,642 L381,634 L385,628 L392,624 L396,616 L400,614 L401,608 L407,610 L417,575 L430,578 L438,578 L445,581 L468,581 L473,585 L481,585 L496,590 L505,591 L515,588 L534,595 L539,594 L544,597 L557,597 L572,601 L599,622 L615,630 L618,631 L620,629 L626,632 L634,641"/><path d="M634,641 L627,633 L621,630 L623,628"/></g><g class="rt"><path d="M634,642 L632,633 L634,622 L640,613 L641,607 L666,603 L690,604 L706,608 L720,607 L724,586 L729,580 L731,573 L733,552 L731,538 L733,529 L748,518 L751,511 L776,484 L780,460 L785,452 L789,439 L786,394 L792,351 L791,343 L795,313 L793,307 L790,304 L791,301 L789,299 L793,285 L788,277 L791,276 L790,273 L793,273 L797,270 L806,272 L805,262 L809,251 L808,251"/><path d="M808,251 L819,248 L810,250 L805,262 L806,272 L797,270 L793,273 L790,273 L791,276 L787,277 L793,285 L790,294 L790,304 L783,297 L754,286 L731,271 L724,264 L708,255 L696,252 L693,247 L683,246 L668,238 L650,233 L638,225 L618,223 L607,213 L590,208 L576,196 L573,191"/><path d="M573,191 L558,175 L563,180 L568,178 L569,170 L572,169 L571,155 L573,152 L578,150 L583,151 L583,145 L588,138 L585,134 L587,130 L586,125 L592,122 L602,104 L607,102 L610,102 L613,98 L611,97 L612,93 L624,91 L627,87"/><path d="M627,87 L624,91 L612,93 L611,97 L613,99 L610,103 L607,102 L602,104 L599,100 L596,99 L595,95 L597,96"/><path d="M597,96 L596,99 L601,103 L601,106 L595,114 L592,122 L586,125 L587,130 L585,134 L588,138 L587,141 L583,144 L583,151 L578,150 L573,152 L571,155 L573,172 L568,190 L578,198 L578,208 L571,213 L567,236 L561,250 L557,252 L557,260 L553,262 L544,284 L529,296 L521,305 L509,315 L507,332 L504,332 L503,333 L496,362 L481,377 L480,380 L474,378 L470,385 L453,395 L438,421 L431,425 L432,426 L429,432 L424,436 L418,438 L416,442"/><path d="M416,442 L418,446 L410,457 L400,496 L403,511 L412,520 L416,549 L415,564 L410,574 L387,576 L383,574 L374,577 L355,579 L340,569 L332,567 L315,566 L312,561 L306,557 L297,558 L282,550 L270,550 L260,546 L257,552 L246,556 L244,558 L236,557 L230,561 L204,558 L196,551 L189,548 L137,550 L134,551 L129,559 L113,565 L115,567 L113,566 L107,570 L92,590 L87,594 L82,596 L82,598"/><path d="M82,598 L85,596 L87,608 L94,612 L97,618 L109,623 L119,621 L128,626 L127,627 L130,626 L132,623 L136,624 L140,627 L148,627 L156,631 L169,640 L175,647 L180,648 L196,661 L215,662 L227,665 L243,664 L281,670 L285,669 L288,671 L301,672 L308,676 L315,677 L323,684 L346,695"/><path d="M346,695 L345,703 L346,694 L360,696 L367,700 L370,704 L368,706 L370,705 L372,707 L369,709 L374,712 L371,714 L370,722 L355,727"/><path d="M355,727 L370,722 L371,714 L374,713 L369,709 L372,707 L370,705 L368,706 L370,704 L366,699 L372,694 L372,689 L373,690 L374,689 L374,682 L379,679 L378,673 L381,673 L372,668 L368,658 L376,657 L377,654 L376,654 L380,652 L376,648 L381,642 L381,634 L385,628 L392,624 L396,616 L400,614 L401,608 L407,610 L417,575 L430,578 L438,578 L445,581 L468,581 L473,585 L481,585 L496,590 L505,591 L515,588 L534,595 L539,594 L544,597 L557,597 L572,601 L599,622 L615,630 L618,631 L620,629 L626,632 L634,641"/><path d="M634,641 L627,633 L621,630 L623,628"/></g><circle cx="587" cy="72" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="483" cy="376" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="134" cy="551" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="127" cy="626" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="372" cy="658" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="415" cy="582" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="559" cy="175" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="378" cy="755" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="634" cy="641" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="808" cy="251" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="573" cy="191" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="619" cy="88" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="597" cy="96" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="416" cy="442" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="82" cy="598" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="346" cy="695" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="355" cy="727" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><text x="643" y="677" text-anchor="start" class="lb">乌鲁木齐</text><text x="643" y="697" text-anchor="start" class="tg">D1 · D10 宿</text><text x="799" y="216" text-anchor="end" class="lb">可可托海</text><text x="799" y="236" text-anchor="end" class="tg">D2 宿</text><text x="564" y="227" text-anchor="end" class="lb">布尔津</text><text x="564" y="247" text-anchor="end" class="tg">D3 宿</text><text x="628" y="53" text-anchor="start" class="lb">禾木</text><text x="628" y="73" text-anchor="start" class="tg">D4 宿</text><text x="606" y="132" text-anchor="start" class="lb">贾登峪</text><text x="606" y="152" text-anchor="start" class="tg">D5 宿</text><text x="407" y="407" text-anchor="end" class="lb">克拉玛依</text><text x="407" y="427" text-anchor="end" class="tg">D6 宿</text><text x="82" y="561" text-anchor="middle" class="lb">清水河</text><text x="82" y="581" text-anchor="middle" class="tg">D7 宿</text><text x="337" y="730" text-anchor="end" class="lb">那拉提</text><text x="337" y="750" text-anchor="end" class="tg">D8 宿</text><text x="364" y="692" text-anchor="start" class="lb">巴音布鲁克</text><text x="364" y="712" text-anchor="start" class="tg">D9 宿</text><text x="578" y="37" text-anchor="end" class="lb">喀纳斯</text><text x="578" y="57" text-anchor="end" class="tg">D5</text><text x="492" y="412" text-anchor="start" class="lb">魔鬼城</text><text x="492" y="432" text-anchor="start" class="tg">D6</text><text x="143" y="587" text-anchor="start" class="lb">赛里木湖</text><text x="143" y="607" text-anchor="start" class="tg">D7</text><text x="118" y="662" text-anchor="end" class="lb">伊宁</text><text x="118" y="682" text-anchor="end" class="tg">D8</text><text x="363" y="623" text-anchor="end" class="lb">乔尔玛</text><text x="363" y="643" text-anchor="end" class="tg">D10</text><text x="424" y="618" text-anchor="start" class="lb">独山子</text><text x="424" y="638" text-anchor="start" class="tg">D10</text><text x="789" y="102" text-anchor="middle" class="rg" transform="rotate(-26 789 102)">阿尔泰山</text><text x="645" y="716" text-anchor="middle" class="rg" transform="rotate(0 645 716)">天 山</text><text x="641" y="420" text-anchor="middle" class="rg" transform="rotate(0 641 420)">准噶尔盆地</text><text x="207" y="697" text-anchor="middle" class="rg" transform="rotate(0 207 697)">伊犁河谷</text><g class="sb"><path d="M28,799 h102"/><text x="79" y="791" text-anchor="middle">100 km</text></g><text x="538" y="780" class="vb">乌尉高速 · 备用</text></svg></div>
+    <div class="cap">按真实道路走线。空心圆为过夜地，实心点为途经点，虚线为乌尉高速备用线。底图 NASA Blue Marble。</div>
+  </div>
+</section>
+
+<section id="book">
+  <div class="sh"><h2>预订</h2><span class="n" id="bookN"></span></div>
+  <div class="card miss" id="missBox"></div>
+  <div class="card rows" id="bookings"></div>
+</section>
+
+<section id="tkt">
+  <div class="sh"><h2>费用</h2><span class="n">六人分摊，旺季估算</span></div>
+  <div class="card cost">
+    <table>
+      <thead><tr><th>项目</th><th class="n">总额</th><th class="n">人均</th></tr></thead>
+      <tbody>
+        <tr><td>车：租金、保险、油、过路停车</td><td class="n">12790</td><td class="n">2132</td></tr>
+        <tr><td>住宿：十晚三间</td><td class="n">20100</td><td class="n">3350</td></tr>
+        <tr><td>门票、区间车、自驾服务费</td><td class="n">6540</td><td class="n">1090</td></tr>
+        <tr><td>吃饭：150 / 人 / 天 × 11 天</td><td class="n">9900</td><td class="n">1650</td></tr>
+        <tr class="tot"><td>合计，不含机票</td><td class="n">49330</td><td class="n">8222</td></tr>
+      </tbody>
+    </table>
+    <div class="note">不含机票。住宿按预估列，已订 8 晚实付约 14080。</div>
+  </div>
+  <div class="sh" style="margin-top:16px"><h3>门票</h3><span class="n">人均，含区间车</span></div>
+  <div class="card tkt" id="tktBox"></div>
+</section>
+
+<section id="days">
+  <div class="sh"><h2>逐日行程</h2><span class="n">基线 09:00 出发，例外日单独标注</span></div>
+  <div class="card sched">
+    <table>
+      <thead><tr><th>天</th><th>起床</th><th>出发</th><th>落脚</th></tr></thead>
+      <tbody>
+        <tr><td>D1 乌鲁木齐</td><td>—</td><td>13:00 取车</td><td>—</td></tr>
+        <tr><td>D2 可可托海</td><td>08:00</td><td>09:00</td><td>16:00</td></tr>
+        <tr><td>D3 布尔津</td><td>08:00</td><td>09:00 · 09:30 进景区</td><td>18:30</td></tr>
+        <tr><td>D4 禾木</td><td>08:00</td><td>09:00 · 09:30 五彩滩</td><td>15:00 进村</td></tr>
+        <tr class="x"><td>D5 喀纳斯</td><td>06:40</td><td>07:10 上观景台</td><td>19:30</td></tr>
+        <tr><td>D6 克拉玛依</td><td>08:00</td><td>09:00</td><td>19:00</td></tr>
+        <tr class="x"><td>D7 赛里木湖</td><td>06:45</td><td>07:30</td><td>20:15</td></tr>
+        <tr><td>D8 伊宁 → 那拉提</td><td>08:00</td><td>09:00</td><td>20:00</td></tr>
+        <tr class="x"><td>D9 巴音布鲁克</td><td>07:45</td><td>08:30 到那拉提闸口</td><td>21:00</td></tr>
+        <tr><td>D10 独库</td><td>08:00</td><td>09:00</td><td>19:00–20:00 市区</td></tr>
+        <tr><td>D11 返程</td><td>08:30</td><td>10:15 退房去机场</td><td>14:45 起飞</td></tr>
+      </tbody>
+    </table>
+    <div class="note">早起三天：D5 禾木日出、D7 赛湖环湖、D9 那拉提。北疆日出 08:20–08:40、日落 20:00–20:20，比内地晚约两小时。D4 禾木 22:30 睡，次日 06:40 起。</div>
+  </div>
+  <div id="dayList"></div>
+</section>
+
+<section id="todo">
+  <div class="sh"><h2>待办</h2><span class="n">按时间排序</span></div>
+  <div class="card rows todo" id="todos"></div>
+</section>
+
+<section id="tips">
+  <div class="sh"><h2>贴士</h2></div>
+  <dl class="card tips" id="tipList"></dl>
+</section>
+
+<footer id="foot"></footer>
+</main>
+
+<script>
+"use strict";
+/* ===== 高德深链 =====
+   坐标为 GCJ-02，2026-09 经高德官方 POI 检索逐个核对。页面不含任何 API Key。 */
+var C = {
+ "天山国际机场":[87.48109,43.91701], "国际大巴扎":[87.61798,43.78001],
+ "五一星光夜市":[87.61417,43.81814], "乌市亚朵":[87.61756,43.79750],
+ "乌市桔子酒店":[87.61567,43.79693],
+ "可可苏里":[89.76482,47.02887], "雾海野奢民宿":[89.78054,47.20403],
+ "可可托海景区":[89.88421,47.22208], "泰悦假日酒店":[86.86047,47.70576],
+ "布尔津河堤夜市":[86.85470,47.70003], "五彩滩":[86.68070,47.83754],
+ "禾木门票站":[87.52834,48.57146], "禾木無也民宿":[87.43394,48.56568],
+ "禾木观景台":[87.42857,48.57735], "禾木山庄":[87.46430,48.57673],
+ "贾登峪服务中心":[87.13312,48.50706], "喀纳斯生态度假酒店":[87.15351,48.49484],
+ "喀纳斯换乘中心":[87.03085,48.69333], "观鱼台":[86.98965,48.71804],
+ "月亮湾":[87.04576,48.64099], "世界魔鬼城":[85.73320,46.13515],
+ "克拉玛依亚朵":[84.90971,45.56452], "精河县":[82.89071,44.59920],
+ "赛里木湖东门":[81.39588,44.60312], "果子沟大桥":[81.14019,44.47598],
+ "丽呈花盛酒店":[80.74542,44.18994], "六星街":[81.30967,43.93243],
+ "喀赞其":[81.33249,43.90199], "文旅那拉提度假酒店":[84.03234,43.31880],
+ "那拉提风景区":[84.02376,43.23972], "丽呈酒店巴音布鲁克":[84.14741,43.02574],
+ "九曲十八弯观景台":[84.42771,42.76573], "乔尔玛烈士陵园":[84.35840,43.65204],
+ "独山子区":[84.88697,44.32810]
+};
+function pt(k){ var c=C[k]; return c ? c[0]+","+c[1]+","+encodeURIComponent(k) : null; }
+var UA = navigator.userAgent, IS_IOS = /iPhone|iPad|iPod/.test(UA), IS_AND = /Android/.test(UA);
+/* 手机上直接唤起高德 App（scheme），不经 uri.amap.com 中转页；桌面端回退网页版。mode: navi=直接开导航, view=落图标 */
+function amap(k, mode){
+  var c = C[k];
+  if(!c) return "https://uri.amap.com/search?keyword="+encodeURIComponent(k)+"&src=beijiang&callnative=1";
+  var q = "sourceApplication=beijiang&poiname="+encodeURIComponent(k)+"&lat="+c[1]+"&lon="+c[0]+"&dev=0";
+  if(IS_IOS) return mode==="view" ? "iosamap://viewMap?"+q : "iosamap://navi?"+q+"&style=2";
+  if(IS_AND) return mode==="view" ? "androidamap://viewMap?"+q : "androidamap://navi?"+q+"&style=2";
+  return "https://uri.amap.com/marker?position="+c[0]+","+c[1]+"&name="+encodeURIComponent(k)+"&coordinate=gaode&src=beijiang&callnative=1";
+}
+function dayRoute(from, via, to){
+  var f=pt(from), t=pt(to), v=via?pt(via):null;
+  if(!f||!t) return null;
+  return "https://uri.amap.com/navigation?from="+f+"&to="+t+(v?"&via="+v:"")+
+    "&mode=car&policy=1&coordinate=gaode&src=beijiang&callnative=1";
+}
+function navBtn(k, label, mode){
+  var u = amap(k, mode), ext = u.indexOf("http")===0 ? ' target="_blank" rel="noopener"' : '';
+  return '<a class="nav" href="'+u+'"'+ext+'>'+
+    '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4.5 20.3l.9.9L12 18l6.6 3.2.9-.9z"/></svg>'+
+    (label||"高德")+'</a>';
+}
+
+/* ===== 数据 ===== */
+var TZ = "+08:00";
+
+var HOTELS = [
+  {d:"9/25", n:1, city:"乌鲁木齐", nm:"桔子酒店 国际大巴扎人民电影院店", st:"ok",
+   addr:"天山区民主路 148 号", note:"步行到大巴扎", nav:"乌市桔子酒店"},
+  {d:"9/26", n:2, city:"可可托海", nm:"雾海野奢民宿", st:"ok",
+   addr:"可可托海镇", price:"1559 / 3 间", note:"雾凇双床 ×2 · 雾海大床 ×1", nav:"雾海野奢民宿"},
+  {d:"9/27", n:3, city:"布尔津", nm:"泰悦假日酒店", st:"ok",
+   addr:"布尔津县", price:"1407 / 3 间", note:"舒适大床房 ×3", nav:"泰悦假日酒店"},
+  {d:"9/28", n:4, city:"禾木", nm:"無也民宿", st:"ok",
+   addr:"禾木老村东哈拉 68 号，近白桦林车站", price:"2376＋ / 2 间",
+   note:"三人房 ×2，第二间价格待补 · <b>不含早</b> · 有壁炉", nav:"禾木無也民宿"},
+  {d:"9/29", n:5, city:"贾登峪", nm:"喀纳斯生态度假酒店", st:"ok",
+   addr:"贾登峪", price:"4138 / 3 间", note:"氧心森居高级大床房 ×3 · 含早 · 有西餐厅", nav:"喀纳斯生态度假酒店"},
+  {d:"9/30", n:6, city:"克拉玛依", nm:"亚朵 一号井汇源路店", st:"ok",
+   addr:"克拉玛依区汇源路 97-1", price:"1622 / 3 间",
+   note:"行政大床房 ×3 · <b>10:00 可入住</b>，14:00 前退房 · 自助洗衣，全程唯一", nav:"克拉玛依亚朵"},
+  {d:"10/1", n:7, city:"清水河镇", nm:"丽呈花盛酒店", st:"ok",
+   addr:"霍城县清水河镇新华路 2 号", price:"852 / 3 间", note:"镇中心，餐饮区旁", nav:"丽呈花盛酒店"},
+  {d:"10/2", n:8, city:"那拉提", nm:"文旅那拉提度假酒店", st:"ok",
+   addr:"那拉提镇那拉提街 166 号，景区游客中心隔壁", price:"1103 / 3 间",
+   note:"豪华大床房（有窗）×3，1 间含早 · 14:00 入住", nav:"文旅那拉提度假酒店"},
+  {d:"10/3", n:9, city:"巴音布鲁克", nm:"丽呈酒店 独库公路景区店", st:"ok",
+   addr:"巴音布鲁克镇，保护区管理局东南 400 米", price:"1023 / 3 间",
+   note:"无空调、有供暖，夜间零下", nav:"丽呈酒店巴音布鲁克"},
+  {d:"10/4", n:10, city:"乌鲁木齐", nm:"亚朵 国际大巴扎人民电影院店", st:"wait",
+   addr:"天山区民主路 185 号", note:"步行到大巴扎", nav:"乌市亚朵"}
+];
+
+var DAYS = [
+  {d:1, date:"9/25", wk:"周五", r:"到乌鲁木齐", m:"13:00 机场取车 · 市区过夜", stay:"桔子酒店 国际大巴扎人民电影院店", stayNav:"乌市桔子酒店",
+   meals:[["午", "取车后进城，<b>领馆巷</b>艾力江和田馕坑烤肉，人均 45", "羊肉串", "领馆巷 艾力江"], ["晚", "<b>大巴扎夜市</b>走过去：白尔开特肉馕、烤包子、伊孜海迩冰淇淋", "烤包子", "乌鲁木齐 大巴扎夜市"]],
+   it:[
+    {t:"13:00", c:"<b>天山国际机场</b>取车：验车录像；所有司机登记附加驾驶员", nav:"天山国际机场", hot:1},
+    {t:"", c:"超市补给：水、零食、常用药、晕车药"},
+    {t:"21:00", c:"大巴扎夜市，酒店步行可达", nav:"国际大巴扎"},
+    {t:"", c:"不安排远行。新疆作息比内地晚约 2 小时"}
+   ]},
+  {d:2, rt:["乌市桔子酒店","可可苏里","雾海野奢民宿"], date:"9/26", wk:"周六", r:"乌鲁木齐 → 可可托海", m:"520 km · 6 h · 09:00 出发", stay:"雾海野奢民宿", stayNav:"雾海野奢民宿",
+   pic:[["01.jpg", "可可托海额尔齐斯大峡谷，河谷两侧是花岗岩石壁和针叶林", "可可托海景区的额尔齐斯大峡谷。摄影 Yanxutong1215，Wikimedia Commons，CC BY-SA 4.0"]],
+   meals:[["早", "领馆巷<b>伊犁奶茶馆</b>：咸奶茶、油塔子、薄皮包子；或大巴扎门口的烤包子", "包尔萨克", "乌鲁木齐 伊犁奶茶馆"], ["午", "富蕴县城或可可苏里停车点，拌面或大盘鸡", "拌面", "富蕴 拌面"], ["晚", "<b>美味烧烤吧</b>（派出所对面）：烤馕、羊肉串、炖蘑菇", "羊肉串", "可可托海 美味烧烤吧"]],
+   it:[
+    {t:"09:00", c:"出发，G7 转 G216"},
+    {t:"途中", c:"<b>可可苏里</b>（野鸭湖）停车休息", nav:"可可苏里"},
+    {t:"16:00", c:"到可可托海镇", nav:"雾海野奢民宿"},
+    {t:"24:00", bk:"提前抢 · 就是今晚", c:"<span class='warn'>0 点抢独库北段 10/4 名额</span>，「平安独库」小程序，<b>选 12:00–14:00 档</b>。提前确认房间有信号", hot:1}
+   ]},
+  {d:3, rt:["雾海野奢民宿","可可托海景区","泰悦假日酒店"], date:"9/27", wk:"周日", r:"可可托海 → 布尔津", m:"350 km · 景区 3 h · 09:00 出发", stay:"泰悦假日酒店", stayNav:"泰悦假日酒店",
+   meals:[["早", "镇上早餐店：奶茶、包尔萨克、烤包子，顺手买两个馕带着", "包尔萨克", "可可托海镇 早餐"], ["午", "12:30 出景区，镇上快餐，抓饭或拌面，13:30 出发", "抓饭", "可可托海 抓饭"], ["晚", "<b>河堤夜市烤冷水鱼</b>：乔尔泰或五道黑，35–55 元/条，老街烧烤城、边疆烧烤最出名。先问价、看着取鱼", null, "布尔津 河堤夜市"]],
+   it:[
+    {t:"09:30", bk:1, c:"进<b>可可托海景区</b>：额尔齐斯大峡谷、神钟山、白桦林。区间车只坐第一段（含在门票内，单程 40 分钟），第二段单独收费，不买", nav:"可可托海景区", hot:1},
+    {t:"12:30", c:"出景区，午饭后 13:30 出发"},
+    {t:"18:30", c:"到布尔津"},
+    {t:"19:30", c:"河堤夜市，烤冷水鱼", nav:"布尔津河堤夜市"}
+   ]},
+  {d:4, rt:["泰悦假日酒店","五彩滩","禾木门票站"], date:"9/28", wk:"周一", r:"布尔津 → 五彩滩 → 禾木", m:"180 km · 09:00 出发", stay:"禾木無也民宿", stayNav:"禾木無也民宿",
+   pic:[["02.jpg", "五彩滩的彩色雅丹地貌，额尔齐斯河从旁边流过", "五彩滩。摄影 Anh minh，Wikimedia Commons，CC BY-SA 3.0"], ["03.jpg", "从山坡俯瞰禾木村，成片的木屋散布在河谷草地上，背后是针叶林山坡", "禾木村，观景台方向。摄影 Nyx Ning，Wikimedia Commons，CC BY-SA 3.0"]],
+   meals:[["早", "县城早餐店：丸子汤、烤包子、奶茶；来不及再吃酒店", "烤包子", "布尔津 早餐"], ["午", "门票站附近简单吃或车上干粮；15:00 进村后<b>禾木大头快餐</b>土火锅", null, "禾木 大头快餐"], ["晚", "18:00 <b>禾木山庄图瓦部落餐厅</b>：烧烤、烤包子、图瓦咸奶茶。<b>顺手买好明早早饭</b>", "烤包子", "禾木 图瓦部落餐厅"]],
+   it:[
+    {t:"09:00", c:"出发"},
+    {t:"09:30", c:"<b>五彩滩</b>，1 小时", nav:"五彩滩"},
+    {t:"10:30", bk:"提前买 · 9/15 全域通票，喀纳斯景区公众号", c:"去禾木。<span class='warn'>车停禾木门票站，不是贾登峪</span>，两地相距 34 km。私家车不能进村，停车 20 元/天，换区间车", nav:"禾木门票站", hot:1},
+    {t:"13:00", c:"到门票站购票停车，13:30 上区间车，约 1 小时"},
+    {t:"15:00", c:"进村安顿，自由活动约 2.5 小时"},
+    {t:"18:00", c:"晚饭：禾木山庄图瓦部落餐厅。<b>顺手买好明早早饭</b>，民宿不含早", nav:"禾木山庄"},
+    {t:"19:00", c:"上<b>禾木观景台</b>，19:30 到位看炊烟，20:00 日落", nav:"禾木观景台", hot:1},
+    {t:"21:30", c:"星空。<b>22:30 前睡</b>，次日 06:40 起。夜间零下"}
+   ]},
+  {d:5, rt:["禾木门票站","贾登峪服务中心","喀纳斯生态度假酒店"], date:"9/29", wk:"周二", r:"禾木 → 喀纳斯", m:"70 km · 06:40 起 · 全程最长的一天", stay:"喀纳斯生态度假酒店", stayNav:"喀纳斯生态度假酒店",
+   pic:[["04.jpg", "喀纳斯月亮湾，河道呈弯月形，两岸密林", "喀纳斯月亮湾。摄影 Yanxutong1215，Wikimedia Commons，CC BY-SA 4.0"]],
+   meals:[["早", "06:40 起，头天买好的馕和奶茶，出门前吃", "馕", null], ["午", "景区里贵且一般，<b>自带干粮</b>；换乘中心有快餐", null, "喀纳斯 换乘中心 午饭"], ["晚", "酒店西餐厅全天供餐；景区外<b>一路吉祥快餐店</b>过油肉拌面、碳烤羊肉串", "拌面", "贾登峪 一路吉祥"]],
+   it:[
+    {t:"06:40", c:"起床"},
+    {t:"07:10", c:"步行 30 分钟上观景台，07:50 到位。前半程摸黑，开手机手电", hot:1},
+    {t:"08:22", c:"<b>日出、晨雾</b>。<b>09:00 下山</b>"},
+    {t:"09:30", c:"退房，区间车出禾木"},
+    {t:"10:30", c:"门票站取车，开 34 km 到贾登峪"},
+    {t:"11:40", c:"<b>贾登峪换乘中心</b>上车", nav:"贾登峪服务中心", hot:1},
+    {t:"12:40", bk:"提前买 · 9/15 分时预约 + 全域通票", c:"进<b>喀纳斯</b>，6 小时：先观鱼台（1068 级台阶，约 2 小时），再三湾徒步（5 km，2–3 小时）", nav:"喀纳斯换乘中心"},
+    {t:"18:30", c:"回程区间车，1 小时"},
+    {t:"19:30", c:"到贾登峪，酒店餐厅晚饭"}
+   ]},
+  {d:6, rt:["喀纳斯生态度假酒店","世界魔鬼城","克拉玛依亚朵"], date:"9/30", wk:"周三", r:"喀纳斯 → 魔鬼城 → 克拉玛依", m:"440 km · 6 h · 09:00 出发", stay:"克拉玛依亚朵", stayNav:"克拉玛依亚朵",
+   meals:[["早", "贾登峪早上没有别的选择，吃酒店（含早）", null, null], ["午", "途中布尔津或和什托洛盖，拌面、大盘鸡", "大盘鸡", "布尔津 午饭 拌面"], ["晚", "<b>阿罗新疆菜</b>（天山路 43 号）：大盘鸡、抓饭、黑加仑酸奶；<b>禾田烤包子</b>（胜利路 48 号）", "抓饭", "克拉玛依 阿罗新疆菜"]],
+   it:[
+    {t:"09:00", c:"出发，途中午饭"},
+    {t:"15:30", c:"<b>乌尔禾魔鬼城</b>，2 小时，不等日落", nav:"世界魔鬼城"},
+    {t:"17:30", c:"出发"},
+    {t:"19:00", c:"到克拉玛依"},
+    {t:"晚上", c:"<b>洗衣</b>，全程唯一一次。早睡", hot:1}
+   ]},
+  {d:7, rt:["克拉玛依亚朵","赛里木湖东门","丽呈花盛酒店"], date:"10/1", wk:"周四", r:"克拉玛依 → 赛里木湖 → 清水河", m:"520 km + 环湖 92 · 06:45 起", stay:"丽呈花盛酒店", stayNav:"丽呈花盛酒店",
+   pic:[["05.jpg", "赛里木湖湖岸，湖水碧蓝，远处是雪山", "赛里木湖岸边。摄影 Fumikas Sagisavas，Wikimedia Commons，CC0"], ["06.jpg", "果子沟大桥横跨山谷，斜拉索桥面架在两侧山体之间", "果子沟大桥。摄影 Timothytyy，Wikimedia Commons，CC BY 4.0"]],
+   meals:[["早", "07:30 就走，外面店还没开门：酒店早餐，或头天晚上买好", null, null], ["午", "11:00 <b>精河</b>买上车：烤包子、馕、水果，湖边吃", "烤包子", "精河 美食"], ["晚", "清水河镇<b>排挡街椒麻鸡</b>：椒麻鸡、老豆腐、烤包子；火锅有椒尚椒", null, "清水河镇 椒麻鸡"]],
+   it:[
+    {t:"06:45", c:"起床，07:30 出发。国庆首日车多，留余量"},
+    {t:"11:00", c:"<b>精河</b>：补给，<b>午饭买上车</b>，停 30 分钟", nav:"精河县", hot:1},
+    {t:"13:00", bk:"提前抢 · 9/25 自驾名额 + 门票，赛里木湖景区公众号", c:"进<b>赛里木湖东门</b>", nav:"赛里木湖东门", hot:1},
+    {t:"", c:"环湖 92 km，<b>给满 5.5 小时</b>，单向逆时针：月亮湾 → 亲水滩 → 点将台 → <b>西海草原</b> → 克勒涌珠 → 松树头 → 南门出。西海草原仅自驾可达，是重点"},
+    {t:"18:30", c:"出南门"},
+    {t:"19:15", c:"<b>果子沟大桥观景台</b>，夕阳", nav:"果子沟大桥"},
+    {t:"20:15", c:"到清水河镇，晚饭"}
+   ]},
+  {d:8, rt:["丽呈花盛酒店","六星街","文旅那拉提度假酒店"], date:"10/2", wk:"周五", r:"清水河 → 伊宁 → 那拉提", m:"320 km · 09:00 出发 · 伊宁 6 h", stay:"文旅那拉提度假酒店", stayNav:"文旅那拉提度假酒店",
+   meals:[["早", "镇上早餐店：粉汤、烤包子、奶茶；10:00 到伊宁还能在六星街补一碗尕巷子粉汤", "烤包子", "清水河镇 早餐"], ["午", "伊宁<b>六星街</b>：尕巷子牛肉粉汤、杨永宝奶茶包子、哈孜娜糕点坊；冰淇淋去古兰丹姆或棘棘国王", null, "伊宁 六星街 美食"], ["晚", "那拉提酒店<b>花海餐厅</b>大盘鸡，或镇上手抓肉、纳仁、烤包子", "大盘鸡", "那拉提镇 美食"]],
+   it:[
+    {t:"09:00", c:"出发，清伊高速"},
+    {t:"10:00", c:"到<b>伊宁</b>，自由活动 6 小时", hot:1},
+    {t:"10:30", c:"<b>六星街</b>。<b>10:30–12:30 光线最佳</b>，拍照放这个窗口", nav:"六星街"},
+    {t:"12:45", c:"午饭"},
+    {t:"13:45", c:"<b>喀赞其</b>民俗区", nav:"喀赞其"},
+    {t:"16:00", c:"<span class='warn'>出发去那拉提，死线</span>。280 km 约 4 小时，晚走就是摸黑赶山路", hot:1},
+    {t:"20:00", c:"到那拉提，晚饭"}
+   ]},
+  {d:9, rt:["文旅那拉提度假酒店","那拉提风景区","丽呈酒店巴音布鲁克"], date:"10/3", wk:"周六", r:"那拉提 → 巴音布鲁克", m:"110 km 独库中段 · 07:45 起", stay:"丽呈酒店（巴音布鲁克）", stayNav:"丽呈酒店巴音布鲁克",
+   pic:[["07.jpg", "巴音布鲁克草原上的开都河，河道大幅度蜿蜒", "开都河，九曲十八弯为其一段。摄影 MichaelE，Wikimedia Commons，CC BY-SA 4.0"]],
+   meals:[["早", "镇上早餐店奶茶包子，08:30 前吃完；来不及再吃酒店（1 间含早）", "包尔萨克", "那拉提 早餐"], ["午", "13:00 出景区，镇上纳仁或抓饭", "抓饭", "那拉提 纳仁"], ["晚", "21:00 回镇，<b>罗家手抓肉</b>（游客中心斜对面，营业到 24:00）：黑头羊手抓肉、干炸野生鱼", "手抓肉", "巴音布鲁克 罗家手抓肉"]],
+   it:[
+    {t:"07:45", c:"起床"},
+    {t:"08:30", bk:1, c:"<b>那拉提景区</b>闸口，酒店步行可达，开门即进。<b>只坐空中草原线区间车</b>，河谷草原不去，4 小时", nav:"那拉提风景区", hot:1},
+    {t:"13:00", c:"出景区，镇上午饭"},
+    {t:"14:00", c:"<span class='warn'>出发，死线</span>。110 km 独库中段，翻那拉提达坂，按 3 小时算", hot:1},
+    {t:"17:30", bk:"提前买 · 9/30 门票 + 区间车，景区傍晚停售", c:"进<b>巴音布鲁克景区</b>。天鹅湖不去", nav:"九曲十八弯观景台", hot:1},
+    {t:"18:15", c:"区间车到<b>九曲十八弯观景台</b>占位。<b>延误时从前面砍，这个时间不动</b>"},
+    {t:"20:10", c:"日落"},
+    {t:"21:00", c:"回镇上，晚饭"}
+   ]},
+  {d:10, rt:["丽呈酒店巴音布鲁克","乔尔玛烈士陵园","乌市亚朵"], date:"10/4", wk:"周日", r:"巴音布鲁克 → 独库北段 → 乌鲁木齐", m:"520 km · 11 h · 09:00 出发 · 无余量", stay:"乌鲁木齐亚朵（待订）", stayNav:"乌市亚朵",
+   pic:[["08.jpg", "独库公路 G217 在山间盘旋，两侧是陡峭山体", "独库公路（G217）。摄影 Tigerzeng，Wikimedia Commons，CC BY-SA 4.0"]],
+   meals:[["早", "镇上早餐店：奶茶、包尔萨克、烤包子；再买路上的馕和熟食", "馕", "巴音布鲁克镇 早餐"], ["午", "独库沿线没有饭馆，<b>车上吃</b>；乔尔玛只有加油站", "馕", null], ["晚", "20:30 回乌市<b>领馆巷</b>，补 D1 没吃到的：本帮本色拉条子、伊犁奶茶馆", "拉条子", "领馆巷 美食"]],
+   it:[
+    {t:"出发前", c:"<b>加满油</b>，独库沿线仅乔尔玛一站。查一次独库路况", hot:1},
+    {t:"09:00", c:"出发，130 km 山路"},
+    {t:"12:00", c:"到<b>乔尔玛</b>。<span class='warn'>熔断点：13:00 未过乔尔玛，按 21:00 后到乌市安排</span>", nav:"乔尔玛烈士陵园", hot:1},
+    {t:"", bk:"提前抢 · 9/26 24:00 通行名额，平安独库小程序", c:"独库北段：老虎口、哈希勒根达坂，130 km"},
+    {t:"15:30", c:"到独山子，上 G30"},
+    {t:"19:00", c:"到乌鲁木齐"},
+    {t:"20:30", c:"进城住市区，不去机场。买特产：干果、馕、伊力特", nav:"国际大巴扎"}
+   ]},
+  {d:11, rt:["乌市亚朵",null,"天山国际机场"], date:"10/5", wk:"周一", r:"乌鲁木齐 → 返程", m:"14:45 起飞 · 上午 2 h 空闲", stay:"", stayNav:"",
+   meals:[["早", "领馆巷或大巴扎门口：烤包子、丸子汤，10:15 前回酒店退房；顺手买干果、馕、伊力特", "烤包子", "乌鲁木齐 大巴扎 早餐"]],
+   it:[
+    {t:"08:30", c:"上午 2 小时空闲，补买特产"},
+    {t:"10:15", c:"退房去机场，19 km 约 35 分钟。<b>途中加满油</b>", nav:"天山国际机场"},
+    {t:"10:50", c:"还车，验车录像"},
+    {t:"11:45", c:"进航站楼。两道安检，国庆返程高峰，留足时间", hot:1},
+    {t:"", c:"酒类只能托运，每人 5 L、未开封。买特产前算托运额度"},
+    {t:"14:45", c:"<b>CA1902</b> 起飞，次日 06:50 到新加坡"}
+   ]}
+];
+
+/* 路线图数据：Web Mercator z8 投影到 1400 宽底图；routes 为高德驾车真实走线（DP 简化） */
+var MAP = {"w":900,"h":825,"routes":{"2":"M634,642 L632,633 L634,622 L640,613 L641,607 L666,603 L690,604 L706,608 L720,607 L724,586 L729,580 L731,573 L733,552 L731,538 L733,529 L748,518 L751,511 L776,484 L780,460 L785,452 L789,439 L786,394 L792,351 L791,343 L795,313 L793,307 L790,304 L791,301 L789,299 L793,285 L788,277 L791,276 L790,273 L793,273 L797,270 L806,272 L805,262 L809,251 L808,251","3":"M808,251 L819,248 L810,250 L805,262 L806,272 L797,270 L793,273 L790,273 L791,276 L787,277 L793,285 L790,294 L790,304 L783,297 L754,286 L731,271 L724,264 L708,255 L696,252 L693,247 L683,246 L668,238 L650,233 L638,225 L618,223 L607,213 L590,208 L576,196 L573,191","4":"M573,191 L558,175 L563,180 L568,178 L569,170 L572,169 L571,155 L573,152 L578,150 L583,151 L583,145 L588,138 L585,134 L587,130 L586,125 L592,122 L602,104 L607,102 L610,102 L613,98 L611,97 L612,93 L624,91 L627,87","5":"M627,87 L624,91 L612,93 L611,97 L613,99 L610,103 L607,102 L602,104 L599,100 L596,99 L595,95 L597,96","6":"M597,96 L596,99 L601,103 L601,106 L595,114 L592,122 L586,125 L587,130 L585,134 L588,138 L587,141 L583,144 L583,151 L578,150 L573,152 L571,155 L573,172 L568,190 L578,198 L578,208 L571,213 L567,236 L561,250 L557,252 L557,260 L553,262 L544,284 L529,296 L521,305 L509,315 L507,332 L504,332 L503,333 L496,362 L481,377 L480,380 L474,378 L470,385 L453,395 L438,421 L431,425 L432,426 L429,432 L424,436 L418,438 L416,442","7":"M416,442 L418,446 L410,457 L400,496 L403,511 L412,520 L416,549 L415,564 L410,574 L387,576 L383,574 L374,577 L355,579 L340,569 L332,567 L315,566 L312,561 L306,557 L297,558 L282,550 L270,550 L260,546 L257,552 L246,556 L244,558 L236,557 L230,561 L204,558 L196,551 L189,548 L137,550 L134,551 L129,559 L113,565 L115,567 L113,566 L107,570 L92,590 L87,594 L82,596 L82,598","8":"M82,598 L85,596 L87,608 L94,612 L97,618 L109,623 L119,621 L128,626 L127,627 L130,626 L132,623 L136,624 L140,627 L148,627 L156,631 L169,640 L175,647 L180,648 L196,661 L215,662 L227,665 L243,664 L281,670 L285,669 L288,671 L301,672 L308,676 L315,677 L323,684 L346,695","9":"M346,695 L345,703 L346,694 L360,696 L367,700 L370,704 L368,706 L370,705 L372,707 L369,709 L374,712 L371,714 L370,722 L355,727","10":"M355,727 L370,722 L371,714 L374,713 L369,709 L372,707 L370,705 L368,706 L370,704 L366,699 L372,694 L372,689 L373,690 L374,689 L374,682 L379,679 L378,673 L381,673 L372,668 L368,658 L376,657 L377,654 L376,654 L380,652 L376,648 L381,642 L381,634 L385,628 L392,624 L396,616 L400,614 L401,608 L407,610 L417,575 L430,578 L438,578 L445,581 L468,581 L473,585 L481,585 L496,590 L505,591 L515,588 L534,595 L539,594 L544,597 L557,597 L572,601 L599,622 L615,630 L618,631 L620,629 L626,632 L634,641","11":"M634,641 L627,633 L621,630 L623,628","alt":"M355,727 L374,720 L407,721 L419,715 L444,720 L467,717 L487,717 L489,720 L495,720 L503,725 L511,726 L513,728 L513,732 L517,737 L526,739 L532,743 L533,748 L530,756 L539,745 L553,742 L560,738 L571,737 L582,719 L590,716 L593,711 L593,706 L602,694 L602,684 L611,670 L614,661 L617,658 L620,659 L626,654 L630,655 L634,641"},"nodes":{"乌鲁木齐":[634,641,"SE"],"可可托海":[808,251,"NW"],"布尔津":[573,191,"SW"],"禾木":[619,88,"NE"],"贾登峪":[597,96,"SE"],"喀纳斯":[587,72,"NW"],"魔鬼城":[483,376,"SE"],"克拉玛依":[416,442,"NW"],"精河":[254,552,"E"],"赛里木湖":[134,551,"SE"],"伊宁":[127,626,"SW"],"清水河":[82,598,"N"],"那拉提":[346,695,"SW"],"巴音布鲁克":[355,727,"NE"],"九曲十八弯":[378,755,"E"],"乔尔玛":[372,658,"NW"],"独山子":[415,582,"SE"],"机场":[623,628,"E"],"五彩滩":[559,175,"E"],"可可苏里":[807,271,"E"]}};
+var SEGS = {1:["乌鲁木齐"],2:["乌鲁木齐","可可托海"],3:["可可托海","布尔津"],4:["布尔津","五彩滩","禾木"],5:["禾木","贾登峪","喀纳斯"],6:["贾登峪","魔鬼城","克拉玛依"],7:["克拉玛依","赛里木湖","清水河"],8:["清水河","伊宁","那拉提"],9:["那拉提","巴音布鲁克"],10:["巴音布鲁克","乔尔玛","独山子","乌鲁木齐"],11:["乌鲁木齐","机场"]};
+
+var FOOD = {"烤包子": "kaobaozi", "馕": "nang", "拉条子": "latiaozi", "包尔萨克": "baoersake", "拌面": "banmian", "羊肉串": "yangrouchuan", "大盘鸡": "dapanji", "抓饭": "zhuafan", "手抓肉": "shouzhuarou"};
+
+var TICKETS = {
+  best:"<b>喀纳斯全域通票 375/人</b>：门票 195 + 区间车 180，3 天有效，含禾木、白哈巴。D4 禾木、D5 喀纳斯同在 3 天内，比分开买省 70。「喀纳斯景区」公众号实名购票，刷身份证入园。",
+  rows:[
+    ["喀纳斯","185","禁私家车，区间车 100","285","D5",1],
+    ["禾木","60","禁私家车，区间车 100","160","D4",1],
+    ["可可托海","—","含区间车","约 170","D3"],
+    ["赛里木湖","70","自驾 180/车，摊 30","100","D7",1],
+    ["那拉提","95","区间车（空中草原线）40–60","约 145","D9"],
+    ["巴音布鲁克","65","区间车 62","127","D9",1],
+    ["魔鬼城","—","100/车，12 小时","约 57","D6"],
+    ["五彩滩","—","—","约 50","D4"]
+  ],
+  pre:[
+    ["9/15","喀纳斯 + 禾木","「喀纳斯景区」公众号：分时预约 + 全域通票，实名"],
+    ["9/25","赛里木湖自驾名额 + 门票","「赛里木湖景区」公众号，提前 3–7 天，旺季日限 3000 辆"],
+    ["9/26 24:00","独库北段 10/4 通行名额","「平安独库」小程序，0 点放号，选 12:00–14:00 档"],
+    ["9/30","巴音布鲁克门票 + 区间车","网上购买，景区傍晚停售"]
+  ],
+  total:"约 1090", total2:"约 1020",
+  note:"自驾服务费自 2026-08-20 起按车收取，不再按人数。那拉提、巴音布鲁克按区间车入园预算。以上为旺季估算，以景区公示为准。"
+};
+
+var EVENTS = [
+  {t:"2026-09-25T13:00:00"+TZ, n:"天山国际机场取车"},
+  {t:"2026-09-27T00:00:00"+TZ, n:"0 点抢独库北段 10/4 名额"},
+  {t:"2026-09-28T19:00:00"+TZ, n:"禾木观景台，炊烟"},
+  {t:"2026-09-29T08:22:00"+TZ, n:"禾木日出"},
+  {t:"2026-10-01T13:00:00"+TZ, n:"进赛里木湖东门，环湖 5.5 小时"},
+  {t:"2026-10-03T20:10:00"+TZ, n:"九曲十八弯日落"},
+  {t:"2026-10-04T09:00:00"+TZ, n:"出发走独库北段"},
+  {t:"2026-10-05T14:45:00"+TZ, n:"CA1902 起飞"}
+];
+
+var TODOS = [
+  {w:"最急", c:"<b>租车下单</b>：腾势 D9 插混，天山国际机场取还，9/25 13:00 取、10/5 11:00 还，行驶证核定 7 座"},
+  {w:"最急", c:"<b>订乌鲁木齐 10/4 一晚</b>：亚朵国际大巴扎人民电影院店，大床房 ×3"},
+  {w:"尽快", c:"<b>约旅拍摄影师</b>：三位各拍各的，不合影。首选伊宁六星街 10/2 上午，备选禾木 9/28 下午。行情 2 小时约 1000"},
+  {w:"9/15", c:"<b>喀纳斯分时预约 + 全域通票</b>，「喀纳斯景区」公众号实名"},
+  {w:"9/18", c:"<b>高德新疆离线地图</b>，目的地加收藏"},
+  {w:"9/20 起", c:"<b>每日查独库路况</b>。通车至 10 月中旬，2025 年 10/10 封路"},
+  {w:"9/22", c:"<b>收公共基金 2000/人</b>：车、油、路桥、住宿、门票公摊，多退少补"},
+  {w:"9/25", c:"<b>赛里木湖 10/1 自驾名额</b>，「赛里木湖景区」公众号实名，提前 3–7 天"},
+  {w:"9/26 24:00", hot:1, c:"<b>抢独库北段 10/4 名额</b>，「平安独库」小程序，每日 0 点放 7 天后的号。<b>选 12:00–14:00 档</b>，早上 8 点档赶不到"},
+  {w:"9/30", c:"<b>巴音布鲁克 10/3 门票 + 区间车</b>，景区傍晚停售"}
+];
+
+var TIPS = [
+ ["加油", "登记身份证、人下车、熄火，国庆排队约 30 分钟。<b>独库沿线仅乔尔玛一站</b>。油表过半即找站，进山前加满，尤其 D10 出发前。车为插混，北疆充电桩稀少，<b>按纯油车用</b>。"],
+ ["备餐", "D7、D9、D10 天黑后才落脚，山里未必有饭。进山前在最后一个县城备齐：精河、那拉提、巴音布鲁克镇。<b>D7 午饭在精河买上车</b>。车上常备馕、熟食、水果、水。"],
+ ["证件与驾驶员", "身份证全程必带：加油、住宿、景区、安检。信用卡一张压押金，电子押金 6000–8000，车辆押金 1–2 万。<b>所有司机在租车合同登记为附加驾驶员</b>，否则出险不赔。"],
+ ["穿衣", "白天 10–18 ℃，早晚 0 ℃ 上下；禾木、赛里木湖、巴音布鲁克夜间可到 −5 ℃，按初冬准备。三层：速干内衣 + 抓绒或轻羽绒 + 防风防水外套。裤子要冲锋裤或加绒的，牛仔裤湿了一天不干。防水徒步鞋、帽子、手套、脖套，厚袜子两三双。拍照带一件亮色外套。<b>带 5–6 天衣量即可</b>，D6 克拉玛依可洗烘，后备箱空间紧。"],
+ ["防晒和保湿", "秋天紫外线照样毒，高倍防晒霜别省。空气极干，唇膏、护手霜、面霜是刚需。墨镜带上，赛里木湖和雪地反光刺眼。"],
+ ["药", "感冒药、退烧药、肠胃药（羊肉吃猛了容易出事）、<b>晕车药</b>（独库和果子沟两段山路必备）、创可贴。常吃的药自己备足。"],
+ ["行李怎么打", "后备箱是这趟最紧的资源。<b>软包比硬壳箱好塞</b>；羽绒服用真空压缩袋；20 寸登机箱加双肩包，比一个 28 寸大箱灵活。"],
+ ["电子和车上", "充电宝、车充、多口充电器、手机支架。相机多带一块电池贴身放，低温掉电快。湿巾纸巾多备，保温杯、垃圾袋、零食。<b>部分民宿不给一次性洗漱用品和拖鞋，自己带一套。</b>"],
+ ["点菜", "<b>整只整条的别点</b>，烤全羊三十斤起，六个人吃不完。按斤、按串点。六人一桌参考：手抓肉两斤、羊肉焖饼一份、羊肉串每人三四串、凉菜一份、砖茶一壶，人均一百出头。日落 20:20 前后，追日落就是 21 点后吃饭；只留 D4 禾木、D9 九曲两个日落，都先吃饭再上去。"],
+ ["无人机", "白哈巴全域禁飞；喀纳斯、禾木需报备；赛里木湖、那拉提需景区和公安双备案。空重 ≥250 g 须在民航 UOM 平台实名登记，违规罚 2000–20000 元。按不能飞准备。"],
+ ["明火", "赛里木湖全湖禁明火，禁在非指定区露营、搭天幕。指定营地经过三处：亲水滩、点将台、西海草原。热饮用保温壶带热水，出发前在酒店烧好。"],
+ ["独库风险", "<b>堵车</b>：10/4 是假期第四天，熔断点 13:00 乔尔玛。<b>降雪</b>：10 月中旬封路，初雪可能临时封闭，当天早上查路况。<b>退路</b>：乌尉高速 G0711，穿天山胜利隧道，约 380 km、5–6 小时。独库中段 D9 已走，北段是加餐。"]
+];
+</script>
+
+<script>
+(function(){
+  /* 统计 */
+  var booked = HOTELS.filter(function(h){return h.st==="ok"}).length;
+  document.getElementById("stBook").textContent = booked+" / "+HOTELS.length;
+  document.getElementById("bookN").textContent = "已订 "+booked+" 晚 · 待订 "+(HOTELS.length-booked)+" 晚";
+
+  /* 预订 */
+  document.getElementById("missBox").innerHTML =
+    "<b>未落定 2 项</b>：租车 · 乌鲁木齐 10/4 一晚";
+
+  function row(dt, body, st, label){
+    return '<div class="row"><div class="dt">'+dt+'</div><div>'+body+'</div>'+
+      '<span class="tag '+st+'">'+label+'</span></div>';
+  }
+  var bh = "";
+  bh += row("机票",
+    '<div class="nm">回程 CA1902</div><div class="meta"><b>10/5 14:45</b> 乌鲁木齐天山国际机场起飞，次日 06:50 到新加坡</div>'+
+    navBtn("天山国际机场", null, "view"), "ok", "已订");
+  bh += row("租车",
+    '<div class="nm">腾势 D9 · 7 座插混</div><div class="meta">天山国际机场取还，<b>9/25 13:00 取 · 10/5 11:00 还</b>，参考价约 9100。'+
+    '合同须允许驶入独库；全员登记附加驾驶员</div>', "wait", "待订");
+  HOTELS.forEach(function(h){
+    bh += row(h.d+'<em>D'+h.n+'</em>',
+      '<div class="nm">'+h.city+' · '+h.nm+'</div><div class="meta">'+
+      (h.price?'<b>'+h.price+'</b> · ':'')+h.addr+
+      (h.note?'<br>'+h.note:'')+'</div>'+navBtn(h.nav, null, "view"),
+      h.st, h.st==="ok"?"已订":"待订");
+  });
+  bh += '<div class="sum"><span>已付 <b>约 14080</b>，禾木第二间、桔子酒店未计</span><span>乌鲁木齐 10/4 预计 1400–1800 / 3 间</span></div>';
+  document.getElementById("bookings").innerHTML = bh;
+
+  /* 门票 */
+  (function(){
+    var t = TICKETS;
+    var rows = t.rows.map(function(r){
+      return '<tr><td><b>'+r[0]+'</b><span class="d">'+r[4]+'</span>'+(r[5]?'<span class="d pre">提前</span>':'')+'</td><td class="n">'+r[1]+'</td>'+
+        '<td class="g">'+r[2]+'</td><td class="n">'+r[3]+'</td></tr>';
+    }).join("");
+    document.getElementById("tktBox").innerHTML =
+      '<div class="best">'+t.best+'</div>'+
+      '<div class="prelist"><div class="ph">必须提前买 / 抢，漏了进不去</div>'+
+        t.pre.map(function(r){return '<div class="pr"><b class="mono">'+r[0]+'</b><span><b>'+r[1]+'</b><br>'+r[2]+'</span></div>'}).join("")+
+      '</div>'+
+      '<table><thead><tr><th>景区</th><th class="n">门票</th><th>区间车 / 自驾费</th><th class="n">人均</th></tr></thead>'+
+      '<tbody>'+rows+'</tbody></table>'+
+      '<div class="tot"><span>分开购票，每人合计</span><b>'+t.total+'</b><span>用全域通票，每人合计</span><b>'+t.total2+'</b></div>'+
+      '<div class="note">'+t.note+'</div>';
+  })();
+
+  /* 当日小地图：同一张底图，当天走线高亮，其余灰 */
+  function miniMap(dn, col, rt){
+    var names = SEGS[dn] || []; var mine = MAP.routes[String(dn)];
+    var others = Object.keys(MAP.routes).filter(function(k){return k!==String(dn) && k!=="alt"}).map(function(k){return '<path d="'+MAP.routes[k]+'"/>'}).join("");
+    var dots="", labs="";
+    names.forEach(function(n){
+      var p = MAP.nodes[n]; if(!p) return;
+      var a = p[2], x = p[0], y = p[1], tx = x, ty = y, anc = "start";
+      if(a==="E"||a==="NE"||a==="SE"){tx=x+16;anc="start"} else if(a==="W"||a==="NW"||a==="SW"){tx=x-16;anc="end"} else {anc="middle"}
+      if(a==="N"||a==="NE"||a==="NW"){ty=y-18} else if(a==="S"||a==="SE"||a==="SW"){ty=y+38} else {ty=y+10}
+      dots += '<circle cx="'+x+'" cy="'+y+'" r="11" fill="var(--card)" stroke="'+col+'" stroke-width="4.5"/>';
+      labs += '<text x="'+tx+'" y="'+ty+'" text-anchor="'+anc+'" class="lb">'+n+'</text>';
+    });
+    return '<div class="minimap"><div class="mapwrap"><svg viewBox="0 0 '+MAP.w+' '+MAP.h+'" role="img" aria-label="第'+dn+'天路段">'+
+      '<g class="dim">'+others+'</g>'+
+      (mine ? '<g class="cas"><path d="'+mine+'"/></g><path d="'+mine+'" fill="none" stroke="'+col+'" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round"/>' : '')+
+      dots + labs + '</svg></div>' + routeBtn(rt) + '</div>';
+  }
+  function routeBtn(rt){
+    if(!rt) return "";
+    var u = dayRoute(rt[0], rt[1], rt[2]);
+    if(!u) return "";
+    var mid = rt[1] ? ' → '+rt[1] : '';
+    return '<a class="dayroute" href="'+u+'" target="_blank" rel="noopener">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+
+      '<circle cx="6" cy="18" r="2.6"/><circle cx="18" cy="6" r="2.6"/><path d="M8.4 16.2 15.6 8.4"/></svg>'+
+      '<span><b>全天路线导航</b><em>'+rt[0]+mid+' → '+rt[2]+'</em></span></a>';
+  }
+
+  /* 逐日 */
+  var dh = "";
+  DAYS.forEach(function(d){
+    var col = "var(--d"+Math.min(d.d,10)+")";
+    var items = d.it.map(function(x){
+      var cls = x.bk ? " bk" : (x.hot ? " hot" : "");
+      var flag = x.bk ? '<span class="bkflag">'+(x.bk===1?'需提前订':x.bk)+'</span>' : "";
+      return '<div class="tm mono">'+(x.t||"")+'</div><div class="ct'+cls+'">'+flag+x.c+
+        (x.nav?'<br>'+navBtn(x.nav):'')+'</div>';
+    }).join("");
+    dh += '<details class="card day"'+(d.d===1?" open":"")+'><summary>'+
+      '<div class="dn" style="background:'+col+'">D'+d.d+'</div>'+
+      '<div class="dti"><div class="r">'+d.r+'</div><div class="m">'+d.date+' '+d.wk+' · '+d.m+'</div></div>'+
+      '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
+      '</summary><div class="dbody">'+miniMap(d.d, col, d.rt)+'<div class="tl">'+items+'</div>'+
+      (d.pic?d.pic.map(function(p){return '<figure class="photo"><img src="img/'+p[0]+'" alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+
+      (d.meals?'<div class="meals"><div class="mh">吃</div>'+d.meals.map(function(m){
+        var f = m[2] && FOOD[m[2]];
+        return '<div class="meal'+(f?'':' noimg')+'"><span class="ml">'+m[0]+'</span><div class="mt">'+m[1]+
+          (m[3]?' <a class="xhs" href="https://www.xiaohongshu.com/search_result/?keyword='+encodeURIComponent(m[3])+'" target="_blank" rel="noopener">小红书</a>':'')+'</div>'+
+          (f?'<img class="mi" src="img/food/'+f+'.jpg" alt="'+m[2]+'" loading="lazy">':'')+'</div>';
+      }).join('')+'</div>':'')+
+      (d.stay?'<div class="stay"><span><span class="k">今晚</span>'+d.stay+'</span>'+
+        (d.stayNav?navBtn(d.stayNav):'')+'</div>':'')+
+      '</div></details>';
+  });
+  document.getElementById("dayList").innerHTML = dh;
+
+  /* 待办 */
+  document.getElementById("todos").innerHTML = TODOS.map(function(t){
+    return '<div class="row"><div class="dt'+(t.hot?' hot':'')+'">'+t.w+'</div><div class="c">'+t.c+'</div></div>';
+  }).join("");
+
+  /* 贴士 */
+  document.getElementById("tipList").innerHTML = TIPS.map(function(t){
+    return '<dt>'+t[0]+'</dt><dd>'+t[1]+'</dd>';
+  }).join("");
+
+  /* 页脚 */
+  document.getElementById("foot").innerHTML =
+    "时间为北京时间。价格为 2026 年旺季估算，以预订和景区公示为准。地点按钮直接唤起高德 App 导航，需已安装高德；电脑上打开为网页版。照片来自 Wikimedia Commons，授权见各图说明。菜品小图同样来自 Wikimedia Commons：烤包子：Uyghur samsa（Mizu basyo，CC BY-SA 3.0）；馕：Goshnan（Mizu basyo，CC BY-SA 3.0）；拉条子：Dolan Uyghur handmade noodles Adelaide（Orderinchaos，CC BY-SA 4.0）；包尔萨克：Boortsog（Vidor，Public domain）；拌面：Xinjiang-style sautéed beef noodles in Beijing (20180425171642)（N509FZ，CC BY-SA 4.0）。";
+
+  /* 时区提示：设备不在 UTC+8 时才显示 */
+  try{
+    var off = -new Date().getTimezoneOffset()/60;
+    if(off !== 8){
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      document.getElementById("tzNote").textContent =
+        "全部时间为北京时间 UTC+8。你的设备：UTC"+(off>=0?"+":"")+off+(tz?"（"+tz+"）":"");
+    }
+  }catch(e){}
+
+  /* 倒计时 */
+  var evEl=document.getElementById("nowEv"), whEl=document.getElementById("nowWhen"),
+      D=document.getElementById("cdD"),H=document.getElementById("cdH"),
+      M=document.getElementById("cdM"),S=document.getElementById("cdS");
+  var fmtOpt={timeZone:"Asia/Shanghai",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:false};
+  function tick(){
+    var now = Date.now(), nxt=null;
+    for(var i=0;i<EVENTS.length;i++){
+      var ts = new Date(EVENTS[i].t).getTime();
+      if(ts > now){ nxt = {ts:ts, n:EVENTS[i].n}; break; }
+    }
+    if(!nxt){
+      evEl.textContent="行程已结束"; whEl.textContent="";
+      D.textContent=H.textContent=M.textContent=S.textContent="0";
+      return;
+    }
+    evEl.textContent = nxt.n;
+    var dt = new Date(nxt.ts);
+    var f = new Intl.DateTimeFormat("zh-CN",fmtOpt).format(dt);
+    var wd = new Intl.DateTimeFormat("zh-CN",{timeZone:"Asia/Shanghai",weekday:"short"}).format(dt);
+    whEl.textContent = f + " " + wd;
+    var sec = Math.floor((nxt.ts - now)/1000);
+    D.textContent=Math.floor(sec/86400);
+    H.textContent=String(Math.floor(sec%86400/3600)).padStart(2,"0");
+    M.textContent=String(Math.floor(sec%3600/60)).padStart(2,"0");
+    S.textContent=String(sec%60).padStart(2,"0");
+  }
+  tick(); setInterval(tick,1000);
+
+  /* 吸顶导航高亮 */
+  try{
+    var links = Array.prototype.slice.call(document.querySelectorAll(".topnav a"));
+    var targets = links.map(function(a){return document.querySelector(a.getAttribute("href"))}).filter(Boolean);
+    var io = new IntersectionObserver(function(){
+      var y = window.scrollY + 80, cur = targets[0];
+      targets.forEach(function(el){ if(el.offsetTop <= y) cur = el; });
+      links.forEach(function(a){ a.classList.toggle("on", a.getAttribute("href")==="#"+cur.id); });
+    }, {rootMargin:"-40% 0px -55% 0px", threshold:[0,1]});
+    targets.forEach(function(el){ io.observe(el); });
+    window.addEventListener("scroll", function(){
+      var y = window.scrollY + 80, cur = targets[0];
+      targets.forEach(function(el){ if(el.offsetTop <= y) cur = el; });
+      links.forEach(function(a){ a.classList.toggle("on", a.getAttribute("href")==="#"+cur.id); });
+    }, {passive:true});
+  }catch(e){}
+
+  /* 离线缓存：仅在 http(s) 下注册 */
+  if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
+    navigator.serviceWorker.register("./sw.js").catch(function(){});
+  }
+})();
+</script>
+</body>
+</html>
