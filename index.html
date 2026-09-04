@@ -185,8 +185,10 @@ section{margin:30px 0;scroll-margin-top:52px}
 .meal .mt b{color:var(--ink)}
 .meal .mi{width:56px;height:56px;border-radius:8px;object-fit:cover;background:var(--card);display:block}
 .meal.noimg{grid-template-columns:20px 1fr}
-.xhs{display:inline-block;font-size:11px;font-weight:700;color:#fff;text-decoration:none;margin-left:5px;white-space:nowrap;border-radius:4px;padding:1px 5px;background:#FF2442;vertical-align:1px;line-height:1.5}
-.xhs:active{opacity:.75}
+.xl{color:var(--ink);text-decoration:none;border-bottom:1px dotted rgba(255,36,66,.55);padding-bottom:1px}
+.xl i{display:inline-block;width:1em;height:1em;border-radius:3px;background:#FF2442;color:#fff;font-style:normal;font-size:.68em;line-height:1.5;text-align:center;vertical-align:.12em;margin-right:3px;font-weight:700}
+.xl.ic{border:0;margin-left:2px}
+.xl:active{opacity:.6}
 
 /* 概述与照片 */
 figure.photo{margin:0;background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
@@ -721,8 +723,14 @@ var TIPS = [
       (d.pic?d.pic.map(function(p){return '<figure class="photo"><img src="img/'+p[0]+'" alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+
       (d.meals?'<div class="meals"><div class="mh">吃</div>'+d.meals.map(function(m){
         var f = m[2] && FOOD[m[2]];
-        return '<div class="meal'+(f?'':' noimg')+'"><span class="ml">'+m[0]+'</span><div class="mt">'+m[1]+
-          (m[3]?' <a class="xhs" href="https://www.xiaohongshu.com/search_result/?keyword='+encodeURIComponent(m[3])+'" target="_blank" rel="noopener">小红书</a>':'')+'</div>'+
+        var txt = m[1];
+        if(m[3]){
+          var xu = 'https://www.xiaohongshu.com/search_result/?keyword='+encodeURIComponent(m[3]);
+          var bm = txt.match(/<b>([^<]+)<\/b>/);
+          txt = bm ? txt.replace(bm[0], '<b><a class="xl" href="'+xu+'" target="_blank" rel="noopener"><i>书</i>'+bm[1]+'</a></b>')
+                   : txt+' <a class="xl ic" href="'+xu+'" target="_blank" rel="noopener"><i>书</i></a>';
+        }
+        return '<div class="meal'+(f?'':' noimg')+'"><span class="ml">'+m[0]+'</span><div class="mt">'+txt+'</div>'+
           (f?'<img class="mi" src="img/food/'+f+'.jpg" alt="'+m[2]+'" loading="lazy">':'')+'</div>';
       }).join('')+'</div>':'')+
       (d.stay?'<div class="stay"><span class="k">今晚</span>'+(d.stayNav?navLink(d.stayNav, d.stay, "navi"):d.stay)+'</div>':'')+
