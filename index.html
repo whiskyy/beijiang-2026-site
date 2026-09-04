@@ -117,12 +117,12 @@ section{margin:30px 0;scroll-margin-top:52px}
 .sum{padding:12px 14px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink2);display:flex;justify-content:space-between;gap:6px 12px;flex-wrap:wrap}
 .sum b{color:var(--ink)}
 
-/* 高德链接 */
-.nav{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--blue);text-decoration:none;
-  padding:2px 7px 2px 5px;border:1px solid color-mix(in srgb,var(--blue) 28%,transparent);border-radius:6px;margin-top:6px;
-  background:color-mix(in srgb,var(--blue) 5%,transparent);white-space:nowrap}
-.nav:active{background:color-mix(in srgb,var(--blue) 15%,transparent)}
-.nav svg{width:11px;height:11px;flex:none}
+/* 地点链接 */
+.pl{color:var(--blue);text-decoration:none;border-bottom:1px dotted color-mix(in srgb,var(--blue) 50%,transparent);padding-bottom:1px}
+.pl svg{width:.9em;height:.9em;fill:currentColor;vertical-align:-.1em;margin-right:1px}
+.pl.ic{border:0;margin-left:3px}
+.pl.ic svg{width:1.05em;height:1.05em}
+.pl:active{opacity:.6}
 
 /* 门票 */
 .tkt{padding:14px}
@@ -175,9 +175,8 @@ section{margin:30px 0;scroll-margin-top:52px}
 .tl .ct:last-child{padding-bottom:2px}
 .bkflag{display:block;width:max-content;max-width:100%;font-size:10.5px;font-weight:700;color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);
   padding:1px 6px;border-radius:4px;margin:2px 0 4px;line-height:1.5}
-.stay{margin-top:12px;padding:10px 12px;background:var(--soft);border-radius:8px;font-size:13.5px;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.stay{margin-top:12px;padding:10px 12px;background:var(--soft);border-radius:8px;font-size:13.5px;line-height:1.5}
 .stay .k{font-size:11px;color:var(--ink3);letter-spacing:.1em;font-weight:700;margin-right:8px}
-.stay .nav{margin-top:0}
 .meals{margin-top:12px;background:var(--soft);border-radius:8px;padding:8px 12px 2px}
 .meals .mh{font-size:11px;color:var(--ink3);letter-spacing:.1em;font-weight:700;padding:2px 0 4px}
 .meal{display:grid;grid-template-columns:20px 1fr 56px;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--rule)}
@@ -365,27 +364,46 @@ var C = {
  "独山子区":[84.88697,44.32810]
 };
 function pt(k){ var c=C[k]; return c ? c[0]+","+c[1]+","+encodeURIComponent(k) : null; }
-var UA = navigator.userAgent, IS_IOS = /iPhone|iPad|iPod/.test(UA), IS_AND = /Android/.test(UA);
-/* 手机上直接唤起高德 App（scheme），不经 uri.amap.com 中转页；桌面端回退网页版。mode: navi=直接开导航, view=落图标 */
-function amap(k, mode){
+var UA = navigator.userAgent, IS_IOS = /iPhone|iPad|iPod/.test(UA), IS_AND = /Android/.test(UA), IS_WX = /MicroMessenger/i.test(UA);
+/* 地点链接：href 永远是高德网页版（微信、桌面都能开）；手机浏览器点击时先试 App scheme，1.5 秒内没切走再退回网页版 */
+function amapWeb(k){
   var c = C[k];
   if(!c) return "https://uri.amap.com/search?keyword="+encodeURIComponent(k)+"&src=beijiang&callnative=1";
-  var q = "sourceApplication=beijiang&poiname="+encodeURIComponent(k)+"&lat="+c[1]+"&lon="+c[0]+"&dev=0";
-  if(IS_IOS) return mode==="view" ? "iosamap://viewMap?"+q : "iosamap://navi?"+q+"&style=2";
-  if(IS_AND) return mode==="view" ? "androidamap://viewMap?"+q : "androidamap://navi?"+q+"&style=2";
   return "https://uri.amap.com/marker?position="+c[0]+","+c[1]+"&name="+encodeURIComponent(k)+"&coordinate=gaode&src=beijiang&callnative=1";
 }
+function amapScheme(k, mode){
+  var c = C[k]; if(!c) return "";
+  var q = "sourceApplication=beijiang&poiname="+encodeURIComponent(k)+"&lat="+c[1]+"&lon="+c[0]+"&dev=0";
+  var host = IS_IOS ? "iosamap://" : IS_AND ? "androidamap://" : "";
+  if(!host) return "";
+  return mode==="view" ? host+"viewMap?"+q : host+"navi?"+q+"&style=2";
+}
+var PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>';
+function navLink(k, text, mode){
+  var sch = amapScheme(k, mode);
+  return '<a class="pl'+(text?'':' ic')+'" href="'+amapWeb(k)+'"'+(sch?' data-s="'+sch+'"':'')+' target="_blank" rel="noopener">'+PIN+(text||'')+'</a>';
+}
+/* 正文里找到地名就地变链接；找不到就在句末补一个图标 */
+var ALIAS = {"国际大巴扎":["大巴扎夜市","大巴扎"],"天山国际机场":["天山国际机场","机场"],"世界魔鬼城":["乌尔禾魔鬼城","魔鬼城"],
+  "喀纳斯换乘中心":["喀纳斯"],"贾登峪服务中心":["贾登峪换乘中心","贾登峪"],"精河县":["精河"],"乔尔玛烈士陵园":["乔尔玛"],
+  "九曲十八弯观景台":["巴音布鲁克景区","九曲十八弯观景台"],"六星街":["六星街","伊宁"],"雾海野奢民宿":["可可托海镇"],
+  "禾木山庄":["禾木山庄图瓦部落餐厅","禾木山庄"],"布尔津河堤夜市":["河堤夜市"],"那拉提风景区":["那拉提景区"],
+  "果子沟大桥":["果子沟大桥观景台","果子沟大桥"],"喀纳斯生态度假酒店":["贾登峪"]};
 function dayRoute(from, via, to){
   var f=pt(from), t=pt(to), v=via?pt(via):null;
   if(!f||!t) return null;
   return "https://uri.amap.com/navigation?from="+f+"&to="+t+(v?"&via="+v:"")+
     "&mode=car&policy=1&coordinate=gaode&src=beijiang&callnative=1";
 }
-function navBtn(k, label, mode){
-  var u = amap(k, mode), ext = u.indexOf("http")===0 ? ' target="_blank" rel="noopener"' : '';
-  return '<a class="nav" href="'+u+'"'+ext+'>'+
-    '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4.5 20.3l.9.9L12 18l6.6 3.2.9-.9z"/></svg>'+
-    (label||"高德")+'</a>';
+function linkify(html, k, mode){
+  var cands = [k].concat(ALIAS[k]||[]);
+  for(var i=0;i<cands.length;i++){
+    var t = cands[i], b = "<b>"+t+"</b>";
+    if(html.indexOf(b)>=0) return html.replace(b, "<b>"+navLink(k,t,mode)+"</b>");
+    var re = new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+    if(re.test(html)) return html.replace(re, navLink(k,t,mode));
+  }
+  return html+" "+navLink(k,"",mode);
 }
 
 /* ===== 数据 ===== */
@@ -625,16 +643,15 @@ var TIPS = [
   }
   var bh = "";
   bh += row("机票",
-    '<div class="nm">回程 CA1902</div><div class="meta"><b>10/5 14:45</b> 乌鲁木齐天山国际机场起飞，次日 06:50 到新加坡</div>'+
-    navBtn("天山国际机场", null, "view"), "ok", "已订");
+    '<div class="nm">回程 CA1902</div><div class="meta"><b>10/5 14:45</b> 乌鲁木齐'+navLink("天山国际机场","天山国际机场","view")+'起飞，次日 06:50 到新加坡</div>', "ok", "已订");
   bh += row("租车",
     '<div class="nm">腾势 D9 · 7 座插混</div><div class="meta">天山国际机场取还，<b>9/25 13:00 取 · 10/5 11:00 还</b>，参考价约 9100。'+
     '合同须允许驶入独库；全员登记附加驾驶员</div>', "wait", "待订");
   HOTELS.forEach(function(h){
     bh += row(h.d+'<em>D'+h.n+'</em>',
-      '<div class="nm">'+h.city+' · '+h.nm+'</div><div class="meta">'+
+      '<div class="nm">'+navLink(h.nav, h.city+' · '+h.nm, "view")+'</div><div class="meta">'+
       (h.price?'<b>'+h.price+'</b> · ':'')+h.addr+
-      (h.note?'<br>'+h.note:'')+'</div>'+navBtn(h.nav, null, "view"),
+      (h.note?'<br>'+h.note:'')+'</div>',
       h.st, h.st==="ok"?"已订":"待订");
   });
   bh += '<div class="sum"><span>已付 <b>约 14080</b>，禾木第二间、桔子酒店未计</span><span>乌鲁木齐 10/4 预计 1400–1800 / 3 间</span></div>';
@@ -694,8 +711,7 @@ var TIPS = [
     var items = d.it.map(function(x){
       var cls = x.bk ? " bk" : (x.hot ? " hot" : "");
       var flag = x.bk ? '<span class="bkflag">'+(x.bk===1?'需提前订':x.bk)+'</span>' : "";
-      return '<div class="tm mono">'+(x.t||"")+'</div><div class="ct'+cls+'">'+flag+x.c+
-        (x.nav?'<br>'+navBtn(x.nav):'')+'</div>';
+      return '<div class="tm mono">'+(x.t||"")+'</div><div class="ct'+cls+'">'+flag+(x.nav?linkify(x.c, x.nav, "navi"):x.c)+'</div>';
     }).join("");
     dh += '<details class="card day"'+(d.d===1?" open":"")+'><summary>'+
       '<div class="dn" style="background:'+col+'">D'+d.d+'</div>'+
@@ -709,8 +725,7 @@ var TIPS = [
           (m[3]?' <a class="xhs" href="https://www.xiaohongshu.com/search_result/?keyword='+encodeURIComponent(m[3])+'" target="_blank" rel="noopener">小红书</a>':'')+'</div>'+
           (f?'<img class="mi" src="img/food/'+f+'.jpg" alt="'+m[2]+'" loading="lazy">':'')+'</div>';
       }).join('')+'</div>':'')+
-      (d.stay?'<div class="stay"><span><span class="k">今晚</span>'+d.stay+'</span>'+
-        (d.stayNav?navBtn(d.stayNav):'')+'</div>':'')+
+      (d.stay?'<div class="stay"><span class="k">今晚</span>'+(d.stayNav?navLink(d.stayNav, d.stay, "navi"):d.stay)+'</div>':'')+
       '</div></details>';
   });
   document.getElementById("dayList").innerHTML = dh;
@@ -727,7 +742,7 @@ var TIPS = [
 
   /* 页脚 */
   document.getElementById("foot").innerHTML =
-    "时间为北京时间。价格为 2026 年旺季估算，以预订和景区公示为准。地点按钮直接唤起高德 App 导航，需已安装高德；电脑上打开为网页版。照片来自 Wikimedia Commons，授权见各图说明。菜品小图同样来自 Wikimedia Commons：烤包子：Uyghur samsa（Mizu basyo，CC BY-SA 3.0）；馕：Goshnan（Mizu basyo，CC BY-SA 3.0）；拉条子：Dolan Uyghur handmade noodles Adelaide（Orderinchaos，CC BY-SA 4.0）；包尔萨克：Boortsog（Vidor，Public domain）；拌面：Xinjiang-style sautéed beef noodles in Beijing (20180425171642)（N509FZ，CC BY-SA 4.0）。";
+    "时间为北京时间。价格为 2026 年旺季估算，以预订和景区公示为准。带定位图标的地名可点：手机浏览器里直接唤起高德 App，微信和电脑里打开高德网页版。照片来自 Wikimedia Commons，授权见各图说明。菜品小图同样来自 Wikimedia Commons：烤包子：Uyghur samsa（Mizu basyo，CC BY-SA 3.0）；馕：Goshnan（Mizu basyo，CC BY-SA 3.0）；拉条子：Dolan Uyghur handmade noodles Adelaide（Orderinchaos，CC BY-SA 4.0）；包尔萨克：Boortsog（Vidor，Public domain）；拌面：Xinjiang-style sautéed beef noodles in Beijing (20180425171642)（N509FZ，CC BY-SA 4.0）。";
 
   /* 时区提示：设备不在 UTC+8 时才显示 */
   try{
@@ -784,6 +799,19 @@ var TIPS = [
       links.forEach(function(a){ a.classList.toggle("on", a.getAttribute("href")==="#"+cur.id); });
     }, {passive:true});
   }catch(e){}
+
+  /* 手机浏览器：先唤起高德 App，没切走再退到网页版；微信里直接走网页版 */
+  document.addEventListener("click", function(e){
+    var a = e.target.closest && e.target.closest("a.pl"); if(!a) return;
+    var sch = a.getAttribute("data-s"); if(!sch || IS_WX || !(IS_IOS||IS_AND)) return;
+    e.preventDefault();
+    var web = a.href, gone = false, t0 = Date.now();
+    function hide(){ gone = true; }
+    document.addEventListener("visibilitychange", hide, {once:true}); window.addEventListener("pagehide", hide, {once:true});
+    document.documentElement.setAttribute("data-navtry", sch);
+    location.href = sch;
+    setTimeout(function(){ if(!gone && !document.hidden && Date.now()-t0 < 2500) location.href = web; }, 1500);
+  });
 
   /* 离线缓存：仅在 http(s) 下注册 */
   if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
