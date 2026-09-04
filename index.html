@@ -111,9 +111,9 @@ section{margin:30px 0;scroll-margin-top:52px}
 .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.03em;white-space:nowrap}
 .tag.ok{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--green)}
 .tag.wait{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red)}
-.miss{border-color:color-mix(in srgb,var(--red) 30%,transparent);background:color-mix(in srgb,var(--red) 6%,transparent);
+.miss{border-color:color-mix(in srgb,var(--green) 30%,transparent);background:color-mix(in srgb,var(--green) 7%,transparent);
   padding:11px 14px;font-size:13.5px;margin-bottom:10px;line-height:1.55}
-.miss b{color:var(--red)}
+.miss b{color:var(--green)}
 .sum{padding:12px 14px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink2);display:flex;justify-content:space-between;gap:6px 12px;flex-wrap:wrap}
 .sum b{color:var(--ink)}
 
@@ -291,14 +291,14 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
     <table>
       <thead><tr><th>项目</th><th class="n">总额</th><th class="n">人均</th></tr></thead>
       <tbody>
-        <tr><td>车：租金、保险、油、过路停车</td><td class="n">12790</td><td class="n">2132</td></tr>
+        <tr><td>车：租金含保险 8632 实付，油、路桥、停车预估 3700</td><td class="n">12330</td><td class="n">2055</td></tr>
         <tr><td>住宿：十晚三间</td><td class="n">20100</td><td class="n">3350</td></tr>
         <tr><td>门票、区间车、自驾服务费</td><td class="n">6540</td><td class="n">1090</td></tr>
         <tr><td>吃饭：150 / 人 / 天 × 11 天</td><td class="n">9900</td><td class="n">1650</td></tr>
-        <tr class="tot"><td>合计，不含机票</td><td class="n">49330</td><td class="n">8222</td></tr>
+        <tr class="tot"><td>合计，不含机票</td><td class="n">48870</td><td class="n">8145</td></tr>
       </tbody>
     </table>
-    <div class="note">不含机票。住宿按预估列，已订 8 晚实付约 14080。</div>
+    <div class="note">不含机票。租车为实付；住宿按预估列，已订 8 晚实付约 14080，桔子、全季、禾木第二间未计。</div>
   </div>
   <div class="sh" style="margin-top:16px"><h3>门票</h3><span class="n">人均，含区间车</span></div>
   <div class="card tkt" id="tktBox"></div>
@@ -348,7 +348,7 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 var C = {
  "天山国际机场":[87.48109,43.91701], "国际大巴扎":[87.61798,43.78001],
  "五一星光夜市":[87.61417,43.81814], "乌市亚朵":[87.61756,43.79750],
- "乌市桔子酒店":[87.61567,43.79693], "乌市全季友好明园":[87.58779,43.81620],
+ "乌市桔子酒店":[87.61567,43.79693], "乌市全季友好明园":[87.58779,43.81620], "神州大巴扎服务点":[87.62400,43.79300], "红宝石雅致酒店":[87.58750,43.81517],
  "可可苏里":[89.76482,47.02887], "雾海野奢民宿":[89.78054,47.20403],
  "可可托海景区":[89.88421,47.22208], "泰悦假日酒店":[86.86047,47.70576],
  "布尔津河堤夜市":[86.85470,47.70003], "五彩滩":[86.68070,47.83754],
@@ -451,7 +451,7 @@ var DAYS = [
    pic:[["01.jpg", "可可托海额尔齐斯大峡谷，河谷两侧是花岗岩石壁和针叶林", "可可托海景区的额尔齐斯大峡谷。摄影 Yanxutong1215，Wikimedia Commons，CC BY-SA 4.0"]],
    meals:[["早", "领馆巷<b>伊犁奶茶馆</b>：咸奶茶、油塔子、薄皮包子；或大巴扎门口的烤包子", "包尔萨克", "乌鲁木齐 伊犁奶茶馆"], ["午", "富蕴县城或可可苏里停车点，拌面或大盘鸡", "拌面", "富蕴 拌面"], ["晚", "<b>美味烧烤吧</b>（派出所对面）：烤馕、羊肉串、炖蘑菇", "羊肉串", "可可托海 美味烧烤吧"]],
    it:[
-    {t:"08:30", c:"一人去酒店附近门店取车，<b>要开车的人一起去，带身份证和驾照登记附加驾驶员</b>；验车录像、核对行驶证 7 座", hot:1},
+    {t:"08:30", c:"一人去<b>新疆国际大巴扎服务点</b>取车，离酒店 1.7 km，打车 10 分钟。取车人脸识别；验车绕一圈录像，核对行驶证 7 座、车牌与 App 一致；未在 App 添加的驾驶员一起去登记", nav:"神州大巴扎服务点", hot:1},
     {t:"09:30", c:"出发，G7 转 G216"},
     {t:"途中", c:"<b>可可苏里</b>（野鸭湖）停车休息", nav:"可可苏里"},
     {t:"16:30", c:"到可可托海镇", nav:"雾海野奢民宿"},
@@ -549,7 +549,7 @@ var DAYS = [
     {t:"18:30", c:"进城前<b>加满油</b>，还车要满油"},
     {t:"19:00", c:"到乌鲁木齐，住友好明园"},
     {t:"20:30", c:"晚饭。特产（干果、馕、伊力特）酒店门口就有特产店，或交给下午走的两人"},
-    {t:"22:00", c:"<b>神州上门取车</b>，酒店门口交车，灯下绕车拍一圈视频", hot:1}
+    {t:"22:00", c:"<b>神州上门取车</b>，交车点红宝石雅致酒店，西北路 805 号，从全季走过去 260 米；灯下绕车拍一圈视频，油要满", nav:"红宝石雅致酒店", hot:1}
    ]},
   {d:11, rt:["乌市全季友好明园",null,"天山国际机场"], date:"10/5", wk:"周一", r:"乌鲁木齐 → 返程", m:"4 人 14:45 起飞 · 2 人下午走 · 各自打车", stay:"", stayNav:"",
    meals:[["早", "<b>四十九丸子汤</b>友好店 740 米、晨九公包子铺 290 米、老太太哨子面 67 米；10:00 前吃完", "烤包子", "乌鲁木齐 友好 丸子汤"]],
@@ -603,7 +603,8 @@ var EVENTS = [
 ];
 
 var TODOS = [
-  {w:"最急", c:"<b>租车下单</b>：腾势 D9 插混，9/26 08:30 酒店附近门店取、10/4 22:00 全季友好明园店上门取车还，行驶证核定 7 座；问清门店营业时间、上门取车时段和费用"},
+  {w:"9/26 前", c:"<b>要开车的人在神州 App 完成身份证、驾驶证认证</b>，并让订车人在订单里添加为驾驶员；没在线加上的 9/26 早上一起去服务点登记"},
+  {w:"9/24 08:30", c:"租车免费取消的截止时间，之后改不了"},
   {w:"尽快", c:"<b>约旅拍摄影师</b>：三位各拍各的，不合影。首选伊宁六星街 10/2 上午，备选禾木 9/28 下午。行情 2 小时约 1000"},
   {w:"9/15", c:"<b>喀纳斯分时预约 + 全域通票</b>，「喀纳斯景区」公众号实名"},
   {w:"9/18", c:"<b>高德新疆离线地图</b>，目的地加收藏"},
@@ -639,7 +640,7 @@ var TIPS = [
 
   /* 预订 */
   document.getElementById("missBox").innerHTML =
-    "<b>未落定 1 项</b>：租车";
+    "<b>预订全部完成</b>：机票、租车、十晚住宿";
 
   function row(dt, body, st, label){
     return '<div class="row"><div class="dt">'+dt+'</div><div>'+body+'</div>'+
@@ -649,8 +650,8 @@ var TIPS = [
   bh += row("机票",
     '<div class="nm">回程 CA1902</div><div class="meta"><b>10/5 14:45</b> 乌鲁木齐'+navLink("天山国际机场","天山国际机场","view")+'起飞，次日 06:50 到新加坡</div>', "ok", "已订");
   bh += row("租车",
-    '<div class="nm">腾势 D9 · 7 座插混</div><div class="meta"><b>9/26 08:30 市区门店取 · 10/4 22:00 全季友好明园店上门取车</b>，参考价约 9100。'+
-    '合同须允许驶入独库；要开车的人取车时到场登记附加驾驶员</div>', "wait", "待订");
+    '<div class="nm">神州租车 · 腾势 D9 · 7 座插混，车龄 2 年内</div><div class="meta"><b>9/26 08:30</b> 新疆国际大巴扎服务点取 · <b>10/4 22:00</b> 上门取车，交车点红宝石雅致酒店（西北路 805 号，离全季 260 米）。'+
+    '9 天含保险实付 <b>8632</b>。全程无忧升级版：车损全额含轮胎、三者 300 万、乘客 50 万/人、停运费免。<b>9/24 08:30 前可免费取消</b></div>', "ok", "已订");
   HOTELS.forEach(function(h){
     bh += row(h.d+'<em>D'+h.n+'</em>',
       '<div class="nm">'+navLink(h.nav, h.city+' · '+h.nm, "view")+'</div><div class="meta">'+
