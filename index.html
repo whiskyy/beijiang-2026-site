@@ -13,6 +13,7 @@
   --d1:#C8892B; --d2:#8A9A3B; --d3:#3F7A5E; --d4:#2C6E75; --d5:#3B5F91;
   --d6:#6B4E8C; --d7:#9E3E70; --d8:#B03A38; --d9:#C06A22; --d10:#7A6A3A;
   --route:#1F5B85; --halo:rgba(252,250,245,.9); --dim:rgba(255,255,255,.8); --mapimg:url(img/map-light.jpg);
+  --wash1:rgba(200,137,43,.10); --wash2:rgba(31,91,133,.07); --contour-img:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420' fill='none' stroke='%231E1B17' stroke-opacity='.075' stroke-width='1'><path d='M-20 60c60-30 120 10 180-10s110-50 170-20 90 60 110 60'/><path d='M-20 110c70-20 130 20 200 0s100-40 160-10 80 50 100 50'/><path d='M-20 170c80-40 150 30 230 10s90-60 150-30 70 40 80 40'/><path d='M-20 240c60-10 110 40 180 30s120-70 200-40 80 40 80 40'/><path d='M-20 300c90-50 160 20 240 0s90-30 140-10 60 40 60 40'/><path d='M-20 360c70 0 120 30 190 20s130-60 210-30 50 30 50 30'/><path d='M60 420c40-40 90-60 150-50s110 40 170 20'/></svg>");
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -21,6 +22,7 @@
     --d1:#E3A94E; --d2:#AFC155; --d3:#5FA684; --d4:#4E97A0; --d5:#6A8FC4;
     --d6:#9B7CC0; --d7:#CE6E9C; --d8:#DE6A64; --d9:#E39346; --d10:#A99457;
     --route:#8FC1E8; --halo:rgba(22,21,17,.85); --dim:rgba(255,255,255,.35); --mapimg:url(img/map-dark.jpg);
+    --wash1:rgba(227,169,78,.09); --wash2:rgba(143,193,232,.06); --contour-img:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420' fill='none' stroke='%23ECE6DA' stroke-opacity='.06' stroke-width='1'><path d='M-20 60c60-30 120 10 180-10s110-50 170-20 90 60 110 60'/><path d='M-20 110c70-20 130 20 200 0s100-40 160-10 80 50 100 50'/><path d='M-20 170c80-40 150 30 230 10s90-60 150-30 70 40 80 40'/><path d='M-20 240c60-10 110 40 180 30s120-70 200-40 80 40 80 40'/><path d='M-20 300c90-50 160 20 240 0s90-30 140-10 60 40 60 40'/><path d='M-20 360c70 0 120 30 190 20s130-60 210-30 50 30 50 30'/><path d='M60 420c40-40 90-60 150-50s110 40 170 20'/></svg>");
   }
 }
 :root[data-theme="dark"]{
@@ -29,15 +31,20 @@
   --d1:#E3A94E; --d2:#AFC155; --d3:#5FA684; --d4:#4E97A0; --d5:#6A8FC4;
   --d6:#9B7CC0; --d7:#CE6E9C; --d8:#DE6A64; --d9:#E39346; --d10:#A99457;
   --route:#8FC1E8; --halo:rgba(22,21,17,.85); --dim:rgba(255,255,255,.35); --mapimg:url(img/map-dark.jpg);
+  --wash1:rgba(227,169,78,.09); --wash2:rgba(143,193,232,.06); --contour-img:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420' fill='none' stroke='%23ECE6DA' stroke-opacity='.06' stroke-width='1'><path d='M-20 60c60-30 120 10 180-10s110-50 170-20 90 60 110 60'/><path d='M-20 110c70-20 130 20 200 0s100-40 160-10 80 50 100 50'/><path d='M-20 170c80-40 150 30 230 10s90-60 150-30 70 40 80 40'/><path d='M-20 240c60-10 110 40 180 30s120-70 200-40 80 40 80 40'/><path d='M-20 300c90-50 160 20 240 0s90-30 140-10 60 40 60 40'/><path d='M-20 360c70 0 120 30 190 20s130-60 210-30 50 30 50 30'/><path d='M60 420c40-40 90-60 150-50s110 40 170 20'/></svg>");
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;min-width:0}
 html{scroll-behavior:smooth}
 html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
 body{
   background:var(--bg);color:var(--ink);
+  background-image:radial-gradient(900px 520px at 12% -6%,var(--wash1),transparent 60%),radial-gradient(760px 480px at 100% 28%,var(--wash2),transparent 60%);
+  background-attachment:fixed;
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
   font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:60px;
 }
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-repeat:repeat;background-size:420px 420px;background-image:var(--contour-img);
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,.45) 45%,rgba(0,0,0,.7));-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,.45) 45%,rgba(0,0,0,.7))}
 .wrap{max-width:660px;margin:0 auto;padding:0 16px}
 h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.01em}
 a{color:inherit}
