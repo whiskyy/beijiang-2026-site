@@ -35,7 +35,7 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;min-width:0}
 html{scroll-behavior:smooth}
-html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+html,body{margin:0;padding:0;overflow-x:clip;max-width:100%}
 body{
   background:var(--bg);color:var(--ink);
   background-image:radial-gradient(900px 520px at 12% -6%,var(--wash1),transparent 60%),radial-gradient(760px 480px at 100% 28%,var(--wash2),transparent 60%);
@@ -156,8 +156,16 @@ section{margin:30px 0;scroll-margin-top:52px}
 .tkt .note{font-size:12.5px;color:var(--ink2);line-height:1.55;margin:10px 0 0}
 
 /* 逐日 */
-.day{margin-bottom:8px;overflow:hidden}
-.day>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:11px}
+.day{margin-bottom:8px;overflow:hidden;scroll-margin-top:calc(96px + env(safe-area-inset-top))}
+.daychips{position:sticky;top:calc(45px + env(safe-area-inset-top));z-index:9;display:flex;gap:6px;overflow-x:auto;padding:8px 2px;margin:0 0 8px;background:var(--bg);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.daychips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:inline-flex;align-items:center;min-height:36px;padding:0 11px;border-radius:999px;border:1px solid var(--rule);background:var(--card);font-size:12.5px;font-weight:700;color:var(--ink2);text-decoration:none;-webkit-user-select:none;user-select:none}
+.chip em{font-style:normal;font-weight:500;margin-left:4px;color:var(--ink3)}
+.chip.on{border-color:var(--c);color:var(--c);box-shadow:0 0 0 1px var(--c) inset}
+.chip.on em{color:var(--c)}
+.chip:active{background:var(--soft)}
+.day>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:11px;-webkit-user-select:none;user-select:none}
+.day>summary:active{background:var(--soft)}
 .day>summary::-webkit-details-marker{display:none}
 .dn{flex:none;width:30px;height:30px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
 .dti{flex:1;min-width:0}
@@ -196,9 +204,10 @@ section{margin:30px 0;scroll-margin-top:52px}
 .meals .mh{font-size:11px;color:var(--ink3);letter-spacing:.1em;font-weight:700;padding:2px 0 4px}
 .meal{display:grid;grid-template-columns:20px 1fr 56px;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--rule)}
 .tour{margin:12px 0 4px;border:1px solid var(--rule);border-radius:10px;background:var(--card)}
-.tour>summary{list-style:none;display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink)}
+.tour>summary{list-style:none;display:flex;align-items:center;gap:8px;padding:11px 12px;min-height:44px;box-sizing:border-box;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink);-webkit-user-select:none;user-select:none}
+.tour>summary:active{background:var(--soft)}
 .tour>summary::-webkit-details-marker{display:none}
-.tour>summary .tsub{margin-left:auto;font-weight:500;color:var(--ink3);font-size:11.5px;white-space:nowrap}
+.tour>summary .tsub{margin-left:auto;font-weight:500;color:var(--ink3);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%}
 .tour>summary .chev{flex:none;color:var(--ink3);transition:transform .18s}
 .tour[open]>summary .chev{transform:rotate(90deg)}
 .tbody{padding:2px 12px 12px;border-top:1px solid var(--rule)}
@@ -217,6 +226,8 @@ section{margin:30px 0;scroll-margin-top:52px}
 .xl{color:var(--ink);text-decoration:none;border-bottom:1px dotted rgba(255,36,66,.55);padding-bottom:1px}
 .xl i{display:inline-block;width:1em;height:1em;border-radius:3px;background:#FF2442;color:#fff;font-style:normal;font-size:.68em;line-height:1.5;text-align:center;vertical-align:.12em;margin-right:3px;font-weight:700}
 .xl.ic{border:0;margin-left:2px}
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%);max-width:86vw;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.5;z-index:99;opacity:0;transition:opacity .2s;pointer-events:none;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.toast.on{opacity:1}
 .xl:active{opacity:.6}
 
 /* 概述与照片 */
@@ -278,9 +289,12 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 .meal .mi{margin-top:4px}
 .mn{font-size:12.5px;color:var(--ink2);line-height:1.5;margin:0 0 4px}
 .mo{list-style:none;margin:0;padding:0}
-.mo li{padding:4px 0;font-size:13.5px;line-height:1.5;color:var(--ink)}
-.mo li .os{display:block;font-size:12px;color:var(--ink3);line-height:1.45}
-.mo li .pl{font-weight:600}
+.mo li{padding:0}
+.opt{display:block;padding:7px 8px;margin:0 -8px;border-radius:8px;color:var(--ink);text-decoration:none;border:0;min-height:44px;box-sizing:border-box}
+a.opt:active{background:var(--soft)}
+.opt .on{display:block;font-size:13.5px;font-weight:600;line-height:1.5}
+a.opt .on{color:var(--blue)}
+.opt .os{display:block;font-size:12.5px;color:var(--ink3);line-height:1.45}
 .mt .xl.ic{margin-top:2px}
 .tour.spot>summary::before{content:"景区";flex:none;font-size:10.5px;font-weight:700;color:var(--route);border:1px solid color-mix(in srgb,var(--route) 40%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
 </style>
@@ -353,6 +367,7 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
     </table>
     <div class="note">只有 D5 看日出要早起，其余起床都在 08:15 之后，多数 09:00 左右。每天的时间线都按<b>每 2 小时停一次服务区上厕所、吃饭 45 分钟</b>算，到达时间是含停车的保守值。北疆日出 08:20–08:40、日落 20:00–20:20，比内地晚约两小时。<b>全天路线导航</b>只带一个途经点（高德链接的限制），中途各站在「总览」里逐站点导航。</div>
   </div>
+  <div class="daychips" id="daychips" aria-label="跳到某一天"></div>
   <div id="dayList"></div>
 </section>
 
@@ -506,9 +521,12 @@ function amapScheme(k, mode){
   return mode==="view" ? host+"viewMap?"+q : host+"navi?"+q+"&style=2";
 }
 var PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>';
-function navLink(k, text, mode){
+function navAttrs(k, mode){
   var sch = amapScheme(k, mode);
-  return '<a class="pl'+(text?'':' ic')+'" href="'+amapWeb(k)+'"'+(sch?' data-s="'+sch+'"':'')+' target="_blank" rel="noopener">'+PIN+(text||'')+'</a>';
+  return ' href="'+amapWeb(k)+'"'+(sch?' data-s="'+sch+'"':'')+' target="_blank" rel="noopener"';
+}
+function navLink(k, text, mode){
+  return '<a class="pl'+(text?'':' ic')+'"'+navAttrs(k, mode)+'>'+PIN+(text||'')+'</a>';
 }
 /* 正文里找到地名就地变链接；找不到就在句末补一个图标 */
 var ALIAS = {"伊雷木湖观景台":["伊雷木湖"],"冲乎尔镇":["冲乎尔河谷观景台","冲乎尔"],"巩乃斯河谷":["巩乃斯河谷观景台"],"赛湖月亮湾":["月亮湾"],"巴音布鲁克湿地草原":["巴音布鲁克草原"],"哈希勒根隧道":["哈希勒根达坂隧道","哈希勒根达坂"],"赛里木湖南门":["南门"],"那拉提入口":["那拉提入口"],"国际大巴扎":["大巴扎夜市","大巴扎"],"天山国际机场":["天山国际机场","机场"],"世界魔鬼城":["乌尔禾魔鬼城","魔鬼城"],
@@ -533,6 +551,12 @@ function linkify(html, k, mode){
     if(re.test(html)) return html.replace(re, navLink(k,t,mode));
   }
   return html+" "+navLink(k,"",mode);
+}
+
+/* 小红书搜索：手机上网页版搜索不存在（页面不见了），只能唤起 App；桌面走网页版 */
+function xhsLink(kw){
+  var q = encodeURIComponent(kw);
+  return '<a class="xl ic" href="https://www.xiaohongshu.com/search_result?keyword='+q+'&source=web_explore_feed" data-x="xhsdiscover://search/result?keyword='+q+'" data-kw="'+kw.replace(/"/g,"&quot;")+'" target="_blank" rel="noopener" title="小红书搜「'+kw+'」"><i>书</i></a>';
 }
 
 /* ===== 数据 ===== */
@@ -906,7 +930,7 @@ var TIPS = [
   function musicRows(dn){
     var m = MUSIC[dn]; if(!m) return "";
     return m.map(function(x){
-      return '<a class="music" href="https://music.163.com/#/playlist?id='+x.id+'" target="_blank" rel="noopener"><span class="ic">云</span><span><b>'+x.n+'</b><em>'+x.s+'</em></span><span class="h">'+x.h+' h</span></a>';
+      return '<a class="music" href="https://music.163.com/#/playlist?id='+x.id+'" data-s="orpheus://playlist/'+x.id+'" target="_blank" rel="noopener"><span class="ic">云</span><span><b>'+x.n+'</b><em>'+x.s+'</em></span><span class="h">'+x.h+' h</span></a>';
     }).join("");
   }
   function routeBtn(rt){
@@ -943,8 +967,7 @@ var TIPS = [
     if(t.cost) notes += '<div class="tnote"><span class="k">费用</span><span>'+t.cost+'</span></div>';
     if(t.tip)  notes += '<div class="tnote"><span class="k">提示</span><span>'+t.tip+'</span></div>';
     if(t.pic){
-      var xu = 'https://www.xiaohongshu.com/search_result/?keyword='+encodeURIComponent(t.xhs||(t.n.split(' ')[0]+' 机位'));
-      notes += '<div class="tnote"><span class="k">出片</span><span>'+t.pic+' <a class="xl ic" href="'+xu+'" target="_blank" rel="noopener"><i>书</i></a></span></div>';
+      notes += '<div class="tnote"><span class="k">出片</span><span>'+t.pic+' '+xhsLink(t.xhs||(t.n.split(' ')[0]+' 机位'))+'</span></div>';
     }
     return '<details class="'+cls+'"><summary>'+t.n.replace(/^沿途停车 · /,"")+'<span class="tsub">'+(t.sub||"")+'</span>'+
       '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></summary>'+
@@ -955,10 +978,11 @@ var TIPS = [
     if(!d.meals) return "";
     var rows = d.meals.map(function(m){
       var f = m.f && FOOD[m.f];
-      var xu = m.x ? ' <a class="xl ic" href="https://www.xiaohongshu.com/search_result/?keyword='+encodeURIComponent(m.x)+'" target="_blank" rel="noopener" title="小红书搜「'+m.x+'」"><i>书</i></a>' : '';
+      var xu = m.x ? ' '+xhsLink(m.x) : '';
       var opts = (m.o||[]).map(function(o){
-        var nm = C[o[0]] ? navLink(o[0], o[0], "view") : '<b>'+o[0]+'</b>';
-        return '<li>'+nm+(o[1]?'<span class="os">'+o[1]+'</span>':'')+'</li>';
+        var has = !!C[o[0]];
+        var inner = '<span class="on">'+(has?PIN:'')+o[0]+'</span>'+(o[1]?'<span class="os">'+o[1]+'</span>':'');
+        return '<li>'+(has ? '<a class="pl opt"'+navAttrs(o[0],"view")+'>'+inner+'</a>' : '<div class="opt">'+inner+'</div>')+'</li>';
       }).join('');
       return '<div class="meal'+(f?'':' noimg')+'"><span class="ml">'+m.t+'</span><div class="mt">'+(m.n?'<div class="mn">'+m.n+xu+'</div>':'')+'<ul class="mo">'+opts+'</ul>'+(m.n?'':xu)+'</div>'+
         (f?'<img class="mi" src="img/food/'+f+'.jpg" alt="'+m.f+'" loading="lazy">':'')+'</div>';
@@ -989,6 +1013,27 @@ var TIPS = [
       '</div></details>';
   });
   document.getElementById("dayList").innerHTML = dh;
+  /* 日期胶囊：吸顶，点一下只展开那一天 */
+  var chipsEl = document.getElementById("daychips");
+  if(chipsEl){
+    chipsEl.innerHTML = DAYS.map(function(d){ var s = SEGS[d.d]||[]; var to = s.length ? s[s.length-1] : ""; return '<a class="chip" href="#day-'+d.d+'" data-d="'+d.d+'" style="--c:var(--d'+Math.min(d.d,10)+')">D'+d.d+'<em>'+to+'</em></a>'; }).join("");
+    function syncChips(){
+      var open = Array.prototype.filter.call(document.querySelectorAll("details.day"), function(x){return x.open});
+      var last = open.length ? open[open.length-1].id.replace("day-","") : "";
+      Array.prototype.forEach.call(chipsEl.children, function(c){
+        var on = c.getAttribute("data-d")===last; c.classList.toggle("on", on);
+        if(on) chipsEl.scrollTo({left: c.offsetLeft - chipsEl.clientWidth/2 + c.offsetWidth/2, behavior:"smooth"});
+      });
+    }
+    document.querySelectorAll("details.day").forEach(function(x){ x.addEventListener("toggle", syncChips); });
+    chipsEl.addEventListener("click", function(e){
+      var c = e.target.closest("a.chip"); if(!c) return; e.preventDefault();
+      var id = c.getAttribute("href").slice(1);
+      document.querySelectorAll("details.day").forEach(function(x){ x.open = (x.id===id); });
+      if(location.hash==="#"+id) openHashDay(); else location.hash = "#"+id;
+    });
+    syncChips();
+  }
   function openHashDay(){ var m = /^#day-(\d+)$/.exec(location.hash); if(m){ var el = document.getElementById("day-"+m[1]); if(el){ el.open = true; el.scrollIntoView({block:"start"}); } } }
   window.addEventListener("hashchange", openHashDay); openHashDay();
   if(TODAY_D){
@@ -1070,7 +1115,7 @@ var TIPS = [
 
   /* 手机浏览器：先唤起高德 App，没切走再退到网页版；微信里直接走网页版 */
   document.addEventListener("click", function(e){
-    var a = e.target.closest && e.target.closest("a.pl"); if(!a) return;
+    var a = e.target.closest && e.target.closest("a[data-s]"); if(!a) return;
     var sch = a.getAttribute("data-s"); if(!sch || IS_WX || !(IS_IOS||IS_AND)) return;
     e.preventDefault();
     var web = a.href, gone = false, t0 = Date.now();
@@ -1079,6 +1124,29 @@ var TIPS = [
     document.documentElement.setAttribute("data-navtry", sch);
     location.href = sch;
     setTimeout(function(){ if(!gone && !document.hidden && Date.now()-t0 < 2500) location.href = web; }, 1500);
+  });
+
+  /* 小红书：手机上唤起 App；微信里或没装 App 就把关键词复制好，提示去 App 粘贴 */
+  var toastEl = null, toastT = 0;
+  function toast(msg){
+    if(!toastEl){ toastEl = document.createElement("div"); toastEl.className = "toast"; document.body.appendChild(toastEl); }
+    toastEl.textContent = msg; toastEl.classList.add("on");
+    clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("on"); }, 4500);
+  }
+  function copyText(s){
+    try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(s).catch(function(){}); return; } }catch(e){}
+    try{ var ta = document.createElement("textarea"); ta.value = s; ta.setAttribute("readonly",""); ta.style.cssText = "position:fixed;left:-999px;top:0"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); }catch(e){}
+  }
+  document.addEventListener("click", function(e){
+    var a = e.target.closest && e.target.closest("a.xl"); if(!a) return;
+    var sch = a.getAttribute("data-x"), kw = a.getAttribute("data-kw") || ""; if(!sch || !(IS_IOS||IS_AND)) return;
+    e.preventDefault();
+    if(IS_WX){ copyText(kw); toast("微信里打不开小红书。已复制「"+kw+"」，去小红书 App 粘贴搜索"); return; }
+    var gone = false, t0 = Date.now();
+    function hide(){ gone = true; }
+    document.addEventListener("visibilitychange", hide, {once:true}); window.addEventListener("pagehide", hide, {once:true});
+    location.href = sch;
+    setTimeout(function(){ if(!gone && !document.hidden && Date.now()-t0 < 2500){ copyText(kw); toast("没唤起小红书。已复制「"+kw+"」，打开小红书 App 粘贴搜索"); } }, 1500);
   });
 
   /* 离线缓存：仅在 http(s) 下注册 */
