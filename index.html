@@ -389,7 +389,7 @@ a.opt .on{color:var(--blue)}
         <tr><td>D11 返程</td><td><a class="wake" data-t="08:30" data-d="11">08:30</a></td><td>09:20 大堂集合<br>开车去机场</td><td>10:00 还车<br>14:45 起飞</td></tr>
       </tbody>
     </table>
-    <div class="wakehelp"><b>蓝色的起床时间可以点。</b>安卓：直接弹出设好时间的闹钟，确认即可。iPhone：打开时钟的闹钟页，点右上角「+」，把时间调到表里的数字。微信里打不开，要在浏览器里点。</div>
+    <div class="wakehelp" id="wakehelp"><b>安卓手机点起床时间，直接弹出设好时间的闹钟。</b>iPhone 的网页开不了时钟，最快是对 Siri 说「明天早上八点半叫我」。</div>
     <div class="note">只有 D5 看日出要早起，其余起床都在 08:15 之后，多数 09:00 左右。到达时间已经算进途中休息和吃饭，是宽松值。北疆日出 08:20–08:40、日落 20:00–20:20，比内地晚约两小时。<b>全天路线导航</b>只带一个途经点（高德链接的限制），中途各站在「总览」里逐站点导航。</div>
   </div>
   <div class="daychips" id="daychips" aria-label="跳到某一天"></div>
@@ -1085,17 +1085,16 @@ var TIPS = [
     "<p>桌面图标是「北疆」，加完以后断网也能看。</p></details>"+
     "<details><summary>图片来源</summary>照片来自 Wikimedia Commons，授权见各图说明。菜品小图同样来自 Wikimedia Commons：烤包子：Uyghur samsa（Mizu basyo，CC BY-SA 3.0）；馕：Goshnan（Mizu basyo，CC BY-SA 3.0）；拉条子：Dolan Uyghur handmade noodles Adelaide（Orderinchaos，CC BY-SA 4.0）；包尔萨克：Boortsog（Vidor，Public domain）；拌面：Xinjiang-style sautéed beef noodles in Beijing (20180425171642)（N509FZ，CC BY-SA 4.0）。</details>";
 
-  /* 起床时间 → 手机闹钟：安卓走系统 SET_ALARM 意图（时间预填）；iPhone 网页设不了闹钟，只能打开时钟的闹钟页 */
+  /* 起床时间 → 手机闹钟：只有安卓能走系统 SET_ALARM 意图；iPhone 没有任何网页入口，起床时间就是普通文字 */
   Array.prototype.forEach.call(document.querySelectorAll("a.wake"), function(a){
     var t = a.getAttribute("data-t"), d = a.getAttribute("data-d"), hm = t.split(":");
     if(IS_AND && !IS_WX){
       a.href = "intent:#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR="+parseInt(hm[0],10)+";i.android.intent.extra.alarm.MINUTES="+parseInt(hm[1],10)+";S.android.intent.extra.alarm.MESSAGE="+encodeURIComponent("北疆 D"+d+" 起床")+";B.android.intent.extra.alarm.SKIP_UI=false;end";
-    } else if(IS_IOS && !IS_WX){
-      a.href = "clock-alarm://";
     } else {
-      a.href = "#"; a.addEventListener("click", function(e){ e.preventDefault(); toast(IS_WX ? "微信里打不开时钟，用 Safari 或 Chrome 打开这个页面再点" : "在手机上打开，点起床时间会跳到闹钟"); });
+      var sp = document.createElement("b"); sp.textContent = t; a.parentNode.replaceChild(sp, a);
     }
   });
+  if(!(IS_AND && !IS_WX)){ var wh = document.getElementById("wakehelp"); if(wh) wh.innerHTML = IS_IOS ? "iPhone 的网页开不了时钟。设闹钟最快是对 Siri 说「明天早上八点半叫我」。" : "安卓手机在浏览器里点起床时间，会直接弹出设好时间的闹钟；iPhone 对 Siri 说一句最快。"; }
 
   /* 安卓 Chrome：拿到安装事件就显示一键安装；已经装到桌面就不再提示 */
   try{
