@@ -241,6 +241,10 @@ section{margin:30px 0;scroll-margin-top:52px}
 .xl.ic i{margin:0}
 .toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%);max-width:86vw;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.5;z-index:99;opacity:0;transition:opacity .2s;pointer-events:none;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 .toast.on{opacity:1}
+#foot summary{padding:8px 0;cursor:pointer}
+.a2hs p{margin:6px 0;line-height:1.55}
+.btn{display:inline-block;margin-left:8px;padding:6px 12px;border-radius:8px;border:1px solid var(--gold);background:var(--gold);color:#fff;font-weight:700;font-size:13px;line-height:1.4;cursor:pointer}
+.btn:active{filter:brightness(.88)}
 .xl:active{opacity:.6}
 
 /* 概述与照片 */
@@ -1071,7 +1075,19 @@ var TIPS = [
   document.getElementById("foot").innerHTML =
     "<p class='play'>车上玩牌：<b>巫师牌</b>，3–6 人，60 张牌。每轮发牌后先叫自己能吃几墩，猜准得 20 分再每墩加 10，猜错每差一墩扣 10。规则看 <a href='https://zhuanlan.zhihu.com/p/420507499' target='_blank' rel='noopener'>知乎图文</a> 或 <a href='https://www.bilibili.com/video/BV1C5411R7ch/' target='_blank' rel='noopener'>B 站讲解</a>。</p>" +
     "时间为北京时间。价格为 2026 年旺季估算，以预订和景区公示为准。带定位图标的地名可点：手机浏览器直接唤起高德 App，微信和电脑打开高德网页版。"+
+    "<details class='a2hs' id='a2hs'><summary>加到手机桌面，像 App 一样打开</summary>"+
+    "<p><b>iPhone</b>：用 Safari 打开这个网址，点底部「分享」按钮，选「添加到主屏幕」。微信里没有这个选项，先点右上角「···」，选「在浏览器打开」。</p>"+
+    "<p><b>安卓</b>：Chrome 右上角「⋮」，选「添加到主屏幕」或「安装应用」。<button id='installBtn' class='btn' hidden>一键安装</button></p>"+
+    "<p>桌面图标是「北疆」，加完以后断网也能看。</p></details>"+
     "<details><summary>图片来源</summary>照片来自 Wikimedia Commons，授权见各图说明。菜品小图同样来自 Wikimedia Commons：烤包子：Uyghur samsa（Mizu basyo，CC BY-SA 3.0）；馕：Goshnan（Mizu basyo，CC BY-SA 3.0）；拉条子：Dolan Uyghur handmade noodles Adelaide（Orderinchaos，CC BY-SA 4.0）；包尔萨克：Boortsog（Vidor，Public domain）；拌面：Xinjiang-style sautéed beef noodles in Beijing (20180425171642)（N509FZ，CC BY-SA 4.0）。</details>";
+
+  /* 安卓 Chrome：拿到安装事件就显示一键安装；已经装到桌面就不再提示 */
+  try{
+    var deferredInstall = null;
+    window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); deferredInstall = e; var b = document.getElementById("installBtn"); if(b) b.hidden = false; });
+    document.addEventListener("click", function(e){ var b = e.target.closest && e.target.closest("#installBtn"); if(!b || !deferredInstall) return; deferredInstall.prompt(); deferredInstall = null; b.hidden = true; });
+    if(navigator.standalone === true || (window.matchMedia && matchMedia("(display-mode: standalone)").matches)){ var a2 = document.getElementById("a2hs"); if(a2) a2.hidden = true; }
+  }catch(e){}
 
   /* 时区提示：设备不在 UTC+8 时才显示 */
   try{
@@ -1133,7 +1149,6 @@ var TIPS = [
   document.addEventListener("click", function(e){
     var a = e.target.closest && e.target.closest("a[data-s]"); if(!a) return;
     var sch = a.getAttribute("data-s"); if(!sch || IS_WX || !(IS_IOS||IS_AND)) return;
-    if(IS_IOS && a.classList.contains("pl")) return; /* iOS：高德网页链接自带 callnative=1 会直接唤起 App，手动 scheme 只会多弹「网址无效」 */
     e.preventDefault();
     var web = a.href, gone = false, t0 = Date.now();
     function hide(){ gone = true; }
