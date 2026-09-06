@@ -389,7 +389,7 @@ a.opt .on{color:var(--blue)}
         <tr><td>D11 返程</td><td><a class="wake" data-t="08:30" data-d="11">08:30</a></td><td>09:20 大堂集合<br>开车去机场</td><td>10:00 还车<br>14:45 起飞</td></tr>
       </tbody>
     </table>
-    <div class="wakehelp"><b>蓝色的起床时间可以点，直接设手机闹钟。</b>安卓点了就弹时钟。iPhone 第一次先装一个现成的快捷指令：<a class="btn" id="installSc" href="beijiang-alarm.shortcut">安装「beijiang-alarm」快捷指令</a><span class="sub">每个人自己的 iPhone 上装一次：弹出预览后点「添加快捷指令」。之后点表里的起床时间，闹钟自动建好，不用再问时间。名字别改，链接靠名字找它。微信里打不开，要在 Safari 里点。按钮没反应就<a href="beijiang-alarm.shortcut" download="beijiang-alarm.shortcut">直接下载文件</a>，到「文件」App 里点开它。</span><details><summary>装不上，手动建</summary><ol><li>打开「快捷指令」App，点右上角 +</li><li>添加动作「从输入获取日期」</li><li>再添加动作「创建闹钟」。<b>点它的时间框，选「选择变量」，选上一步的「日期」</b>（不是手动挑时间）。标签随便写</li><li>把这个快捷指令命名为「beijiang-alarm」，要一模一样</li></ol></details></div>
+    <div class="wakehelp"><b>蓝色的起床时间可以点，直接设手机闹钟。</b>安卓点了就弹时钟。iPhone 第一次先装一个现成的快捷指令：<a class="btn" id="installSc" href="beijiang-alarm.shortcut">下载「beijiang-alarm」快捷指令</a><span class="sub" id="installSub">每个人自己的 iPhone 上装一次，三步：点上面按钮，Safari 会问是否下载，选「下载」；点地址栏右边的下载箭头，点开 beijiang-alarm.shortcut；在弹出的快捷指令预览里点「添加快捷指令」。之后点表里的起床时间，闹钟自动建好，不用再问时间。名字别改，链接靠名字找它。微信里打不开，要在 Safari 里点。</span><details><summary>装不上，手动建</summary><ol><li>打开「快捷指令」App，点右上角 +</li><li>添加动作「从输入获取日期」</li><li>再添加动作「创建闹钟」。<b>点它的时间框，选「选择变量」，选上一步的「日期」</b>（不是手动挑时间）。标签随便写</li><li>把这个快捷指令命名为「beijiang-alarm」，要一模一样</li></ol></details></div>
     <div class="note">只有 D5 看日出要早起，其余起床都在 08:15 之后，多数 09:00 左右。到达时间已经算进途中休息和吃饭，是宽松值。北疆日出 08:20–08:40、日落 20:00–20:20，比内地晚约两小时。<b>全天路线导航</b>只带一个途经点（高德链接的限制），中途各站在「总览」里逐站点导航。</div>
   </div>
   <div class="daychips" id="daychips" aria-label="跳到某一天"></div>
@@ -1085,15 +1085,7 @@ var TIPS = [
     "<p>桌面图标是「北疆」，加完以后断网也能看。</p></details>"+
     "<details><summary>图片来源</summary>照片来自 Wikimedia Commons，授权见各图说明。菜品小图同样来自 Wikimedia Commons：烤包子：Uyghur samsa（Mizu basyo，CC BY-SA 3.0）；馕：Goshnan（Mizu basyo，CC BY-SA 3.0）；拉条子：Dolan Uyghur handmade noodles Adelaide（Orderinchaos，CC BY-SA 4.0）；包尔萨克：Boortsog（Vidor，Public domain）；拌面：Xinjiang-style sautéed beef noodles in Beijing (20180425171642)（N509FZ，CC BY-SA 4.0）。</details>";
 
-  /* 安装快捷指令：iPhone 用 shortcuts://import-workflow 直接拉起添加页，其他情况退到文件本身 */
-  try{
-    var sc = document.getElementById("installSc");
-    if(sc){
-      var scUrl = new URL("beijiang-alarm.shortcut", location.href).href;
-      if(IS_IOS && !IS_WX) sc.href = "shortcuts://import-workflow?url="+encodeURIComponent(scUrl)+"&name=beijiang-alarm";
-      else sc.href = scUrl;
-    }
-  }catch(e){}
+  /* 安装快捷指令：shortcuts://import-workflow 已不接受普通网址（实测「URL 无效」），改为直接给文件，iPhone 下载后在快捷指令里打开 */
   /* 起床时间 → 手机闹钟：安卓走系统 SET_ALARM 意图；iPhone 走用户自建的「设闹钟」快捷指令 */
   Array.prototype.forEach.call(document.querySelectorAll("a.wake"), function(a){
     var t = a.getAttribute("data-t"), d = a.getAttribute("data-d"), hm = t.split(":");
