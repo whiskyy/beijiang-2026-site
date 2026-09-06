@@ -835,6 +835,8 @@ var TIPS = [
       '</div></details>';
   });
   document.getElementById("dayList").innerHTML = dh;
+  function openHashDay(){ var m = /^#day-(\d+)$/.exec(location.hash); if(m){ var el = document.getElementById("day-"+m[1]); if(el){ el.open = true; el.scrollIntoView({block:"start"}); } } }
+  window.addEventListener("hashchange", openHashDay); openHashDay();
   if(TODAY_D){
     var tl = document.getElementById("todayLink"); tl.hidden = false; tl.href = "#day-"+TODAY_D; tl.textContent = "今天 D"+TODAY_D+" 的行程";
     var fb = document.createElement("a"); fb.className = "todaybtn"; fb.href = "#day-"+TODAY_D; fb.textContent = "今天 D"+TODAY_D; document.body.appendChild(fb);
