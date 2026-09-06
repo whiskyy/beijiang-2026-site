@@ -135,6 +135,7 @@ section{margin:30px 0;scroll-margin-top:52px}
 .tkt td.g{color:var(--ink2)}
 .tkt .d{font-size:10.5px;color:var(--ink3);font-weight:600;margin-left:3px}
 .tkt .d.pre{display:inline-block;white-space:nowrap;color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);padding:0 4px;border-radius:3px}
+.tkt .d.ok{display:inline-block;white-space:nowrap;color:var(--green);background:color-mix(in srgb,var(--green) 14%,transparent);padding:0 4px;border-radius:3px}
 .prelist{border:1px solid color-mix(in srgb,var(--red) 30%,transparent);border-radius:8px;padding:10px 12px 4px;margin-bottom:14px}
 .prelist .ph{font-size:11px;font-weight:700;color:var(--red);letter-spacing:.06em;margin-bottom:6px}
 .prelist .pr{display:grid;grid-template-columns:74px 1fr;gap:10px;font-size:13px;line-height:1.5;padding:6px 0;border-top:1px solid var(--rule)}
@@ -667,10 +668,9 @@ var SEGS = {1:["乌鲁木齐"],2:["乌鲁木齐","可可托海"],3:["可可托�
 var FOOD = {"烤包子": "kaobaozi", "馕": "nang", "拉条子": "latiaozi", "包尔萨克": "baoersake", "拌面": "banmian", "羊肉串": "yangrouchuan", "大盘鸡": "dapanji", "抓饭": "zhuafan", "手抓肉": "shouzhuarou"};
 
 var TICKETS = {
-  best:"禾木套票 75 和喀纳斯一进票 230 已买，刷身份证入园。",
   rows:[
-    ["喀纳斯","160","禁私家车，一进区间车 70","230","D5",1],
-    ["禾木","50","禁私家车，区间车 25","75","D4",1],
+    ["喀纳斯","160","禁私家车，一进区间车 70","230","D5",2],
+    ["禾木","50","禁私家车，区间车 25","75","D4",2],
     ["可可托海","90","区间车往返 26","116","D3"],
     ["赛里木湖","70","自驾 180/车，摊 30","100","D7",1],
     ["那拉提","95","空中草原区间车 40 + 索道单程 68","203","D9"],
@@ -730,11 +730,12 @@ var TIPS = [
   (function(){
     var t = TICKETS;
     var rows = t.rows.map(function(r){
-      return '<tr><td><b>'+r[0]+'</b><span class="d">'+r[4]+'</span>'+(r[5]?'<span class="d pre">提前</span>':'')+'</td><td class="n">'+r[1]+'</td>'+
+      var tag = r[5]===2 ? '<span class="d ok">已订</span>' : (r[5] ? '<span class="d pre">提前</span>' : '');
+      return '<tr><td><b>'+r[0]+'</b><span class="d">'+r[4]+'</span>'+tag+'</td><td class="n">'+r[1]+'</td>'+
         '<td class="g">'+r[2]+'</td><td class="n">'+r[3]+'</td></tr>';
     }).join("");
     document.getElementById("tktBox").innerHTML =
-      '<div class="best">'+t.best+'</div>'+
+      (t.best?'<div class="best">'+t.best+'</div>':'')+
       '<div class="prelist"><div class="ph">必须提前买 / 抢，漏了进不去</div>'+
         t.pre.map(function(r){return '<div class="pr"><b class="mono">'+r[0]+'</b><span><b>'+r[1]+'</b><br>'+r[2]+'</span></div>'}).join("")+
       '</div>'+
