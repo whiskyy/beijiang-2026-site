@@ -167,6 +167,13 @@ section{margin:30px 0;scroll-margin-top:52px}
 .dayroute span{min-width:0;line-height:1.35}
 .dayroute b{display:block;font-size:12.5px;font-weight:700}
 .dayroute em{display:block;font-style:normal;font-size:11px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.music{display:flex;align-items:center;gap:9px;margin-top:6px;padding:8px 10px;border-radius:7px;background:var(--card);border:1px solid var(--rule);text-decoration:none;color:var(--ink)}
+.music+.music{margin-top:6px}
+.music .ic{flex:none;width:22px;height:22px;border-radius:6px;background:#C20C0C;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.music span{min-width:0;line-height:1.35}
+.music b{display:block;font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.music em{display:block;font-style:normal;font-size:11px;color:var(--ink3)}
+.music .h{margin-left:auto;flex:none;font-size:11.5px;color:var(--ink3);font-variant-numeric:tabular-nums}
 .tl{display:grid;grid-template-columns:44px 1fr;gap:0 10px}
 .tl .tm{font-size:12px;font-weight:600;color:var(--ink2);padding-top:2px;line-height:1.5}
 .tl .ct{font-size:14px;line-height:1.6;padding:0 0 12px 13px;border-left:2px solid var(--rule);margin-left:-1px;position:relative}
@@ -670,6 +677,18 @@ var TOURS = {
    ["16:45","<b>独山子</b>，上 G30 去乌鲁木齐","独山子"]],
    skip:"独山子大峡谷（30 元，另要 1 小时）", cost:"通行免费，只有盐水沟收费站 20/车", tip:"达坂上没信号；19:00 后入口不放行；山上可能有雪，慢", pic:"老虎口观景点拍挂壁公路；哈希勒根隧道北口观景台雪山；巩乃斯河谷云杉夹路，路肩安全处才停", xhs:"独库公路 机位"}]
 };
+/* 每日车载歌单：网易云，时长按当天车程配 */
+var MUSIC = {
+ 2:[{id:6878218453, n:"布鲁斯摇滚 · 公路行驶", s:"戈壁 520 km，粗粝一点", h:6.7}],
+ 3:[{id:2786894389, n:"老民谣：朴树、老狼、许巍、李健、赵雷", s:"额尔齐斯河谷慢慢开", h:9.6}],
+ 4:[{id:957963743, n:"公路之歌 · 自驾大西北 自由感 BGM", s:"盘山进禾木，秋色配这个", h:9.9}],
+ 5:[{id:1978888492, n:"清晨纯音乐", s:"日出后出村，安静一小时", h:8.7}],
+ 6:[{id:389611402, n:"美国自驾 · 66 号公路", s:"戈壁直路，乡村与西部摇滚", h:6.8}],
+ 7:[{id:362979762, n:"公路旅行 · 川藏青藏草原自驾", s:"国庆首日长途，建议随机播放", h:10.4}],
+ 8:[{id:2019441717, n:"哈萨克民歌", s:"伊犁河谷，冬不拉和阿肯弹唱", h:6.6}],
+ 9:[{id:725683630, n:"草原民谣 · 杭盖、HAYA 这一路", s:"翻达坂进巴音布鲁克", h:4.0}],
+ 10:[{id:7511117395, n:"公路 · 开车 · 自驾游车载音乐", s:"独库十小时的主歌单", h:11.6},{id:8306649866, n:"自由 · 独库公路", s:"进北段换这张", h:4.0}]
+};
 var SEGS = {1:["乌鲁木齐"],2:["乌鲁木齐","可可托海"],3:["可可托海","布尔津"],4:["布尔津","五彩滩","禾木"],5:["禾木","贾登峪","喀纳斯"],6:["贾登峪","魔鬼城","克拉玛依"],7:["克拉玛依","赛里木湖","清水河"],8:["清水河","伊宁","那拉提"],9:["那拉提","巴音布鲁克"],10:["巴音布鲁克","乔尔玛","独山子","乌鲁木齐"],11:["乌鲁木齐","机场"]};
 
 var FOOD = {"烤包子": "kaobaozi", "馕": "nang", "拉条子": "latiaozi", "包尔萨克": "baoersake", "拌面": "banmian", "羊肉串": "yangrouchuan", "大盘鸡": "dapanji", "抓饭": "zhuafan", "手抓肉": "shouzhuarou"};
@@ -768,7 +787,13 @@ var TIPS = [
     return '<div class="minimap"><div class="mapwrap"><svg viewBox="0 0 '+MAP.w+' '+MAP.h+'" role="img" aria-label="第'+dn+'天路段">'+
       '<g class="dim">'+others+'</g>'+
       (mine ? '<g class="cas"><path d="'+mine+'"/></g><path d="'+mine+'" fill="none" stroke="'+col+'" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round"/>' : '')+
-      dots + labs + '</svg></div>' + routeBtn(rt) + '</div>';
+      dots + labs + '</svg></div>' + routeBtn(rt) + musicRows(dn) + '</div>';
+  }
+  function musicRows(dn){
+    var m = MUSIC[dn]; if(!m) return "";
+    return m.map(function(x){
+      return '<a class="music" href="https://music.163.com/#/playlist?id='+x.id+'" target="_blank" rel="noopener"><span class="ic">云</span><span><b>'+x.n+'</b><em>'+x.s+'</em></span><span class="h">'+x.h+' h</span></a>';
+    }).join("");
   }
   function routeBtn(rt){
     if(!rt) return "";
