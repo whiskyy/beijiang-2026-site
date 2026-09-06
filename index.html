@@ -16,7 +16,7 @@
   --rule:#E3DDD3; --gold:#906014; --green:#2D6A4E; --red:#B1392A; --blue:#23587A;
   --d1:#9E6C22; --d2:#707D30; --d3:#3F7A5E; --d4:#2C6E75; --d5:#3B5F91;
   --d6:#6B4E8C; --d7:#9E3E70; --d8:#B03A38; --d9:#B1621F; --d10:#7A6A3A; --dntext:#FFFFFF;
-  --route:#1F5B85; --halo:rgba(252,250,245,.9); --dim:rgba(255,255,255,.8); --mapimg:url(img/map-light.jpg);
+  --route:#1F5B85; --xhs:#C8102E; --halo:rgba(252,250,245,.9); --dim:rgba(255,255,255,.8); --mapimg:url(img/map-light.jpg);
   --wash1:rgba(200,137,43,.10); --wash2:rgba(31,91,133,.07); --contour-img:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420' fill='none' stroke='%231E1B17' stroke-opacity='.075' stroke-width='1'><path d='M-20 60c60-30 120 10 180-10s110-50 170-20 90 60 110 60'/><path d='M-20 110c70-20 130 20 200 0s100-40 160-10 80 50 100 50'/><path d='M-20 170c80-40 150 30 230 10s90-60 150-30 70 40 80 40'/><path d='M-20 240c60-10 110 40 180 30s120-70 200-40 80 40 80 40'/><path d='M-20 300c90-50 160 20 240 0s90-30 140-10 60 40 60 40'/><path d='M-20 360c70 0 120 30 190 20s130-60 210-30 50 30 50 30'/><path d='M60 420c40-40 90-60 150-50s110 40 170 20'/></svg>");
 }
 @media (prefers-color-scheme: dark){
@@ -25,7 +25,7 @@
     --rule:#2C2A23; --gold:#E0A94A; --green:#79B39B; --red:#E08A72; --blue:#79A8CC;
     --d1:#E3A94E; --d2:#AFC155; --d3:#5FA684; --d4:#4E97A0; --d5:#6A8FC4;
     --d6:#9B7CC0; --d7:#CE6E9C; --d8:#DE6A64; --d9:#E39346; --d10:#A99457; --dntext:#141310;
-    --route:#8FC1E8; --halo:rgba(22,21,17,.85); --dim:rgba(255,255,255,.35); --mapimg:url(img/map-dark.jpg);
+    --route:#8FC1E8; --xhs:#F26B7A; --halo:rgba(22,21,17,.85); --dim:rgba(255,255,255,.35); --mapimg:url(img/map-dark.jpg);
     --wash1:rgba(227,169,78,.09); --wash2:rgba(143,193,232,.06); --contour-img:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420' fill='none' stroke='%23ECE6DA' stroke-opacity='.06' stroke-width='1'><path d='M-20 60c60-30 120 10 180-10s110-50 170-20 90 60 110 60'/><path d='M-20 110c70-20 130 20 200 0s100-40 160-10 80 50 100 50'/><path d='M-20 170c80-40 150 30 230 10s90-60 150-30 70 40 80 40'/><path d='M-20 240c60-10 110 40 180 30s120-70 200-40 80 40 80 40'/><path d='M-20 300c90-50 160 20 240 0s90-30 140-10 60 40 60 40'/><path d='M-20 360c70 0 120 30 190 20s130-60 210-30 50 30 50 30'/><path d='M60 420c40-40 90-60 150-50s110 40 170 20'/></svg>");
   }
 }
@@ -34,7 +34,7 @@
   --rule:#2C2A23; --gold:#E0A94A; --green:#79B39B; --red:#E08A72; --blue:#79A8CC;
   --d1:#E3A94E; --d2:#AFC155; --d3:#5FA684; --d4:#4E97A0; --d5:#6A8FC4;
   --d6:#9B7CC0; --d7:#CE6E9C; --d8:#DE6A64; --d9:#E39346; --d10:#A99457; --dntext:#141310;
-  --route:#8FC1E8; --halo:rgba(22,21,17,.85); --dim:rgba(255,255,255,.35); --mapimg:url(img/map-dark.jpg);
+  --route:#8FC1E8; --xhs:#F26B7A; --halo:rgba(22,21,17,.85); --dim:rgba(255,255,255,.35); --mapimg:url(img/map-dark.jpg);
   --wash1:rgba(227,169,78,.09); --wash2:rgba(143,193,232,.06); --contour-img:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420' fill='none' stroke='%23ECE6DA' stroke-opacity='.06' stroke-width='1'><path d='M-20 60c60-30 120 10 180-10s110-50 170-20 90 60 110 60'/><path d='M-20 110c70-20 130 20 200 0s100-40 160-10 80 50 100 50'/><path d='M-20 170c80-40 150 30 230 10s90-60 150-30 70 40 80 40'/><path d='M-20 240c60-10 110 40 180 30s120-70 200-40 80 40 80 40'/><path d='M-20 300c90-50 160 20 240 0s90-30 140-10 60 40 60 40'/><path d='M-20 360c70 0 120 30 190 20s130-60 210-30 50 30 50 30'/><path d='M60 420c40-40 90-60 150-50s110 40 170 20'/></svg>");
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;min-width:0}
@@ -135,7 +135,7 @@ section{margin:30px 0;scroll-margin-top:52px}
 .sum b{color:var(--ink)}
 
 /* 地点链接 */
-.pl{color:var(--blue);text-decoration:underline dotted color-mix(in srgb,var(--blue) 55%,transparent);text-underline-offset:3px;text-decoration-thickness:1px;padding:9px 3px;margin:0 -3px;border-radius:4px}
+.pl{color:var(--blue);text-decoration:none;padding:9px 3px;margin:0 -3px;border-radius:4px}
 .pl:active{background:color-mix(in srgb,var(--blue) 12%,transparent)}
 .pl svg{width:.9em;height:.9em;fill:currentColor;vertical-align:-.1em;margin-right:1px}
 .pl.ic{display:inline-block;min-width:32px;min-height:32px;line-height:32px;text-align:center;vertical-align:middle;margin:-8px -2px;padding:0;text-decoration:none}
@@ -186,14 +186,14 @@ section{margin:30px 0;scroll-margin-top:52px}
 .day[open]>summary .chev{transform:rotate(90deg)}
 .dbody{padding:12px 14px 14px;border-top:1px solid var(--rule)}
 .minimap{margin:0 0 12px;background:var(--soft);border-radius:8px;padding:6px}
-.dayroute{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;background:var(--card);
+.dayroute{display:flex;align-items:center;gap:9px;margin-top:14px;padding:9px 10px;border-radius:7px;background:var(--card);
   border:1px solid color-mix(in srgb,var(--blue) 30%,transparent);color:var(--blue);text-decoration:none}
 .dayroute:active{background:color-mix(in srgb,var(--blue) 12%,transparent)}
 .dayroute svg{width:16px;height:16px;flex:none}
 .dayroute span{min-width:0;line-height:1.35}
 .dayroute b{display:block;font-size:12.5px;font-weight:700}
 .dayroute em{display:block;font-style:normal;font-size:11px;color:var(--ink3);white-space:normal;line-height:1.35}
-.music{display:flex;align-items:center;gap:9px;margin-top:6px;padding:8px 10px;border-radius:7px;background:var(--card);border:1px solid var(--rule);text-decoration:none;color:var(--ink)}
+.music{display:flex;align-items:center;gap:9px;margin-top:10px;padding:8px 10px;border-radius:7px;background:var(--card);border:1px solid var(--rule);text-decoration:none;color:var(--ink)}
 .music+.music{margin-top:6px}
 .music .ic{flex:none;width:22px;height:22px;border-radius:6px;background:#C20C0C;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
 .music span{min-width:0;line-height:1.35}
@@ -234,18 +234,16 @@ section{margin:30px 0;scroll-margin-top:52px}
 .meal .mt b{color:var(--ink)}
 .meal .mi{width:56px;height:56px;border-radius:8px;object-fit:cover;background:var(--card);display:block}
 .meal.noimg{grid-template-columns:20px 1fr}
-.xl{color:var(--ink);text-decoration:none;padding:9px 3px;margin:0 -3px;border-radius:4px}
-.xl:active{background:var(--soft)}
-.xl i{display:inline-block;width:16px;height:16px;border-radius:4px;background:#E5203B;color:#fff;font-style:normal;font-size:11px;line-height:16px;text-align:center;vertical-align:-2px;margin-right:3px;font-weight:700}
-.xl.ic{display:inline-block;min-width:32px;min-height:32px;line-height:32px;text-align:center;vertical-align:middle;margin:-8px -2px;padding:0}
-.xl.ic i{margin:0}
+.xl{display:inline-flex;align-items:center;gap:5px;min-height:32px;padding:0 11px 0 8px;border-radius:999px;border:1px solid color-mix(in srgb,var(--xhs) 40%,transparent);background:color-mix(in srgb,var(--xhs) 7%,transparent);color:var(--xhs);font-size:12px;font-weight:600;line-height:1;text-decoration:none;white-space:nowrap}
+.xl:active{filter:brightness(.9)}
+.mx{margin-top:8px}
+.xl i{display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--xhs);color:#fff;font-style:normal;font-size:10px;line-height:14px;text-align:center;font-weight:700}
 .toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%);max-width:86vw;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.5;z-index:99;opacity:0;transition:opacity .2s;pointer-events:none;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 .toast.on{opacity:1}
 #foot summary{padding:8px 0;cursor:pointer}
 .a2hs p{margin:6px 0;line-height:1.55}
 .btn{display:inline-block;margin-left:8px;padding:6px 12px;border-radius:8px;border:1px solid var(--gold);background:var(--gold);color:#fff;font-weight:700;font-size:13px;line-height:1.4;cursor:pointer}
 .btn:active{filter:brightness(.88)}
-.xl:active{opacity:.6}
 
 /* 概述与照片 */
 figure.photo{margin:0;background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
@@ -301,7 +299,17 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 .tour.plan>summary::before{content:"总览";flex:none;font-size:11px;font-weight:700;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
 .tour.food>summary::before{content:"吃";flex:none;font-size:11px;font-weight:700;color:var(--red);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
 .tbody>.tl{margin-top:10px}
-.minimap .stay{margin-top:6px;padding:6px 10px;min-height:44px;box-sizing:border-box;display:flex;align-items:center;flex-wrap:wrap;background:var(--card);border:1px solid var(--rule);border-radius:7px;font-size:13px}
+.meet{margin-top:8px;padding:8px 10px;min-height:44px;box-sizing:border-box;display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;background:var(--card);border:1px solid var(--rule);border-radius:7px;font-size:13px;line-height:1.45}
+.meet .k{font-size:11px;color:var(--ink3);letter-spacing:.1em;font-weight:700}
+.meet .mt2{flex:1;min-width:60%}
+.alm{display:inline-flex;align-items:center;min-height:32px;padding:0 11px;border-radius:999px;background:var(--gold);color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;margin-left:auto}
+.alm:active{filter:brightness(.88)}
+.alm.ic{background:none;color:inherit;padding:0;min-width:32px;justify-content:center;margin:-8px -4px;font-size:15px}
+.sched .almall{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sched .almall .alm{margin-left:0}
+.sched .almall .n{font-size:12px;color:var(--ink2);line-height:1.5;flex:1;min-width:200px}
+.sched td .alm.ic{margin:-8px 0 -8px 2px;vertical-align:middle}
+.minimap .stay{margin-top:8px;padding:6px 10px;min-height:44px;box-sizing:border-box;display:flex;align-items:center;flex-wrap:wrap;background:var(--card);border:1px solid var(--rule);border-radius:7px;font-size:13px}
 .tbody.meals{margin:0;background:none;border-radius:0;padding:0 12px 10px}
 .meal{align-items:start}
 .meal .mi{margin-top:4px}
@@ -313,7 +321,7 @@ a.opt:active{background:var(--soft)}
 .opt .on{display:block;font-size:14px;font-weight:600;line-height:1.5}
 a.opt .on{color:var(--blue)}
 .opt .os{display:block;font-size:12.5px;color:var(--ink3);line-height:1.45}
-.mt .xl.ic{margin-top:2px}
+
 .tour.spot>summary::before{content:"景区";flex:none;font-size:11px;font-weight:700;color:var(--route);border:1px solid color-mix(in srgb,var(--route) 40%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
 </style>
 </head>
@@ -371,19 +379,20 @@ a.opt .on{color:var(--blue)}
       <thead><tr><th>天</th><th>起床</th><th>出发</th><th>落脚</th></tr></thead>
       <tbody>
         <tr><td>D1 乌鲁木齐</td><td>—</td><td>中午落地</td><td>—</td></tr>
-        <tr><td>D2 可可托海</td><td>08:30</td><td>09:20 打车<br>10:15 机场出发</td><td>17:30</td></tr>
-        <tr><td>D3 布尔津</td><td>09:15</td><td>10:00<br>10:30 进景区</td><td>20:00</td></tr>
-        <tr><td>D4 禾木</td><td>08:30</td><td>09:30<br>10:00 五彩滩</td><td>15:30 进村</td></tr>
-        <tr class="x"><td>D5 喀纳斯</td><td>06:40 看日出<br>不看 09:00</td><td>07:10 上观景台<br>10:30 出村</td><td>19:00</td></tr>
-        <tr><td>D6 克拉玛依</td><td>09:00</td><td>10:00</td><td>19:30</td></tr>
-        <tr class="x"><td>D7 赛里木湖</td><td>08:15</td><td>09:00</td><td>20:00</td></tr>
-        <tr><td>D8 伊宁 → 那拉提</td><td>09:00</td><td>10:00</td><td>20:30</td></tr>
-        <tr><td>D9 巴音布鲁克</td><td>08:30</td><td>09:30 到那拉提闸口</td><td>21:30</td></tr>
-        <tr><td>D10 独库</td><td>09:00</td><td>10:00</td><td>20:30 市区</td></tr>
-        <tr><td>D11 返程</td><td>08:30</td><td>09:20 开车去机场</td><td>10:00 还车<br>14:45 起飞</td></tr>
+        <tr><td>D2 可可托海</td><td>08:30 <a class="alm ic" href="alarm/d02.ics" aria-label="D2 起床提醒">⏰</a></td><td>09:20 打车<br>10:15 机场出发</td><td>17:30</td></tr>
+        <tr><td>D3 布尔津</td><td>09:15 <a class="alm ic" href="alarm/d03.ics" aria-label="D3 起床提醒">⏰</a></td><td>10:00<br>10:30 进景区</td><td>20:00</td></tr>
+        <tr><td>D4 禾木</td><td>08:30 <a class="alm ic" href="alarm/d04.ics" aria-label="D4 起床提醒">⏰</a></td><td>09:30<br>10:00 五彩滩</td><td>15:30 进村</td></tr>
+        <tr class="x"><td>D5 喀纳斯</td><td>06:40 看日出<br>不看 09:00 <a class="alm ic" href="alarm/d05.ics" aria-label="D5 起床提醒">⏰</a></td><td>07:10 上观景台<br>10:30 出村</td><td>19:00</td></tr>
+        <tr><td>D6 克拉玛依</td><td>09:00 <a class="alm ic" href="alarm/d06.ics" aria-label="D6 起床提醒">⏰</a></td><td>10:00</td><td>19:30</td></tr>
+        <tr class="x"><td>D7 赛里木湖</td><td>08:15 <a class="alm ic" href="alarm/d07.ics" aria-label="D7 起床提醒">⏰</a></td><td>09:00</td><td>20:00</td></tr>
+        <tr><td>D8 伊宁 → 那拉提</td><td>09:00 <a class="alm ic" href="alarm/d08.ics" aria-label="D8 起床提醒">⏰</a></td><td>10:00</td><td>20:30</td></tr>
+        <tr><td>D9 巴音布鲁克</td><td>08:30 <a class="alm ic" href="alarm/d09.ics" aria-label="D9 起床提醒">⏰</a></td><td>09:30 到那拉提闸口</td><td>21:30</td></tr>
+        <tr><td>D10 独库</td><td>09:00 <a class="alm ic" href="alarm/d10.ics" aria-label="D10 起床提醒">⏰</a></td><td>10:00</td><td>20:30 市区</td></tr>
+        <tr><td>D11 返程</td><td>08:30 <a class="alm ic" href="alarm/d11.ics" aria-label="D11 起床提醒">⏰</a></td><td>09:20 开车去机场</td><td>10:00 还车<br>14:45 起飞</td></tr>
       </tbody>
     </table>
-    <div class="note">只有 D5 看日出要早起，其余起床都在 08:15 之后，多数 09:00 左右。每天的时间线都按<b>每 2 小时停一次服务区上厕所、吃饭 45 分钟</b>算，到达时间是含停车的保守值。北疆日出 08:20–08:40、日落 20:00–20:20，比内地晚约两小时。<b>全天路线导航</b>只带一个途经点（高德链接的限制），中途各站在「总览」里逐站点导航。</div>
+    <div class="almall"><a class="alm" href="alarm/all.ics">⏰ 一键把 10 天起床提醒加到日历</a><span class="n">iPhone 点开选「添加全部」，到点会响。网页没法直接设时钟闹钟，想要闹钟就跟 Siri 说</span></div>
+    <div class="note">只有 D5 看日出要早起，其余起床都在 08:15 之后，多数 09:00 左右。到达时间已经算进途中休息和吃饭，是宽松值。北疆日出 08:20–08:40、日落 20:00–20:20，比内地晚约两小时。<b>全天路线导航</b>只带一个途经点（高德链接的限制），中途各站在「总览」里逐站点导航。</div>
   </div>
   <div class="daychips" id="daychips" aria-label="跳到某一天"></div>
   <div id="dayList"></div>
@@ -574,7 +583,7 @@ function linkify(html, k, mode){
 /* 小红书搜索：手机上网页版搜索不存在（页面不见了），只能唤起 App；桌面走网页版 */
 function xhsLink(kw){
   var q = encodeURIComponent(kw);
-  return '<a class="xl ic" href="https://www.xiaohongshu.com/search_result?keyword='+q+'&source=web_explore_feed" data-x="xhsdiscover://search/result?keyword='+q+'" data-kw="'+kw.replace(/"/g,"&quot;")+'" target="_blank" rel="noopener" aria-label="小红书搜「'+kw+'」"><i>书</i></a>';
+  return '<a class="xl" href="https://www.xiaohongshu.com/search_result?keyword='+q+'&source=web_explore_feed" data-x="xhsdiscover://search/result?keyword='+q+'" data-kw="'+kw.replace(/"/g,"&quot;")+'" target="_blank" rel="noopener" aria-label="小红书搜「'+kw+'」"><i>书</i>小红书 · '+kw+'</a>';
 }
 
 var IMGD = {"00.jpg": [950, 632], "01.jpg": [950, 646], "02.jpg": [950, 712], "04.jpg": [950, 646], "07.jpg": [950, 534], "09.jpg": [950, 663], "10.jpg": [950, 631], "11.jpg": [950, 633], "12.jpg": [900, 599], "13.jpg": [950, 633], "14.jpg": [950, 712], "15.jpg": [950, 712], "16.jpg": [950, 712], "17.jpg": [950, 712], "18.jpg": [950, 636], "19.jpg": [950, 633]};
@@ -583,7 +592,7 @@ var TZ = "+08:00";
 
 
 var DAYS = [
-  {d:1, date:"9/25", wk:"周五", r:"到乌鲁木齐", m:"中午落地 · 打车进城 · 市区过夜", stay:"桔子酒店 国际大巴扎人民电影院店", stayNav:"乌市桔子酒店",
+  {d:1, date:"9/25", wk:"周五", meet:"中午机场落地，4 人一起打车进城", r:"到乌鲁木齐", m:"中午落地 · 打车进城 · 市区过夜", stay:"桔子酒店 国际大巴扎人民电影院店", stayNav:"乌市桔子酒店",
    meals:[{"t": "午", "n": "落地进城后去<b>领馆巷</b>，离大巴扎 400 米", "f": "羊肉串", "x": "领馆巷 美食", "o": [["艾力江和田馕坑烤肉", "领馆巷 23 号，馕坑烤肉、烤包子，人均 45"], ["努尔麦麦提兄弟和田烤肉", "领馆巷 5 号，和田风味烤肉"], ["赞梅尔特色抓饭馆", "天池路 178 号，抓饭为主，走 5 分钟"]]}, {"t": "晚", "f": "烤包子", "x": "乌鲁木齐 大巴扎夜市", "o": [["国际大巴扎", "夜市烤串、酸奶刨冰、干果，边逛边吃"], ["白尔开特肉馕", "领馆巷口，现烤肉馕，本地人排队"], ["忆孜海迩冰淇淋", "领馆巷 90 号，手工冰淇淋当甜品"], ["海尔巴格大饭店", "延安路 4 号大巴扎旁，坐下吃新疆菜，六人拼一桌"]]}],
    it:[
     {t:"中午", c:"4 人落地<b>天山国际机场</b>，打车进城，2 辆车；另 2 人已在市区", nav:"天山国际机场"},
@@ -591,36 +600,36 @@ var DAYS = [
     {t:"21:00", c:"大巴扎夜市，酒店步行可达", nav:"国际大巴扎"},
     {t:"", c:"不安排远行。新疆作息比内地晚约 2 小时"}
    ]},
-  {d:2, rt:["天山国际机场","可可苏里","雾海野奢民宿"], date:"9/26", wk:"周六", r:"乌鲁木齐 → 可可托海", m:"520 km · 6 h · 10:00 机场取车 · 10:15 出发", stay:"雾海野奢民宿", stayNav:"雾海野奢民宿",
+  {d:2, rt:["天山国际机场","可可苏里","雾海野奢民宿"], date:"9/26", wk:"周六", wake:"08:30", meet:"09:20 酒店大堂集合，打车去机场", alarm:"d02.ics", r:"乌鲁木齐 → 可可托海", m:"520 km · 6 h · 10:00 机场取车 · 10:15 出发", stay:"雾海野奢民宿", stayNav:"雾海野奢民宿",
    pic:[["01.jpg", "可可托海额尔齐斯大峡谷，河谷两侧是花岗岩石壁和针叶林", "可可托海景区的额尔齐斯大峡谷。摄影 Yanxutong1215，Wikimedia Commons，CC BY-SA 4.0"]],
    meals:[{"t": "早", "n": "08:45 吃，09:20 打车", "f": "包尔萨克", "x": "乌鲁木齐 伊犁奶茶馆", "o": [["伊犁奶茶馆", "领馆巷 90 号，咸奶茶、油塔子、薄皮包子"], ["千心灵牛肉面", "大巴扎 4 号楼，牛肉面，快"], ["白尔开特肉馕", "买几个肉馕带上车"]]}, {"t": "午", "n": "14:00 恰库尔图或 15:00 富蕴，45 分钟", "f": "拌面", "x": "富蕴 拌面", "o": [["恰库尔图老奇台拌面王", "恰库尔图镇文化东路，过油肉拌面"], ["昌吉老回民特色拌面", "同一路口，清真拌面"], ["穆巴郎大盘鸡新疆菜", "富蕴县城团结南路，大盘鸡"], ["富蕴三道羊餐厅", "富蕴迎宾西路 25 号，羊肉菜"]]}, {"t": "晚", "n": "民宿在镇外，都要开车", "f": "羊肉串", "x": "可可托海 美食", "o": [["美味烧烤吧", "派出所对面，烤馕、羊肉串、炖蘑菇，开车约 8 分钟"], ["好兄弟特色美食城", "风情街，新疆菜、大盘鸡，桌多，开车约 9 分钟"], ["湘宴冷水鱼庄", "和平路，额河冷水鱼，开车约 6 分钟"]]}],
    it:[
     {t:"09:20", c:"6 人从酒店打车去机场，一辆六座网约车或两辆出租车，30 分钟", nav:"天山国际机场"},
     {t:"10:00", c:"<b>一嗨天山机场店取车</b>，P1 停车楼 6 层 6F-C 区，别克 GL8 陆尚插混。4 个驾驶员都在场，附加驾驶员当场登记；验车绕一圈录像，核对行驶证 7 座、车牌与 App 一致，胎压、备胎看一眼", hot:1},
     {t:"10:15", c:"从机场上绕城高速接 G7，转 G216，不回市区"},
-    {t:"12:15", c:"<b>五彩湾服务区</b>加油上厕所，20 分钟。之后卡拉麦里 130 km 没有厕所", nav:"五彩湾服务区"},
-    {t:"14:00", c:"<b>恰库尔图</b>收费站后午饭 45 分钟，厕所；不想停就到 15:00 富蕴吃", nav:"恰库尔图"},
+    {t:"12:15", c:"<b>五彩湾服务区</b>加油、休息。之后卡拉麦里 130 km 没有服务区", nav:"五彩湾服务区"},
+    {t:"14:00", c:"<b>恰库尔图</b>收费站后午饭；不想停就到 15:00 富蕴吃", nav:"恰库尔图"},
     {t:"16:30", c:"<b>可可苏里</b>（野鸭湖）停车 20 分钟", nav:"可可苏里"},
     {t:"17:30", c:"到可可托海镇。全天开 6 小时，停 1.5 小时", nav:"雾海野奢民宿"},
     {t:"24:00", bk:"提前抢 · 就是今晚", c:"<span class='warn'>0 点抢独库北段 10/4 名额</span>，「游新疆一码游」小程序：<b>入口选那拉提，时段 12:00–14:00</b>，填车牌、驾驶员和 6 人实名，人脸核验。提前确认房间有信号", hot:1}
    ]},
-  {d:3, rt:["雾海野奢民宿","可可托海景区","泰悦假日酒店"], date:"9/27", wk:"周日", r:"可可托海 → 布尔津", m:"350 km · 5.5 h · 10:00 出发", stay:"泰悦假日酒店", stayNav:"泰悦假日酒店",
+  {d:3, rt:["雾海野奢民宿","可可托海景区","泰悦假日酒店"], date:"9/27", wk:"周日", wake:"09:15", meet:"10:00 民宿门口集合，先进景区", alarm:"d03.ics", r:"可可托海 → 布尔津", m:"350 km · 5.5 h · 10:00 出发", stay:"泰悦假日酒店", stayNav:"泰悦假日酒店",
    meals:[{"t": "早", "n": "进镇文化西路一条街，顺手买两个馕带着", "f": "包尔萨克", "x": "可可托海镇 早餐", "o": [["金大碗牛肉面", "远方大酒店旁，牛肉面，开车约 8 分钟"], ["老马大盘鸡拌面", "文化西路 32-1，早上开门，面食"], ["小马拌面牛肉面馆", "文化西路，拌面、牛肉面"]]}, {"t": "午", "n": "13:30 出景区，镇上快餐，14:30 出发", "f": "抓饭", "x": "可可托海 拌面", "o": [["库拉西拌面王", "文化西路，拌面，快"], ["老昌吉拌面王", "文化西路 32-101，拌面、抓饭"], ["穆萨大盘鸡拌面", "文化西路 32-106，大盘鸡拌面"]]}, {"t": "晚", "x": "布尔津 河堤夜市", "o": [["布尔津河堤夜市", "烤冷水鱼摊，乔尔泰或五道黑 35–55 元/条，先问价、看着取鱼，步行 10 分钟"], ["阿凡提冷水鱼庄", "西季美食街，冷水鱼坐下吃，步行 6 分钟"], ["印府冷水鱼", "百花园路总店，冷水鱼，步行 8 分钟"], ["米泉大盘鸡烧烤冷水鱼庄", "友谊峰路美食街，冷水鱼加烧烤，步行 6 分钟"]]}],
    it:[
     {t:"10:30", bk:1, c:"进<b>可可托海景区</b>：额尔齐斯大峡谷、神钟山、白桦林。区间车只坐第一段（单程 40 分钟），第二段电瓶车单独收费，不买", nav:"可可托海景区", hot:1},
     {t:"13:30", c:"出景区，午饭后 14:30 出发"},
-    {t:"15:30", c:"<b>富蕴</b>加油、厕所 15 分钟", nav:"富蕴县"},
-    {t:"18:00", c:"<b>北屯</b>厕所、买水 15 分钟，还有 90 km", nav:"北屯市"},
+    {t:"15:30", c:"<b>富蕴</b>加油、休息", nav:"富蕴县"},
+    {t:"18:00", c:"<b>北屯</b>休息、买水，还有 90 km", nav:"北屯市"},
     {t:"20:00", c:"到布尔津。开 4.5 小时，停 1 小时"},
     {t:"20:30", c:"河堤夜市，烤冷水鱼", nav:"布尔津河堤夜市"}
    ]},
-  {d:4, rt:["泰悦假日酒店","五彩滩","禾木门票站"], date:"9/28", wk:"周一", r:"布尔津 → 五彩滩 → 禾木", m:"180 km · 09:30 出发", stay:"禾木無也民宿", stayNav:"禾木無也民宿",
+  {d:4, rt:["泰悦假日酒店","五彩滩","禾木门票站"], date:"9/28", wk:"周一", wake:"08:30", meet:"09:30 酒店大堂集合出发", alarm:"d04.ics", r:"布尔津 → 五彩滩 → 禾木", m:"180 km · 09:30 出发", stay:"禾木無也民宿", stayNav:"禾木無也民宿",
    pic:[["02.jpg", "五彩滩的彩色雅丹地貌，额尔齐斯河从旁边流过", "五彩滩。摄影 Anh minh，Wikimedia Commons，CC BY-SA 3.0"], ["13.jpg", "十月初雪后的禾木村，成片木屋和背后的雪山", "禾木村，2024 年 10 月 14 日。摄影 Leeinm，Wikimedia Commons，CC BY-SA 4.0"]],
    meals:[{"t": "早", "n": "来不及再吃酒店", "f": "烤包子", "x": "布尔津 早餐", "o": [["四十九丸子汤布尔津店", "友谊峰路 36 号，丸子汤配油塔子，步行 3 分钟"], ["斯外达餐厅", "湘疆大酒店门面，早餐面食，步行 9 分钟"], ["马依莱牛肉面", "和湖路 11 号，牛肉面，步行 15 分钟"]]}, {"t": "午", "n": "15:30 进村后桥头一带。村里物价高，拌面 50、大盘鸡 200 起", "x": "禾木 午饭", "o": [["肯德基禾木店", "禾木村 252 号，平价兜底，步行 9 分钟"], ["桃源风味餐厅", "禾木桥东南 90 米，家常新疆菜，步行 8 分钟"], ["马一绝牛肉面", "乡政府对门，牛肉面快餐，步行 10 分钟"]]}, {"t": "晚", "n": "20:30 下山后。进村时问几点打烊；<b>明早早饭下午先买好</b>", "f": "手抓肉", "x": "禾木 土火锅", "o": [["行山大尾羊特色餐厅", "民宿北侧，大尾羊手抓肉，步行 2 分钟"], ["禾木老桥冷水鱼餐厅", "美丽峰路 19 号桥头，冷水鱼，步行 7 分钟"], ["禾木羊羔子肉土火锅总店", "禾木村 328 号，土火锅 260 元一锅，步行 8 分钟"], ["纳兰禾谷餐厅", "围哈拉 341 号，新疆菜，步行 7 分钟"]]}],
    it:[
     {t:"09:30", c:"出发"},
-    {t:"10:00", c:"<b>五彩滩</b>，45 分钟，看完就走，走前上厕所", nav:"五彩滩"},
-    {t:"10:45", bk:"已买 · 禾木套票 75", c:"去禾木，按 3 小时算：<b>冲乎尔</b>加油厕所 10 分钟，两处观景台各 10 分钟。<span class='warn'>车停禾木门票站，不是贾登峪</span>，相距 34 km。停车 20 元/天，换区间车进村", nav:"禾木门票站", hot:1},
+    {t:"10:00", c:"<b>五彩滩</b>，45 分钟，看完就走", nav:"五彩滩"},
+    {t:"10:45", bk:"已买 · 禾木套票 75", c:"去禾木，按 3 小时算，<b>冲乎尔</b>加油，两处观景台各停一下。<span class='warn'>车停禾木门票站，不是贾登峪</span>，相距 34 km。停车 20 元/天，换区间车进村", nav:"禾木门票站", hot:1},
     {t:"13:45", c:"<b>检票点：禾木门票站</b>。停车，刷身份证换区间车，票已买；14:00 上车，约 1 小时", nav:"禾木门票站", hot:1},
     {t:"15:30", c:"进村安顿，午饭，<b>先买好明早早饭</b>，民宿不含早"},
     {t:"17:30", c:"<b>17:30–19:00 旅拍</b>"},
@@ -628,7 +637,7 @@ var DAYS = [
     {t:"20:30", c:"下山，晚饭：民宿附近行山大尾羊，或桥头老桥冷水鱼"},
     {t:"21:30", c:"星空。<b>22:30 前睡</b>，次日看日出的 06:40 起。夜间零下"}
    ]},
-  {d:5, rt:["禾木门票站","贾登峪服务中心","喀纳斯生态度假酒店"], date:"9/29", wk:"周二", r:"禾木 → 喀纳斯", m:"70 km · 看日出 06:40 起，不看 09:00 起", stay:"喀纳斯生态度假酒店", stayNav:"喀纳斯生态度假酒店",
+  {d:5, rt:["禾木门票站","贾登峪服务中心","喀纳斯生态度假酒店"], date:"9/29", wk:"周二", wake:"09:00", meet:"10:30 民宿集合，退房出村；看日出的 06:40 起", alarm:"d05.ics", r:"禾木 → 喀纳斯", m:"70 km · 看日出 06:40 起，不看 09:00 起", stay:"喀纳斯生态度假酒店", stayNav:"喀纳斯生态度假酒店",
    pic:[["04.jpg", "喀纳斯月亮湾，河道呈弯月形，两岸密林", "喀纳斯月亮湾。摄影 Yanxutong1215，Wikimedia Commons，CC BY-SA 4.0"]],
    meals:[{"t": "早", "n": "出门前先吃头天买的馕、保温壶奶茶；09:30 下山后老村 30 分钟", "f": "包尔萨克", "x": "禾木 早餐 奶茶馆", "o": [["神的自留地", "苏木河路，网红咖啡奶茶，包尔萨克，步行 8 分钟"], ["马一绝牛肉面", "乡政府对门，牛肉面、包子，步行 10 分钟"], ["疆禾餐厅", "景区东北侧，快餐早点，步行 9 分钟"]]}, {"t": "午", "n": "景区里贵且一般，<b>自带干粮</b>最稳", "x": "喀纳斯 换乘中心 午饭", "o": [["肯德基喀纳斯店", "换乘中心旁，最省事"], ["喀纳斯食苑餐厅", "哈纳斯路，新疆菜快餐，步行 5 分钟"], ["达木迪风味快餐", "老村路口，快餐，步行 6 分钟"]]}, {"t": "晚", "f": "拌面", "x": "贾登峪 拌面", "o": [["喀纳斯生态度假酒店", "酒店西餐厅全天供餐，不出门"], ["穆羊姑娘风味餐厅", "文化广场 1 号楼 2 层，羊肉新疆菜，步行 6 分钟"], ["尤布特色大盘鸡馕包肉", "公安局东侧，大盘鸡、馕包肉，步行 6 分钟"], ["勇哥小厨", "餐饮广场，拌面约 30 一份，步行 5 分钟"]]}],
    it:[
@@ -638,29 +647,29 @@ var DAYS = [
     {t:"09:30", c:"老村早餐 30 分钟"},
     {t:"10:30", c:"退房，区间车出禾木"},
     {t:"11:30", c:"门票站取车，开 34 km 到贾登峪"},
-    {t:"12:30", c:"<b>检票点：贾登峪游客服务中心</b>。停车、厕所、买水 30 分钟，13:00 刷身份证上区间车", nav:"贾登峪服务中心", hot:1},
+    {t:"12:30", c:"<b>检票点：贾登峪游客服务中心</b>。停车、买水，13:00 刷身份证上区间车", nav:"贾登峪服务中心", hot:1},
     {t:"14:00", bk:"已买 · 喀纳斯一进票 230", c:"到换乘中心，进<b>喀纳斯</b>，4.5 小时，量力选：三湾徒步（5 km，2–3 小时）是主菜；观鱼台 1068 级台阶，摆渡车另付 20/人，累了就不上", nav:"喀纳斯换乘中心"},
     {t:"18:00", c:"18:00 前在月亮湾上回程区间车，1 小时"},
     {t:"19:00", c:"到贾登峪，酒店餐厅晚饭"}
    ]},
-  {d:6, rt:["喀纳斯生态度假酒店","世界魔鬼城","克拉玛依亚朵"], date:"9/30", wk:"周三", r:"喀纳斯 → 魔鬼城 → 克拉玛依", m:"440 km · 6.5 h 含停车 · 10:00 出发", stay:"克拉玛依亚朵", stayNav:"克拉玛依亚朵",
+  {d:6, rt:["喀纳斯生态度假酒店","世界魔鬼城","克拉玛依亚朵"], date:"9/30", wk:"周三", wake:"09:00", meet:"10:00 酒店大堂集合出发", alarm:"d06.ics", r:"喀纳斯 → 魔鬼城 → 克拉玛依", m:"440 km · 6.5 h 含停车 · 10:00 出发", stay:"克拉玛依亚朵", stayNav:"克拉玛依亚朵",
    pic:[["18.jpg", "乌尔禾魔鬼城的雅丹土丘群", "世界魔鬼城，2026 年 6 月。摄影 M3th04，Wikimedia Commons，CC0"]],
    meals:[{"t": "早", "o": [["喀纳斯生态度假酒店", "含早，最稳"], ["贾登峪兰州牛肉拉面", "1 区西侧，牛肉面，步行 2 分钟"], ["贾登峪杭州小笼包", "二平台，小笼包，步行 5 分钟"]]}, {"t": "午", "n": "12:45 布尔津，45 分钟，顺便加油", "f": "大盘鸡", "x": "布尔津 午饭 拌面", "o": [["歹歹的辣皮子拌面抓饭", "双湖路，辣皮子拌面、抓饭"], ["疆小七过油肉拌面", "夜光城，过油肉拌面"], ["香八里餐厅", "双湖路，新疆家常菜，能点大盘鸡"]]}, {"t": "晚", "f": "抓饭", "x": "克拉玛依 阿罗新疆菜", "o": [["阿罗新疆菜", "天山路 43 号，大盘鸡、抓饭、黑加仑酸奶，开车约 13 分钟"], ["禾田烤包子", "胜利路，烤包子配新疆菜，开车约 7 分钟"], ["手拉手抓饭", "白桦路南湖美食街，抓饭，开车约 5 分钟"]]}],
    it:[
     {t:"10:00", c:"出发，走昨天的盘山路回布尔津"},
-    {t:"12:45", c:"<b>布尔津</b>午饭 45 分钟，加油、厕所", nav:"布尔津"},
-    {t:"15:00", c:"<b>和什托洛盖</b>加油站厕所 15 分钟", nav:"和什托洛盖"},
+    {t:"12:45", c:"<b>布尔津</b>午饭，加油", nav:"布尔津"},
+    {t:"15:00", c:"<b>和什托洛盖</b>加油站休息", nav:"和什托洛盖"},
     {t:"16:30", c:"<b>乌尔禾魔鬼城</b>，1.5 小时，不等日落。累了就跳过，直接进城", nav:"世界魔鬼城"},
     {t:"18:00", c:"出发"},
     {t:"19:30", c:"到克拉玛依"},
     {t:"晚上", c:"<b>洗衣</b>，全程唯一一次。早睡", hot:1}
    ]},
-  {d:7, rt:["克拉玛依亚朵","赛里木湖东门","丽呈花盛酒店"], date:"10/1", wk:"周四", r:"克拉玛依 → 赛里木湖 → 清水河", m:"520 km + 环湖 92 · 09:00 出发 · 含停车 5.5 h 到东门", stay:"丽呈花盛酒店", stayNav:"丽呈花盛酒店",
+  {d:7, rt:["克拉玛依亚朵","赛里木湖东门","丽呈花盛酒店"], date:"10/1", wk:"周四", wake:"08:15", meet:"09:00 酒店大堂集合出发", alarm:"d07.ics", r:"克拉玛依 → 赛里木湖 → 清水河", m:"520 km + 环湖 92 · 09:00 出发 · 含停车 5.5 h 到东门", stay:"丽呈花盛酒店", stayNav:"丽呈花盛酒店",
    pic:[["14.jpg", "赛里木湖湛蓝的湖面和对岸雪山", "赛里木湖，2023 年 6 月。摄影 Fumikas Sagisavas，Wikimedia Commons，CC0"], ["15.jpg", "从 G30 高速看果子沟大桥横跨山谷", "果子沟大桥，2023 年 7 月。摄影 Timothytyy，Wikimedia Commons，CC BY 4.0"]],
    meals:[{"t": "早", "n": "09:00 走", "o": [["克拉玛依亚朵", "酒店早餐，最省事"], ["包不同拌面", "兴业路，拌面早点，步行 6 分钟"], ["夏个面餐厅", "南环路，面馆，步行 7 分钟"]]}, {"t": "午", "n": "12:30 精河买上车，湖边吃", "f": "烤包子", "x": "精河 美食", "o": [["寻香来馕店", "乌伊路 22 号，馕，步行 8 分钟"], ["沙泉子烤包子店", "团结北路，烤包子，步行 11 分钟"], ["羊村抓饭", "伊犁路美食街，想坐下吃就这家，开车约 5 分钟"], ["五台老一号杂烩汤", "G30 五台出口，赛湖前最后一顿热饭，杂烩汤"]]}, {"t": "晚", "x": "清水河镇 椒麻鸡", "o": [["儿子娃娃椒麻鸡火锅", "上海北路，椒麻鸡火锅，步行 3 分钟"], ["苏尔力水饺锅贴椒麻鸡", "同一路口，水饺锅贴，清淡些，步行 2 分钟"], ["太口九新疆椒麻鸡", "三环路，椒麻鸡，步行 6 分钟"]]}],
    it:[
     {t:"08:15", c:"起床，09:00 出发。国庆首日车多"},
-    {t:"10:30", c:"<b>奎屯服务区</b>厕所 15 分钟", nav:"奎屯服务区"},
+    {t:"10:30", c:"<b>奎屯服务区</b>休息", nav:"奎屯服务区"},
     {t:"12:30", c:"<b>精河</b>：补给，<b>午饭买上车</b>，停 30 分钟", nav:"精河县", hot:1},
     {t:"14:30", bk:"提前抢 · 9/24 起 自驾票 + 门票，赛里木湖旅游公众号", c:"进<b>赛里木湖东门</b>", nav:"赛里木湖东门", hot:1},
     {t:"", c:"环湖 92 km，<b>4 小时</b>，逆时针到南门出，重点<b>西海草原</b>，各点停多久见游览详情"},
@@ -668,7 +677,7 @@ var DAYS = [
     {t:"19:15", c:"<b>果子沟大桥观景台</b>，顺路看一眼，天黑就不停", nav:"果子沟大桥"},
     {t:"20:00", c:"到清水河镇，晚饭"}
    ]},
-  {d:8, rt:["丽呈花盛酒店","六星街","文旅那拉提度假酒店"], date:"10/2", wk:"周五", r:"清水河 → 伊宁 → 那拉提", m:"320 km · 10:00 出发 · 伊宁 5.5 h", stay:"文旅那拉提度假酒店", stayNav:"文旅那拉提度假酒店",
+  {d:8, rt:["丽呈花盛酒店","六星街","文旅那拉提度假酒店"], date:"10/2", wk:"周五", wake:"09:00", meet:"10:00 酒店大堂集合出发", alarm:"d08.ics", r:"清水河 → 伊宁 → 那拉提", m:"320 km · 10:00 出发 · 伊宁 5.5 h", stay:"文旅那拉提度假酒店", stayNav:"文旅那拉提度假酒店",
    pic:[["19.jpg", "六星街清真寺的白色拱廊和木门", "六星街，2025 年 10 月。摄影 HaziiDozen，Wikimedia Commons，CC BY-SA 4.0"]],
    meals:[{"t": "早", "f": "烤包子", "x": "清水河镇 早餐", "o": [["二六工丸子汤", "酒店楼下，丸子汤"], ["阿龙四十九丸子汤", "上海北路，丸子汤、油塔子，步行 3 分钟"], ["吾买尔江一绝包子店", "幸福路 108 号，包子，步行 6 分钟"], ["麦尔疆碎肉拌面小锅抓饭", "新华路，小锅抓饭，步行 3 分钟"]]}, {"t": "午", "n": "<b>六星街</b>周边，旅拍前吃", "x": "伊宁 六星街 美食", "o": [["尕巷子粉汤", "工人街 85 号，粉汤"], ["杨永福包子店", "公园街，包子"], ["杏棵香糕点坊", "工人街 102 号（原哈孜娜），糕点"], ["古兰丹姆冰淇淋", "黎光街四巷，古法冰淇淋"], ["棘棘果王", "工人街 94 号，非遗手工冰淇淋"]]}, {"t": "晚", "f": "大盘鸡", "x": "那拉提镇 美食", "o": [["文旅那拉提度假酒店", "酒店餐厅大盘鸡，不出门"], ["正君风味新疆菜手抓肉", "那拉提街 166 号，手抓肉，开车约 5 分钟"], ["尚雅园手抓羊羔肉", "那拉提街，手抓羊羔肉，开车约 5 分钟"], ["那拉提羊掌柜手抓肉", "那拉提街 246 号铭都大酒店楼下，手抓肉新疆菜，开车约 7 分钟"]]}],
    it:[
@@ -677,36 +686,36 @@ var DAYS = [
     {t:"12:00", c:"午饭，六星街"},
     {t:"13:00", c:"<b>六星街</b>。<b>13:00–15:30 旅拍</b>", nav:"六星街"},
     {t:"16:30", c:"<span class='warn'>出发去那拉提，死线</span>。280 km 约 4 小时含停车，20:00 天黑，最后半小时夜路", hot:1},
-    {t:"19:00", c:"<b>新源县</b>加油、厕所 20 分钟，最后 70 km 山路", nav:"新源县"},
+    {t:"19:00", c:"<b>新源县</b>加油，最后 70 km 山路", nav:"新源县"},
     {t:"20:30", c:"到那拉提，晚饭"}
    ]},
-  {d:9, rt:["文旅那拉提度假酒店","那拉提风景区","丽呈酒店巴音布鲁克"], date:"10/3", wk:"周六", r:"那拉提 → 巴音布鲁克", m:"110 km 独库中段 · 08:30 起", stay:"丽呈酒店（巴音布鲁克）", stayNav:"丽呈酒店巴音布鲁克",
+  {d:9, rt:["文旅那拉提度假酒店","那拉提风景区","丽呈酒店巴音布鲁克"], date:"10/3", wk:"周六", wake:"08:30", meet:"09:30 那拉提闸口集合", alarm:"d09.ics", r:"那拉提 → 巴音布鲁克", m:"110 km 独库中段 · 08:30 起", stay:"丽呈酒店（巴音布鲁克）", stayNav:"丽呈酒店巴音布鲁克",
    pic:[["16.jpg", "那拉提空中草原，云杉山坡和毡房", "那拉提，2026 年 7 月。摄影 CatOnMars，Wikimedia Commons，CC BY 4.0"], ["07.jpg", "巴音布鲁克草原上的开都河，河道大幅度蜿蜒", "开都河，九曲十八弯为其一段。摄影 MichaelE，Wikimedia Commons，CC BY-SA 4.0"]],
    meals:[{"t": "早", "n": "09:30 前吃完", "f": "包尔萨克", "x": "那拉提 早餐", "o": [["文旅那拉提度假酒店", "1 间含早，来不及就吃这个"], ["真牛骨汤牛肉面", "迎宾路，牛骨汤面，开车约 7 分钟"], ["可可香五塘小笼包", "芳香那拉提 6 号楼，小笼包，开车约 6 分钟"], ["九十八号老牌子拌面餐厅", "迎宾路 101 号，拌面早点，开车约 7 分钟"]]}, {"t": "午", "n": "13:00 出景区，45 分钟。<b>再买馕和水果上车</b>，晚饭要到 21:30", "f": "抓饭", "x": "那拉提 纳仁", "o": [["那拉提奔跑的拉条子", "景区口管委会旁，拉条子，最近，步行 9 分钟"], ["疆之宴新疆", "建设路 049 号，新疆菜，步行 14 分钟"], ["莱曼古法抓饭", "那拉提街 246 号，古法抓饭，开车约 7 分钟"]]}, {"t": "晚", "n": "21:30 回镇", "f": "手抓肉", "x": "巴音布鲁克 罗家手抓肉", "o": [["罗家手抓肉", "客运站旁，黑头羊手抓肉、干炸野生鱼，步行 15 分钟"], ["黑牛餐厅新疆美食", "人民医院东南门，新疆菜，步行 6 分钟"], ["双马沙湾大盘鸡", "商业街，沙湾大盘鸡，步行 6 分钟"], ["非常香野蘑菇拌面馆", "217 国道边，巴音布鲁克野蘑菇拌面，步行 7 分钟"]]}],
    it:[
     {t:"08:30", c:"起床"},
     {t:"09:30", bk:"提前买 · 9/26 起，智游那拉提小程序", c:"<b>那拉提景区</b>闸口，酒店步行可达。只走<b>空中草原线</b>，索道上天界台，3.5 小时，走法见下面游览详情", nav:"那拉提风景区", hot:1},
     {t:"13:00", c:"出景区，镇上午饭"},
-    {t:"13:45", c:"出发，<b>14:15 是死线</b>。出发前上厕所，路上 3 小时没有厕所。110 km 独库中段，翻那拉提达坂，含两次停车按 3 小时算", hot:1},
+    {t:"13:45", c:"出发，<b>14:15 是死线</b>。110 km 独库中段，翻那拉提达坂，路上没有服务区，含停车按 3 小时算", hot:1},
     {t:"17:00", bk:"提前买 · 9/30 08:00 抢自驾票，抢不到买区间车", c:"到镇上<b>直接进巴音布鲁克景区</b>，<b>18:30 停止入园</b>。自驾票自己开 45 km 到观景台停车场，区间车约 1 小时；再换电瓶车（18/人往返）或步行上台。天鹅湖不去", nav:"九曲十八弯观景台", hot:1},
     {t:"18:45", c:"到<b>九曲十八弯观景台</b>占位。<b>18:30 前必须过闸，延误时从那拉提那头砍</b>"},
     {t:"20:00", c:"日落。看完随末班车下山，末班车约 21:00，进园时问清当天时间"},
     {t:"21:30", c:"回镇上，晚饭"}
    ]},
-  {d:10, rt:["丽呈酒店巴音布鲁克","乔尔玛烈士陵园","乌市全季友好明园"], date:"10/4", wk:"周日", r:"巴音布鲁克 → 独库北段 → 乌鲁木齐", m:"520 km · 10.5 h 含停车 · 10:00 出发", stay:"全季酒店 友好明园店", stayNav:"乌市全季友好明园",
+  {d:10, rt:["丽呈酒店巴音布鲁克","乔尔玛烈士陵园","乌市全季友好明园"], date:"10/4", wk:"周日", wake:"09:00", meet:"10:00 酒店门口集合，出发前加油", alarm:"d10.ics", r:"巴音布鲁克 → 独库北段 → 乌鲁木齐", m:"520 km · 10.5 h 含停车 · 10:00 出发", stay:"全季酒店 友好明园店", stayNav:"乌市全季友好明园",
    pic:[["17.jpg", "独库公路的连续发卡弯盘上山坡", "独库公路北段，2026 年 7 月。摄影 CatOnMars，Wikimedia Commons，CC BY 4.0"]],
    meals:[{"t": "早", "n": "再买路上的馕和熟食", "f": "馕", "x": "巴音布鲁克镇 早餐", "o": [["巴氏兰州牛肉面", "中国石油对面，加油顺便吃，步行 10 分钟"], ["大金牛野蘑菇手工面", "人民医院东南门旁，野蘑菇面，步行 7 分钟"], ["乌尔达美食", "原喀什餐厅，快餐早点，步行 6 分钟"]]}, {"t": "午", "n": "独库沿线没有饭馆", "f": "馕", "o": [["车上吃", "早上买的馕、熟食、水果，主方案"], ["乔尔玛烈士陵园", "加油站小卖部，只有泡面和零食"], ["艾尼一把抓", "独山子金山路，16:45 下高速绕 40 分钟，饿狠了再选"]]}, {"t": "晚", "n": "酒店楼下就是新疆馆子；想热闹打车 10 分钟去夜市", "f": "羊肉串", "x": "乌鲁木齐 明园 美食", "o": [["巴哈迪尔抓饭店", "抓饭，步行 1 分钟"], ["米可抓饭烧烤", "抓饭、烧烤，步行 2 分钟"], ["鼎诚大盘鸡拌面", "大盘鸡、拌面、牛肉面，步行 2 分钟"], ["尤布真味椒麻鸡南昌路店", "椒麻鸡，步行 11 分钟"], ["五一星光夜市", "夜市烤串，3 km，打车"]]}],
    it:[
     {t:"出发前", c:"<b>加满油</b>，独库沿线仅乔尔玛一站。查一次独库路况", hot:1},
-    {t:"10:00", c:"出发前上厕所。85 km 到那拉提，中段不用预约"},
+    {t:"10:00", c:"85 km 到那拉提，中段不用预约"},
     {t:"11:45", bk:"提前抢 · 9/27 0 点，游新疆一码游", c:"到<b>那拉提入口</b>（G217 与 G218 交汇处），<b>预约档 12:00–14:00</b>，出示二维码进北段。迟到可延后 1 小时，只能一次", hot:1},
-    {t:"13:45", c:"到<b>乔尔玛</b>，加油、厕所 20 分钟，北段唯一油站和厕所。之后老虎口、哈希勒根达坂，130 km", nav:"乔尔玛烈士陵园"},
-    {t:"16:45", c:"到独山子，上 G30，第一个服务区厕所 15 分钟"},
+    {t:"13:45", c:"到<b>乔尔玛</b>，加油、休息，北段唯一油站。之后老虎口、哈希勒根达坂，130 km", nav:"乔尔玛烈士陵园"},
+    {t:"16:45", c:"到独山子，上 G30"},
     {t:"20:00", c:"进城前<b>加满油</b>，还车要满油"},
     {t:"20:30", c:"到乌鲁木齐，住友好明园"},
     {t:"20:45", c:"晚饭。特产（干果、馕、伊力特）酒店门口就有特产店，或交给下午走的两人。车停酒店，明早开去机场还"}
    ]},
-  {d:11, rt:["乌市全季友好明园",null,"天山国际机场"], date:"10/5", wk:"周一", r:"乌鲁木齐 → 返程", m:"10:00 机场还车 · 14:45 起飞 · 2 人下午走", stay:"", stayNav:"",
+  {d:11, rt:["乌市全季友好明园",null,"天山国际机场"], date:"10/5", wk:"周一", wake:"08:30", meet:"09:20 酒店大堂集合，开车去机场", alarm:"d11.ics", r:"乌鲁木齐 → 返程", m:"10:00 机场还车 · 14:45 起飞 · 2 人下午走", stay:"", stayNav:"",
    meals:[{"t": "早", "n": "09:15 前吃完", "f": "烤包子", "x": "乌鲁木齐 友好 丸子汤", "o": [["老太太哨子面", "楼下，哨子面，步行 1 分钟"], ["四十九丸子汤友好店", "丸子汤配油塔子，步行 9 分钟"], ["四十九丸子汤西北路店", "同上，另一家，步行 10 分钟"]]}],
    it:[
     {t:"08:30", c:"起床，08:45 早餐"},
@@ -744,7 +753,7 @@ var TOURS = {
    ["","出城 70 km 到冲乎尔，<b>冲乎尔河谷观景台</b>：额尔齐斯河支流、麦田、白桦，10 分钟","冲乎尔镇"],
    ["","冲乎尔到海流滩隧道 50 km 是盘山精华段，<b>S 弯观景台</b>和<b>石头房子森林观景台</b>各停 10 分钟，秋色最好的一段","海流滩隧道"],
    ["","限速 40，区间测速全覆盖，长下坡用低挡，弯道和临崖处严禁停车"]],
-   skip:"", cost:"", tip:"五彩滩到门票站按 3 小时算，已含冲乎尔厕所和两处观景台；停太多会赶不上 14:00 的区间车"},
+   skip:"", cost:"", tip:"五彩滩到门票站按 3 小时算，已含冲乎尔加油和两处观景台；停太多会赶不上 14:00 的区间车"},
   {n:"禾木 · 下午到日落", sub:"14:00–20:30", steps:[
    ["14:00","区间车进村 1 小时，到游客服务中心换免费村内公交 1 路到<b>桥头站</b>，步行 10 分钟到民宿（东哈拉），15:30 到"],
    ["15:30","桥头一带午饭，顺路在美食街把明早的馕和奶茶买好"],
@@ -759,7 +768,7 @@ var TOURS = {
    ["09:30","老村早餐，10:30 退房，1 路公交到游客服务中心，区间车出村 1 小时"]],
    skip:"不看日出的睡到 09:00，09:30 直接早餐", cost:"—", tip:"零下 5 度站一小时：暖宝宝、手套、帽子，相机电池贴身", pic:"观景台等晨雾压村，日出后 20 分钟雾散前最出片，长焦拍木屋炊烟", xhs:"禾木 日出 机位"},
   {n:"喀纳斯", sub:"12:30–19:00 · 量力选", steps:[
-   ["12:30","到贾登峪，停车、厕所、买水 30 分钟；13:00 检票坐<b>贾登峪 1 路</b>区间车进山约 1 小时，去程三湾不下车","贾登峪服务中心"],
+   ["12:30","到贾登峪，停车、买水；13:00 检票坐<b>贾登峪 1 路</b>区间车进山约 1 小时，去程三湾不下车","贾登峪服务中心"],
    ["14:00","到<b>喀纳斯换乘中心</b>。体力好：坐 2 路去<b>观鱼台</b>，摆渡车另付 20，1068 级台阶上下 2 小时，湖的全景只有这里有","观鱼台"],
    ["16:00","回换乘中心，坐 1 路到湖边，喀纳斯湖岸走 30 分钟"],
    ["16:45","坐贾登峪 1 路往回，<b>神仙湾</b>下车，沿河栈道走到<b>月亮湾</b>约 2 km、40 分钟；卧龙湾车不停，车上看","神仙湾"],
@@ -778,11 +787,11 @@ var TOURS = {
    ["18:00","出园去克拉玛依"]],
    skip:"五站全下车要 3 小时，只下三站", cost:"联票 62/人", tip:"风沙大：墨镜、帽子、口罩。售票 10:00–19:00", pic:"狮身人面站的公路 S 弯，站高处拍公路穿雅丹；七剑、卧虎藏龙两站拍人像，逆光有轮廓", xhs:"魔鬼城 机位"}],
  7:[{n:"沿途停车 · 克拉玛依→赛里木湖", sub:"G30 · 国庆首日", steps:[
-   ["10:30","<b>奎屯服务区</b>：厕所、加油，15 分钟","奎屯服务区"],
+   ["10:30","<b>奎屯服务区</b>：加油、休息","奎屯服务区"],
    ["12:30","<b>精河</b>县城下高速：买烤包子、馕、水果上车，30 分钟","精河县"],
    ["","<b>五台</b>：G30 五台出口一片杂烩汤店，不想进精河县城就在这吃热饭，赛湖前最后一顿","五台老一号杂烩汤"],
    ["19:15","出南门后<b>果子沟大桥观景台</b>：高速上的观景平台，看一眼就走，天黑不停","果子沟大桥"]],
-   skip:"艾比湖，不顺路", cost:"", tip:"国庆首日 G30 车多，服务区排队，能上厕所就上"},
+   skip:"艾比湖，不顺路", cost:"", tip:"国庆首日 G30 车多，服务区会排队"},
   {n:"赛里木湖 · 环湖", sub:"14:30–18:30 · 逆时针 92 km", steps:[
    ["14:30","<b>东门</b>检票，自驾票按车。逆时针环湖，西段限速 70 有区间测速","赛里木湖东门"],
    ["","<b>月亮湾</b>：码头，看一眼就走，20 分钟","赛湖月亮湾"],
@@ -827,7 +836,7 @@ var TOURS = {
    ["10:00","巴音布鲁克出发，中段 85 km 到那拉提入口，翻拉尔墩达坂，草原湿地，不用预约"],
    ["11:45","<b>那拉提入口</b>核销二维码进北段，巩乃斯河谷一路上坡","那拉提入口"],
    ["","<b>玉希莫勒盖达坂</b>（3100 米）：停 10 分钟拍照","玉希莫勒盖达坂"],
-   ["13:45","<b>乔尔玛烈士陵园</b>：加油、厕所，北段唯一油站，停 20 分钟","乔尔玛烈士陵园"],
+   ["13:45","<b>乔尔玛烈士陵园</b>：加油，北段唯一油站，停 20 分钟","乔尔玛烈士陵园"],
    ["","<b>老虎口</b>：悬崖上的挂壁公路，观景点停 10 分钟"],
    ["","<b>哈希勒根达坂隧道</b>（3400 米）：北口有停车场和观景台，常年积雪，10 分钟","哈希勒根隧道"],
    ["16:45","<b>独山子</b>，上 G30 去乌鲁木齐","独山子"]],
@@ -882,16 +891,13 @@ var EVENTS = [
 ];
 
 var TODOS = [
-  {w:"9/20 起", c:"<b>每天看三处公告</b>：「新疆路网」独库路况（10 月中旬封路，2025 年 10/10）、「巴音布鲁克景区」公众号有无提前闭园、「喀纳斯景区」公众号禾木初雪和区间车"},
-  {w:"出发前", c:"<b>收公共基金 1500/人</b>：车、油、路桥、住宿、门票公摊，多退少补"},
-  {w:"出发前", c:"<b>证件</b>：6 人身份证原件全程带；4 个驾驶员驾驶证原件，查有效期和扣分；一张额度 2 万以上的信用卡压车辆押金"},
-  {w:"出发前", c:"<b>手机</b>：至少两部有大陆流量（当地卡或漫游）；把这个路书页面开一次，离线也能看；6 人姓名身份证号存一条备忘录，抢票和报备直接粘"},
-  {w:"9/20", c:"<b>打 400-888-6608 报备 3 个附加驾驶员</b>，报订单号和驾驶证信息；取车时 4 人再一起到场登记"},
-  {w:"尽快", hot:1, c:"<b>一嗨订单改时间</b>：取车 9/26 10:00、还车 10/5 10:00，App 订单页改或报备时一起说。取还都是 10:00，整 9 天"},
-  {w:"9/24 起", c:"<b>赛里木湖 10/1 自驾票 + 门票</b>，「赛里木湖旅游」公众号或「游新疆一码游」实名，最早提前 7 天，节假日放票后几小时售罄，当天就抢"},
-  {w:"9/26 起", c:"<b>那拉提 10/3 门票 + 空中草原区间车 + 索道单程</b>，「智游那拉提」小程序，提前 7 天可买"},
-  {w:"9/27 0:00", hot:1, c:"<b>抢独库北段 10/4 名额</b>，「游新疆一码游」小程序，每日零点放第 7 天的号。<b>入口那拉提，时段 12:00–14:00</b>，要填车牌和 6 人实名"},
-  {w:"9/30 08:00", c:"<b>抢巴音布鲁克 10/3 自驾票</b>：「巴音布鲁克旅游」小程序，提前 3 天 8 点放号，6–7 座 150/车 + 门票 65/人。抢不到就买门票 + 区间车 62。买前看公众号确认 10/3 开园"}
+  {w:"9/20 起", c:"<b>每天看公告</b>：「新疆路网」独库路况、「巴音布鲁克景区」「喀纳斯景区」公众号有没有临时闭园或封路"},
+  {w:"出发前", c:"<b>收公共基金 1500/人</b>，多退少补"},
+  {w:"出发前", c:"<b>证件</b>：6 人身份证原件；4 个驾驶员带驾驶证；一张额度 2 万以上的信用卡压车"},
+  {w:"9/24 起", c:"<b>抢赛里木湖 10/1 自驾票 + 门票</b>：「赛里木湖旅游」公众号，节假日放票几小时就没"},
+  {w:"9/26 起", c:"<b>买那拉提 10/3 门票 + 区间车 + 索道</b>：「智游那拉提」小程序"},
+  {w:"9/27 0:00", hot:1, c:"<b>抢独库北段 10/4 名额</b>：「游新疆一码游」小程序，入口那拉提，12:00–14:00 档，填车牌和 6 人实名"},
+  {w:"9/30 08:00", c:"<b>抢巴音布鲁克 10/3 自驾票</b>：「巴音布鲁克旅游」小程序 8 点放号；抢不到就买门票 + 区间车"}
 ];
 
 var TIPS = [
@@ -986,7 +992,7 @@ var TIPS = [
     if(t.cost) notes += '<div class="tnote"><span class="k">费用</span><span>'+t.cost+'</span></div>';
     if(t.tip)  notes += '<div class="tnote"><span class="k">提示</span><span>'+t.tip+'</span></div>';
     if(t.pic){
-      notes += '<div class="tnote"><span class="k">出片</span><span>'+t.pic+' '+xhsLink(t.xhs||(t.n.split(' ')[0]+' 机位'))+'</span></div>';
+      notes += '<div class="tnote"><span class="k">出片</span><span>'+t.pic+'<div class="mx">'+xhsLink(t.xhs||(t.n.split(' ')[0]+' 机位'))+'</div></span></div>';
     }
     return '<details class="'+cls+'"><summary>'+t.n.replace(/^沿途停车 · /,"")+'<span class="tsub">'+(t.sub||"")+'</span>'+
       '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></summary>'+
@@ -997,13 +1003,13 @@ var TIPS = [
     if(!d.meals) return "";
     var rows = d.meals.map(function(m){
       var f = m.f && FOOD[m.f];
-      var xu = m.x ? ' '+xhsLink(m.x) : '';
+      var xu = m.x ? '<div class="mx">'+xhsLink(m.x)+'</div>' : '';
       var opts = (m.o||[]).map(function(o){
         var has = !!C[o[0]];
         var inner = '<span class="on">'+(has?PIN:'')+o[0]+'</span>'+(o[1]?'<span class="os">'+o[1]+'</span>':'');
         return '<li>'+(has ? '<a class="pl opt"'+navAttrs(o[0],"view")+'>'+inner+'</a>' : '<div class="opt">'+inner+'</div>')+'</li>';
       }).join('');
-      return '<div class="meal'+(f?'':' noimg')+'"><span class="ml">'+m.t+'</span><div class="mt">'+(m.n?'<div class="mn">'+m.n+xu+'</div>':'')+'<ul class="mo">'+opts+'</ul>'+(m.n?'':xu)+'</div>'+
+      return '<div class="meal'+(f?'':' noimg')+'"><span class="ml">'+m.t+'</span><div class="mt">'+(m.n?'<div class="mn">'+m.n+'</div>':'')+'<ul class="mo">'+opts+'</ul>'+xu+'</div>'+
         (f?'<img class="mi" src="img/food/'+f+'.jpg" alt="'+m.f+'" loading="lazy">':'')+'</div>';
     }).join('');
     var sub = d.meals.map(function(m){return m.f}).filter(function(v,i,a){return v && a.indexOf(v)===i}).join(' · ');
@@ -1012,6 +1018,7 @@ var TIPS = [
   DAYS.forEach(function(d){
     var col = "var(--d"+Math.min(d.d,10)+")";
     var stayLine = d.stay ? '<div class="stay"><span class="k">今晚</span>'+(d.stayNav?navLink(d.stayNav, d.stay, "navi"):d.stay)+'</div>' : '';
+    if(d.meet) stayLine += '<div class="meet"><span class="k">集合</span><span class="mt2">'+(d.wake?'<b>'+d.wake+'</b> 起床 · ':'')+d.meet+'</span>'+(d.alarm?'<a class="alm" href="alarm/'+d.alarm+'">⏰ 加起床提醒</a>':'')+'</div>';
     var tt = d.it.map(function(x){return x.t}).filter(function(t){return /^\d/.test(t)});
     var times = tt.length ? tt[0]+' – '+tt[tt.length-1] : '';
     var tours = (TOURS[d.d]||[]).slice().sort(function(a,b){ return (/^沿途/.test(b.n)?1:0) - (/^沿途/.test(a.n)?1:0); });
