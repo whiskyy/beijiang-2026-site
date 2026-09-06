@@ -248,6 +248,12 @@ dl.tips dd b{color:var(--ink)}
 
 footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-size:11.5px;color:var(--ink3);line-height:1.7}
 #foot .play{margin:0 0 10px;color:var(--ink2)}#foot .play a{color:var(--route);text-decoration:underline}
+#foot details{margin-top:6px}#foot summary{cursor:pointer;color:var(--ink2);font-weight:600;list-style:none}#foot summary::-webkit-details-marker{display:none}
+.now .today{display:inline-block;margin-top:10px;padding:7px 12px;border-radius:8px;background:var(--gold);color:#fff;font-weight:700;font-size:13px;text-decoration:none}
+.todaybtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:20;padding:9px 14px;border-radius:999px;background:var(--gold);color:#fff;font-weight:700;font-size:13px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.tour.road>summary{color:var(--ink2)}
+.tour.road>summary::before{content:"沿途";flex:none;font-size:10.5px;font-weight:700;color:var(--green);border:1px solid color-mix(in srgb,var(--green) 40%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
+.tour.spot>summary::before{content:"景区";flex:none;font-size:10.5px;font-weight:700;color:var(--route);border:1px solid color-mix(in srgb,var(--route) 40%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -282,6 +288,7 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div><b class="mono" id="cdS">–</b><span>秒</span></div>
   </div>
   <div class="tz" id="tzNote">全部时间为北京时间</div>
+  <a class="today" id="todayLink" hidden>今天的行程</a>
 </div>
 
 <figure class="photo hero"><img src="img/00.jpg" alt="秋日的喀纳斯湖，湖水呈墨绿色，两岸是泛黄的山林"><figcaption>喀纳斯湖。摄影 Muye Ma，Wikimedia Commons，CC0</figcaption></figure>
@@ -315,7 +322,7 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
         <tr><td>D11 返程</td><td>07:30</td><td>08:20 开车去机场</td><td>09:00 还车 · 14:45 起飞</td></tr>
       </tbody>
     </table>
-    <div class="note">只有 D5 看日出要早起，其余都 08:00 后。北疆日出 08:20–08:40、日落 20:00–20:20，比内地晚约两小时。D4 禾木 22:30 睡，次日 06:40 起。</div>
+    <div class="note">只有 D5 看日出要早起，其余都 08:00 后。北疆日出 08:20–08:40、日落 20:00–20:20，比内地晚约两小时。</div>
   </div>
   <div id="dayList"></div>
 </section>
@@ -457,7 +464,7 @@ var DAYS = [
    it:[
     {t:"09:00", c:"出发"},
     {t:"09:30", c:"<b>五彩滩</b>，1 小时，看完就走", nav:"五彩滩"},
-    {t:"10:30", bk:"已买 · 禾木套票 75", c:"去禾木。<span class='warn'>车停禾木门票站，不是贾登峪</span>，两地相距 34 km。私家车不能进村，停车 20 元/天，换区间车", nav:"禾木门票站", hot:1},
+    {t:"10:30", bk:"已买 · 禾木套票 75", c:"去禾木。<span class='warn'>车停禾木门票站，不是贾登峪</span>，相距 34 km。停车 20 元/天，换区间车进村", nav:"禾木门票站", hot:1},
     {t:"13:00", c:"<b>检票点：禾木门票站</b>。停车，刷身份证换区间车，票已买；13:30 上车，约 1 小时", nav:"禾木门票站", hot:1},
     {t:"15:00", c:"进村安顿，午饭，<b>先买好明早早饭</b>，民宿不含早"},
     {t:"17:30", c:"<b>17:30–19:00 旅拍</b>"},
@@ -497,7 +504,7 @@ var DAYS = [
     {t:"07:15", c:"起床，08:00 出发。国庆首日车多"},
     {t:"11:30", c:"<b>精河</b>：补给，<b>午饭买上车</b>，停 30 分钟", nav:"精河县", hot:1},
     {t:"13:30", bk:"提前抢 · 9/24 起 自驾票 + 门票，赛里木湖旅游公众号", c:"进<b>赛里木湖东门</b>", nav:"赛里木湖东门", hot:1},
-    {t:"", c:"环湖 92 km，<b>4.5 小时</b>，单向逆时针：月亮湾 → 亲水滩 → 点将台 → <b>西海草原</b> → 克勒涌珠 → 松树头 → 南门出。西海草原是重点，时间紧就砍克勒涌珠、松树头"},
+    {t:"", c:"环湖 92 km，<b>4.5 小时</b>，逆时针到南门出，重点<b>西海草原</b>，各点停多久见游览详情"},
     {t:"18:00", c:"出南门"},
     {t:"18:45", c:"<b>果子沟大桥观景台</b>，顺路看一眼，不强求", nav:"果子沟大桥"},
     {t:"19:30", c:"到清水河镇，晚饭"}
@@ -519,13 +526,10 @@ var DAYS = [
    meals:[["早", "镇上早餐店奶茶包子，09:00 前吃完；来不及再吃酒店（1 间含早）", "包尔萨克", "那拉提 早餐"], ["午", "12:30 出景区，镇上纳仁或抓饭。<b>再买馕和水果上车</b>，晚饭要到 21:30", "抓饭", "那拉提 纳仁"], ["晚", "21:30 回镇，<b>罗家手抓肉</b>（镇客运站旁，离酒店 1.2 km）：黑头羊手抓肉、干炸野生鱼", "手抓肉", "巴音布鲁克 罗家手抓肉"]],
    it:[
     {t:"08:00", c:"起床"},
-    {t:"09:00", bk:"提前买 · 9/26 起，智游那拉提小程序", c:"<b>那拉提景区</b>闸口，酒店步行可达。只走<b>空中草原线</b>：区间车到哈茵赛索道站，坐<b>索道</b>上天界台，12 分钟，全疆最长的景观索道（单程 68，加空中草原区间车往返 40）", nav:"那拉提风景区", hot:1},
-    {t:"09:45", c:"<b>天界台</b>：空中草原全景，雪山、云杉、草甸一眼看全，30 分钟"},
-    {t:"10:15", c:"区间车到<b>天牧台</b>看一眼牧场毡房，再到终点<b>游牧人家</b>：木桥溪流、毡房、奶茶包尔萨克，45 分钟。天神台雪莲谷（往返 60）、河谷草原线不去"},
-    {t:"11:30", c:"区间车回游客中心，40 分钟"},
+    {t:"09:00", bk:"提前买 · 9/26 起，智游那拉提小程序", c:"<b>那拉提景区</b>闸口，酒店步行可达。只走<b>空中草原线</b>，索道上天界台，3.5 小时，走法见下面游览详情", nav:"那拉提风景区", hot:1},
     {t:"12:30", c:"出景区，镇上午饭"},
     {t:"13:30", c:"出发，<b>14:00 是死线</b>。110 km 独库中段，翻那拉提达坂，按 3 小时算", hot:1},
-    {t:"16:30", bk:"提前买 · 9/30 08:00 抢自驾票，抢不到买区间车", c:"到镇上<b>直接进巴音布鲁克景区</b>，不先去酒店。<b>9 月起售票入园 09:00–18:30，18:30 停止入园</b>。自驾票就自己开 45 km 到观景台停车场；区间车约 1 小时。再换电瓶车（18/人往返）或步行上台。天鹅湖不去", nav:"九曲十八弯观景台", hot:1},
+    {t:"16:30", bk:"提前买 · 9/30 08:00 抢自驾票，抢不到买区间车", c:"到镇上<b>直接进巴音布鲁克景区</b>，<b>18:30 停止入园</b>。自驾票自己开 45 km 到观景台停车场，区间车约 1 小时；再换电瓶车（18/人往返）或步行上台。天鹅湖不去", nav:"九曲十八弯观景台", hot:1},
     {t:"18:30", c:"到<b>九曲十八弯观景台</b>占位。<b>18:30 前必须过闸，延误时从那拉提那头砍</b>"},
     {t:"20:00", c:"日落。看完随末班车下山，末班车约 21:00，进园时问清当天时间"},
     {t:"21:30", c:"回镇上，晚饭"}
@@ -536,7 +540,7 @@ var DAYS = [
    it:[
     {t:"出发前", c:"<b>加满油</b>，独库沿线仅乔尔玛一站。查一次独库路况", hot:1},
     {t:"10:00", c:"出发，85 km 到那拉提，中段不用预约"},
-    {t:"11:45", bk:"提前抢 · 9/27 0 点，游新疆一码游", c:"到<b>那拉提入口</b>（G217 与 G218 交汇处），<b>预约档 12:00–14:00</b>，出示二维码进北段。迟到可申请延后 1 小时，只能一次", hot:1},
+    {t:"11:45", bk:"提前抢 · 9/27 0 点，游新疆一码游", c:"到<b>那拉提入口</b>（G217 与 G218 交汇处），<b>预约档 12:00–14:00</b>，出示二维码进北段。迟到可延后 1 小时，只能一次", hot:1},
     {t:"13:45", c:"到<b>乔尔玛</b>，加油，北段唯一油站。之后老虎口、哈希勒根达坂，130 km", nav:"乔尔玛烈士陵园"},
     {t:"16:45", c:"到独山子，上 G30"},
     {t:"19:30", c:"进城前<b>加满油</b>，还车要满油"},
@@ -769,9 +773,20 @@ var TIPS = [
       '<span><b>全天路线导航</b><em>'+rt[0]+mid+' → '+rt[2]+'</em></span></a>';
   }
 
-  /* 逐日 */
+  /* 逐日：行程期间默认展开当天 */
+  var TODAY_D = (function(){
+    try{
+      var f = new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Shanghai",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+      if(f.slice(0,4)!=="2026") return 0;
+      var key = parseInt(f.slice(5,7),10)+"/"+parseInt(f.slice(8,10),10);
+      for(var i=0;i<DAYS.length;i++){ if(DAYS[i].date===key) return DAYS[i].d; }
+    }catch(e){}
+    return 0;
+  })();
+  var OPEN_D = TODAY_D || 1;
   var dh = "";
   function renderTour(t){
+    var cls = /^沿途/.test(t.n) ? "tour road" : "tour spot";
     var st = t.steps.map(function(x){
       var txt = x[2] ? linkify(x[1], x[2], "navi") : x[1];
       return '<div class="tstep"><div class="tt mono">'+(x[0]||"")+'</div><div>'+txt+'</div></div>';
@@ -784,7 +799,7 @@ var TIPS = [
       var xu = 'https://www.xiaohongshu.com/search_result/?keyword='+encodeURIComponent(t.xhs||(t.n.split(' ')[0]+' 机位'));
       notes += '<div class="tnote"><span class="k">出片</span><span>'+t.pic+' <a class="xl ic" href="'+xu+'" target="_blank" rel="noopener"><i>书</i></a></span></div>';
     }
-    return '<details class="tour"><summary>游览详情 · '+t.n+'<span class="tsub">'+(t.sub||"")+'</span>'+
+    return '<details class="'+cls+'"><summary>'+t.n.replace(/^沿途停车 · /,"")+'<span class="tsub">'+(t.sub||"")+'</span>'+
       '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></summary>'+
       '<div class="tbody">'+st+notes+'</div></details>';
   }
@@ -795,13 +810,13 @@ var TIPS = [
       var flag = x.bk ? '<span class="bkflag">'+(x.bk===1?'需提前订':x.bk)+'</span>' : "";
       return '<div class="tm mono">'+(x.t||"")+'</div><div class="ct'+cls+'">'+flag+(x.nav?linkify(x.c, x.nav, "navi"):x.c)+'</div>';
     }).join("");
-    dh += '<details class="card day"'+(d.d===1?" open":"")+'><summary>'+
+    dh += '<details class="card day" id="day-'+d.d+'"'+(d.d===OPEN_D?" open":"")+'><summary>'+
       '<div class="dn" style="background:'+col+'">D'+d.d+'</div>'+
       '<div class="dti"><div class="r">'+d.r+'</div><div class="m">'+d.date+' '+d.wk+' · '+d.m+'</div></div>'+
       '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
       '</summary><div class="dbody">'+miniMap(d.d, col, d.rt)+'<div class="tl">'+items+'</div>'+
+      (d.stay?'<div class="stay"><span class="k">今晚</span>'+(d.stayNav?navLink(d.stayNav, d.stay, "navi"):d.stay)+'</div>':'')+
       (TOURS[d.d]?TOURS[d.d].map(renderTour).join(''):'')+
-      (d.pic?d.pic.map(function(p){return '<figure class="photo"><img src="img/'+p[0]+'" alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+
       (d.meals?'<div class="meals"><div class="mh">吃</div>'+d.meals.map(function(m){
         var f = m[2] && FOOD[m[2]];
         var txt = m[1];
@@ -814,10 +829,14 @@ var TIPS = [
         return '<div class="meal'+(f?'':' noimg')+'"><span class="ml">'+m[0]+'</span><div class="mt">'+txt+'</div>'+
           (f?'<img class="mi" src="img/food/'+f+'.jpg" alt="'+m[2]+'" loading="lazy">':'')+'</div>';
       }).join('')+'</div>':'')+
-      (d.stay?'<div class="stay"><span class="k">今晚</span>'+(d.stayNav?navLink(d.stayNav, d.stay, "navi"):d.stay)+'</div>':'')+
+      (d.pic?d.pic.map(function(p){return '<figure class="photo"><img src="img/'+p[0]+'" alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+
       '</div></details>';
   });
   document.getElementById("dayList").innerHTML = dh;
+  if(TODAY_D){
+    var tl = document.getElementById("todayLink"); tl.hidden = false; tl.href = "#day-"+TODAY_D; tl.textContent = "今天 D"+TODAY_D+" 的行程";
+    var fb = document.createElement("a"); fb.className = "todaybtn"; fb.href = "#day-"+TODAY_D; fb.textContent = "今天 D"+TODAY_D; document.body.appendChild(fb);
+  }
 
   /* 待办 */
   document.getElementById("todos").innerHTML = TODOS.map(function(t){
@@ -832,7 +851,8 @@ var TIPS = [
   /* 页脚 */
   document.getElementById("foot").innerHTML =
     "<p class='play'>车上玩牌：<b>巫师牌</b>，3–6 人，60 张牌。每轮发牌后先叫自己能吃几墩，猜准得 20 分再每墩加 10，猜错每差一墩扣 10。规则看 <a href='https://zhuanlan.zhihu.com/p/420507499' target='_blank' rel='noopener'>知乎图文</a> 或 <a href='https://www.bilibili.com/video/BV1C5411R7ch/' target='_blank' rel='noopener'>B 站讲解</a>。</p>" +
-    "时间为北京时间。价格为 2026 年旺季估算，以预订和景区公示为准。带定位图标的地名可点：手机浏览器里直接唤起高德 App，微信和电脑里打开高德网页版。照片来自 Wikimedia Commons，授权见各图说明。菜品小图同样来自 Wikimedia Commons：烤包子：Uyghur samsa（Mizu basyo，CC BY-SA 3.0）；馕：Goshnan（Mizu basyo，CC BY-SA 3.0）；拉条子：Dolan Uyghur handmade noodles Adelaide（Orderinchaos，CC BY-SA 4.0）；包尔萨克：Boortsog（Vidor，Public domain）；拌面：Xinjiang-style sautéed beef noodles in Beijing (20180425171642)（N509FZ，CC BY-SA 4.0）。";
+    "时间为北京时间。价格为 2026 年旺季估算，以预订和景区公示为准。带定位图标的地名可点：手机浏览器直接唤起高德 App，微信和电脑打开高德网页版。"+
+    "<details><summary>图片来源</summary>照片来自 Wikimedia Commons，授权见各图说明。菜品小图同样来自 Wikimedia Commons：烤包子：Uyghur samsa（Mizu basyo，CC BY-SA 3.0）；馕：Goshnan（Mizu basyo，CC BY-SA 3.0）；拉条子：Dolan Uyghur handmade noodles Adelaide（Orderinchaos，CC BY-SA 4.0）；包尔萨克：Boortsog（Vidor，Public domain）；拌面：Xinjiang-style sautéed beef noodles in Beijing (20180425171642)（N509FZ，CC BY-SA 4.0）。</details>";
 
   /* 时区提示：设备不在 UTC+8 时才显示 */
   try{
