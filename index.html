@@ -336,6 +336,8 @@ a.opt .on{color:var(--blue)}
 
 
 
+
+
 /* ==== 记账 ==== */
 .acct{padding:14px}
 .acct .asum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
@@ -350,24 +352,33 @@ a.opt .on{color:var(--blue)}
 .acct .settle{font-size:13px;line-height:1.7;margin:10px 0 0;color:var(--ink2)}
 .acct .settle b{color:var(--ink)}
 .acct .lnk{display:inline-flex;align-items:center;min-height:36px;margin-top:6px;padding:0;border:0;background:none;color:var(--blue);font-size:12.5px;font-family:inherit;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
-.aform .hint{font-size:12px;color:var(--ink3)}
 .acct .st{font-size:12px;color:var(--ink3);margin-top:8px;line-height:1.5}
 .acct .st.err{color:var(--red)}
 .acct .st:empty,.acct .settle:empty{display:none}
-.aform{display:grid;gap:10px;margin-top:4px}
-.aform label{display:block;font-size:11px;color:var(--ink3);font-weight:600;margin-bottom:5px}
-.aform input[type=text],.aform input[type=number],.aform input[type=date]{width:100%;box-sizing:border-box;min-height:44px;padding:8px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);color:var(--ink);font-size:16px;font-family:inherit}
-.aform input:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
-.aform .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips button{min-height:36px;padding:6px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--ink2);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;user-select:none}
-.chips button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.chips button.pre{border-style:dashed}
-.chips.quick{margin-bottom:8px}
-.chips button:active{filter:brightness(.9)}
-.aform .act{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.aform .act .btn{margin:0;min-height:44px;padding:0 18px;display:inline-flex;align-items:center;font-size:14px}
-.aform .act .btn.sec{background:transparent;color:var(--ink);border-color:var(--rule)}
+.aform-card{overflow:hidden}
+.aform .fr{padding:12px 14px;border-top:1px solid var(--rule)}
+.aform .fr:first-child{border-top:0}
+.aform .fl{display:block;font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.02em;margin-bottom:8px}
+.aform .amt{text-align:center;padding:14px 14px 10px}
+.aform .amt input{display:block;width:100%;box-sizing:border-box;border:0;background:none;color:var(--ink);text-align:center;font-size:40px;font-weight:700;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;font-family:inherit;padding:2px 0;-moz-appearance:textfield}
+.aform .amt input::-webkit-outer-spin-button,.aform .amt input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.aform .amt input::placeholder{color:var(--rule)}
+.aform .amt input:focus-visible{outline:0}
+.aform .amt:focus-within .fl{color:var(--gold)}
+.seg{display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:2px;padding:3px;border-radius:10px;background:var(--soft)}
+.seg button{min-height:38px;padding:0 4px;border:0;border-radius:8px;background:transparent;color:var(--ink2);font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;user-select:none;white-space:nowrap;transition:transform .1s ease-out}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.seg button:active{transform:scale(.96)}
+.aform .note{display:block;width:100%;box-sizing:border-box;min-height:40px;margin-top:8px;padding:6px 10px;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:none;color:var(--ink);font-size:15px;font-family:inherit}
+.aform .note:focus-visible{outline:0;border-bottom-color:var(--gold)}
+.aform .date{display:flex;align-items:center;justify-content:space-between;min-height:48px;box-sizing:border-box}
+.aform .date .fl{margin:0;font-size:14px;font-weight:600;color:var(--ink)}
+.aform .date input{border:0;background:none;color:var(--ink2);font-size:15px;font-family:inherit;text-align:right;padding:6px 0;min-height:36px}
+.aform .date input:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+.aform .act{padding:12px 14px 14px}
+.aform .act .btn{display:flex;align-items:center;justify-content:center;width:100%;box-sizing:border-box;margin:0;min-height:48px;font-size:16px;border-radius:12px;transition:transform .1s ease-out}
+.aform .act .btn:active{transform:scale(.98)}
+.aform .hint{text-align:center;font-size:12px;color:var(--ink3);margin-top:8px}
 .acct .list{margin-top:14px}
 .acct .list .it{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:9px 0;border-bottom:1px solid var(--rule);font-size:13px;line-height:1.45}
 .acct .list .it .t{color:var(--ink);font-weight:600}
@@ -396,6 +407,7 @@ a.opt .on{color:var(--blue)}
 .frow .w{font-size:18px;font-weight:700;color:var(--ink);margin-right:6px}
 .frow .py{font-size:12px;color:var(--ink3);margin-right:6px}
 .frow .ex{display:block;color:var(--ink3);font-size:12px;margin-top:2px}
+#foot .play .btn{margin:0 4px;min-height:36px;display:inline-flex;align-items:center;padding:0 12px;font-size:13px;vertical-align:middle}
 .gbtns{display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
 .gbtns .btn{margin:0;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;font-size:14px}
 .gbtns .btn.sec{background:transparent;color:var(--ink);border-color:var(--rule)}
@@ -536,6 +548,11 @@ a.opt .on{color:var(--blue)}
 
 
 
+
+
+
+
+
 <section id="acct">
   <div class="sh"><h2>记账</h2><span class="n" id="acctSync">本地</span></div>
   <div class="card acct">
@@ -545,16 +562,14 @@ a.opt .on{color:var(--blue)}
     <div class="st" id="acctSt"></div>
     <button type="button" class="lnk" id="afCopy">复制这份结算，发到群里</button>
   </div>
-  <div class="sh" style="margin-top:16px"><h3>记一笔</h3><span class="n">谁垫的钱就选谁</span></div>
-  <div class="card acct">
+  <div class="sh" style="margin-top:16px"><h3>记一笔</h3></div>
+  <div class="card aform-card">
     <form class="aform" id="acctForm" autocomplete="off">
-      <div class="row2">
-        <div><label for="afA">金额</label><input id="afA" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="0" required></div>
-        <div><label for="afD">日期</label><input id="afD" type="date" required></div>
-      </div>
-      <div><label for="afN">干什么花的</label><div class="chips quick" id="afQ"></div><input id="afN" type="text" maxlength="40" placeholder="或者自己写" required></div>
-      <div><label>谁付的</label><div class="chips" id="afP"></div></div>
-      <div class="act"><button type="submit" class="btn">记上</button><span class="hint">三个人平摊</span></div>
+      <div class="fr amt"><label for="afA" class="fl">金额（元）</label><input id="afA" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="0" required></div>
+      <div class="fr"><div class="fl">花在哪</div><div class="seg" id="afQ" style="--n:4"></div><input id="afN" type="text" maxlength="40" placeholder="备注，可不填" class="note"></div>
+      <div class="fr"><div class="fl">谁付的</div><div class="seg" id="afP" style="--n:3"></div></div>
+      <div class="fr date"><label for="afD" class="fl">日期</label><input id="afD" type="date" required></div>
+      <div class="fr act"><button type="submit" class="btn">记上</button><div class="hint">三个人平摊</div></div>
     </form>
   </div>
   <div class="sh" style="margin-top:16px"><h3>明细</h3><span class="n" id="acctCnt"></span></div>
@@ -1203,7 +1218,7 @@ function gameBlock(d){
       '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
       '</summary><div class="dbody">'+miniMap(d.d, col, d.rt, stayLine)+
       funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div></div></details>'+
-      tours.map(renderTour).join('')+gameBlock(d)+
+      tours.map(renderTour).join('')+
       mealBlock(d)+
       (d.pic?d.pic.map(function(p){var dm = IMGD[p[0]]; return '<figure class="photo"><img src="img/'+p[0]+'"'+(dm?' width="'+dm[0]+'" height="'+dm[1]+'"':'')+' alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+
       '</div></details>';
@@ -1251,6 +1266,7 @@ function gameBlock(d){
   /* 页脚 */
   document.getElementById("foot").innerHTML =
     "<p class='play'>车上玩牌：<b>巫师牌</b>，3–6 人。规则看 <a href='https://zhuanlan.zhihu.com/p/420507499' target='_blank' rel='noopener'>知乎图文</a> 或 <a href='https://www.bilibili.com/video/BV1C5411R7ch/' target='_blank' rel='noopener'>B 站讲解</a>。</p>" +
+    "<p class='play spy'>不用牌的：<button type='button' class='btn' data-game='spy'>谁是卧底</button>，手机传一圈，每人只看自己的词，再轮流描述、投票。</p>" +
     "<details class='a2hs' id='a2hs'><summary>加到手机桌面，像 App 一样打开</summary>"+
     "<p><b>iPhone</b>：Safari 打开，底部「分享」→「添加到主屏幕」。</p>"+
     "<p><b>安卓</b>：Chrome 菜单 →「添加到主屏幕」。<button id='installBtn' class='btn' hidden>一键安装</button></p></details>"+
@@ -1522,27 +1538,26 @@ var SEED = [
   function chips(){
     $("afP").innerHTML = PEOPLE.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" class="'+(p===payer?'on':'')+'">'+esc(p)+'</button>'; }).join("");
   }
-  var QUICK = ["加油","吃饭","零食","水果","门票"];
-  $("afQ").innerHTML = QUICK.map(function(q){ return '<button type="button" data-q="'+q+'">'+q+'</button>'; }).join("");
+  var QUICK = ["加油","吃饭","零食水果","门票"], cat = "";
+  function segQ(){ $("afQ").innerHTML = QUICK.map(function(q){ return '<button type="button" data-q="'+q+'" class="'+(q===cat?'on':'')+'">'+q+'</button>'; }).join(""); }
+  segQ();
   $("afQ").addEventListener("click", function(ev){
     var b = ev.target.closest("button[data-q]"); if(!b) return;
-    $("afN").value = b.getAttribute("data-q");
-    Array.prototype.forEach.call($("afQ").children, function(x){ x.classList.toggle("on", x === b); });
-    if(!$("afA").value) $("afA").focus();
+    cat = cat === b.getAttribute("data-q") ? "" : b.getAttribute("data-q"); segQ();
   });
-  $("afN").addEventListener("input", function(){ Array.prototype.forEach.call($("afQ").children, function(x){ x.classList.toggle("on", x.getAttribute("data-q") === $("afN").value); }); });
   $("afP").addEventListener("click", function(ev){ var b = ev.target.closest("button[data-p]"); if(!b) return; payer = b.getAttribute("data-p"); me = payer; save(LSME, me); chips(); });
   function today(){ var d = new Date(Date.now() + 8*3600e3); return d.toISOString().slice(0,10); }
   $("afD").value = today();
   $("acctForm").addEventListener("submit", function(ev){
     ev.preventDefault();
-    var a = parseFloat($("afA").value), n = $("afN").value.trim(), d = $("afD").value;
-    if(!(a > 0)){ toast("金额没填"); return; }
-    if(!n){ toast("写一下干什么花的"); return; }
+    var a = parseFloat($("afA").value), note = $("afN").value.trim(), d = $("afD").value;
+    var n = cat ? (note ? cat + " · " + note : cat) : note;
+    if(!(a > 0)){ toast("金额没填"); $("afA").focus(); return; }
+    if(!n){ toast("选一个类别，或写一句备注"); return; }
     if(!payer){ toast("选一下谁付的"); return; }
     var e = {id:uid(), d:d, n:n, a:Math.round(a*100)/100, p:payer, t:new Date().toISOString(), by:me};
     queue.push(e); save(LSQ, queue);
-    $("afA").value = ""; $("afN").value = ""; $("afD").value = today(); Array.prototype.forEach.call($("afQ").children, function(x){ x.classList.remove("on"); });
+    $("afA").value = ""; $("afN").value = ""; $("afD").value = today(); cat = ""; segQ();
     render(); fortune(n, a); sync();
   });
   $("acctList").addEventListener("click", function(ev){
