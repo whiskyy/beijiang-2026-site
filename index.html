@@ -339,6 +339,7 @@ a.opt .on{color:var(--blue)}
 
 
 
+
 /* ==== 记账 ==== */
 .acct{padding:14px}
 .acct .asum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
@@ -370,6 +371,11 @@ a.opt .on{color:var(--blue)}
 .seg button{min-height:38px;padding:0 4px;border:0;border-radius:8px;background:transparent;color:var(--ink2);font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;user-select:none;white-space:nowrap;transition:transform .1s ease-out}
 .seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
 .seg button:active{transform:scale(.96)}
+.seg.pets button{min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.seg.pets .pet{font-size:28px;line-height:1;filter:grayscale(1);opacity:.55;transition:transform .15s ease-out,filter .15s,opacity .15s}
+.seg.pets button.on .pet{filter:none;opacity:1;transform:scale(1.12)}
+.seg.pets .pn{font-size:11px;font-weight:600}
+@media (prefers-reduced-motion:reduce){.seg.pets .pet{transition:none}}
 .aform .note{display:block;width:100%;box-sizing:border-box;min-height:40px;margin-top:8px;padding:6px 10px;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:none;color:var(--ink);font-size:15px;font-family:inherit}
 .aform .note:focus-visible{outline:0;border-bottom-color:var(--gold)}
 .aform .date{display:flex;align-items:center;justify-content:space-between;min-height:48px;box-sizing:border-box}
@@ -556,6 +562,8 @@ a.opt .on{color:var(--blue)}
 
 
 
+
+
 <section id="acct">
   <div class="sh"><h2>记账</h2><span class="n" id="acctSync">本地</span></div>
   <div class="card acct">
@@ -569,8 +577,8 @@ a.opt .on{color:var(--blue)}
   <div class="card aform-card">
     <form class="aform" id="acctForm" autocomplete="off">
       <div class="fr amt"><label for="afA" class="fl">金额（元）</label><input id="afA" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="0" required></div>
-      <div class="fr"><div class="fl">花在哪</div><div class="seg" id="afQ" style="--n:4"></div><input id="afN" type="text" maxlength="40" placeholder="备注，可不填" class="note"></div>
-      <div class="fr"><div class="fl">谁付的</div><div class="seg" id="afP" style="--n:3"></div></div>
+      <div class="fr"><div class="fl">花在哪</div><div class="seg" id="afQ" style="--n:3"></div><input id="afN" type="text" maxlength="40" placeholder="备注，可不填" class="note"></div>
+      <div class="fr"><div class="fl">谁付的</div><div class="seg pets" id="afP" style="--n:3"></div></div>
       <div class="fr date"><label for="afD" class="fl">日期</label><input id="afD" type="date" required></div>
       <div class="fr act"><button type="submit" class="btn">记上</button><div class="hint">三个人平摊</div></div>
     </form>
@@ -1399,6 +1407,7 @@ function gameBlock(d){
    删除 = 追加一条 {del:id} 墓碑。离线先存本地，联网后补传。旅行结束删桶即可。==== */
 var LEDGER_CFG = {"host": "beijiang-ledger-1254202958.cos.ap-guangzhou.myqcloud.com", "prefix": "ledger/", "policy": "eyJleHBpcmF0aW9uIjoiMjAyNi0xMS0zMFQxNTo1OTo1OVoiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJiZWlqaWFuZy1sZWRnZXItMTI1NDIwMjk1OCJ9LFsic3RhcnRzLXdpdGgiLCIka2V5IiwibGVkZ2VyLyJdLFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLDEsMjAwMDBdLFsic3RhcnRzLXdpdGgiLCIkQ29udGVudC1UeXBlIiwiIl0seyJxLXNpZ24tYWxnb3JpdGhtIjoic2hhMSJ9LHsicS1hayI6IkFLSUROazFCUmVqbHkydmVBZDFFSEF0V3pHTkkwaUdiamZQeCJ9LHsicS1zaWduLXRpbWUiOiIxNzg4NzEwNDAwOzE3OTYwNTQzOTkifV19", "ak": "AKIDNk1BRejly2veAd1EHAtWzGNI0iGbjfPx", "keytime": "1788710400;1796054399", "sig": "fc94e13db4598b225022ea371f69e8e8432fbea3"};
 var PEOPLE = ["陈昱州","张晓宇","王晨"];
+var PETS = {"陈昱州":"🦅","张晓宇":"🐫","王晨":"🐎"};
 var SEED = [
   ["2026-09-01","D2 可可托海 雾海野奢民宿 3 间",1559,"张晓宇"],
   ["2026-09-01","D3 布尔津 泰悦假日酒店 3 间",1407,"张晓宇"],
@@ -1539,9 +1548,9 @@ var SEED = [
   /* ---- 表单 ---- */
   var payer = me || "";
   function chips(){
-    $("afP").innerHTML = PEOPLE.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" class="'+(p===payer?'on':'')+'">'+esc(p)+'</button>'; }).join("");
+    $("afP").innerHTML = PEOPLE.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" class="'+(p===payer?'on':'')+'" aria-label="'+esc(p)+'"><span class="pet">'+(PETS[p]||"🙂")+'</span><span class="pn">'+esc(p)+'</span></button>'; }).join("");
   }
-  var QUICK = ["加油","吃饭","零食水果","门票","特产","打车","杂物","其他"], cat = "";
+  var QUICK = ["加油","吃饭","零食水果","门票","打车","其他"], cat = "";
   function segQ(){ $("afQ").innerHTML = QUICK.map(function(q){ return '<button type="button" data-q="'+q+'" class="'+(q===cat?'on':'')+'">'+q+'</button>'; }).join(""); }
   segQ();
   $("afQ").addEventListener("click", function(ev){
