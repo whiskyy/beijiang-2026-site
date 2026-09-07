@@ -322,12 +322,56 @@ a.opt .on{color:var(--blue)}
 .opt .os{display:block;font-size:12.5px;color:var(--ink3);line-height:1.45}
 
 .tour.spot>summary::before{content:"景区";flex:none;font-size:11px;font-weight:700;color:var(--route);border:1px solid color-mix(in srgb,var(--route) 40%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
+
+
+
+
+/* ==== 记账 ==== */
+.acct{padding:14px}
+.acct .asum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.acct .asum div{background:var(--soft);border-radius:8px;padding:9px 10px;line-height:1.3}
+.acct .asum b{display:block;font-size:17px;font-variant-numeric:tabular-nums}
+.acct .asum span{font-size:11px;color:var(--ink3);font-weight:600}
+.acct table{width:100%;border-collapse:collapse;font-size:13px}
+.acct th{text-align:left;font-size:11px;color:var(--ink3);font-weight:600;padding:0 8px 7px 0;border-bottom:1px solid var(--rule)}
+.acct td{padding:8px 8px 8px 0;border-bottom:1px solid var(--rule);color:var(--ink2);line-height:1.45;vertical-align:top}
+.acct td.n,.acct th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.acct td.pos{color:var(--green);font-weight:600}.acct td.neg{color:var(--red);font-weight:600}
+.acct .settle{font-size:13px;line-height:1.7;margin:10px 0 0;color:var(--ink2)}
+.acct .settle b{color:var(--ink)}
+.acct .st{font-size:12px;color:var(--ink3);margin-top:8px;line-height:1.5}
+.acct .st.err{color:var(--red)}
+.acct .st:empty,.acct .settle:empty{display:none}
+.aform{display:grid;gap:10px;margin-top:4px}
+.aform label{display:block;font-size:11px;color:var(--ink3);font-weight:600;margin-bottom:5px}
+.aform input[type=text],.aform input[type=number],.aform input[type=date]{width:100%;box-sizing:border-box;min-height:44px;padding:8px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);color:var(--ink);font-size:16px;font-family:inherit}
+.aform input:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.aform .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{min-height:36px;padding:6px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--ink2);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;user-select:none}
+.chips button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips button.pre{border-style:dashed}
+.chips button:active{filter:brightness(.9)}
+.aform .act{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.aform .act .btn{margin:0;min-height:44px;padding:0 18px;display:inline-flex;align-items:center;font-size:14px}
+.aform .act .btn.sec{background:transparent;color:var(--ink);border-color:var(--rule)}
+.acct .list{margin-top:14px}
+.acct .list .it{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:9px 0;border-bottom:1px solid var(--rule);font-size:13px;line-height:1.45}
+.acct .list .it .t{color:var(--ink);font-weight:600}
+.acct .list .it .m{color:var(--ink3);font-size:12px}
+.acct .list .it .a{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
+.acct .list .it .del{text-align:right}
+.acct .list .it .del button{min-height:32px;min-width:44px;padding:4px 8px;border:0;background:transparent;color:var(--ink3);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline dotted}
+.acct .list .it.pend .t::after{content:" 待同步";font-size:11px;color:var(--gold);font-weight:600}
+.acct .empty{font-size:13px;color:var(--ink3);padding:10px 0}
+.acct details.who{margin-top:10px}
+.acct details.who summary{font-size:12px;color:var(--ink3);cursor:pointer;min-height:32px;display:flex;align-items:center}
 </style>
 </head>
 <body>
 
 <nav class="topnav" id="topnav"><div class="wrap">
-  <a href="#top" class="on">概览</a><a href="#days">行程</a><a href="#todo">待办</a><a href="#tips">贴士</a><a href="#tkt">费用</a>
+  <a href="#top" class="on">概览</a><a href="#days">行程</a><a href="#todo">待办</a><a href="#tips">贴士</a><a href="#tkt">费用</a><a href="#acct">记账</a>
 </div></nav>
 
 <main class="wrap">
@@ -422,6 +466,34 @@ a.opt .on{color:var(--blue)}
   </div>
   <div class="sh" style="margin-top:16px"><h3>门票</h3><span class="n">人均，含区间车</span></div>
   <div class="card tkt" id="tktBox"></div>
+</section>
+
+
+
+
+<section id="acct">
+  <div class="sh"><h2>记账</h2><span class="n" id="acctSync">本地</span></div>
+  <div class="card acct">
+    <div class="asum" id="acctSum"></div>
+    <table id="acctBal"><thead><tr><th>人</th><th class="n">垫付</th><th class="n">应摊</th><th class="n">结余</th></tr></thead><tbody></tbody></table>
+    <div class="settle" id="acctSettle"></div>
+    <div class="st" id="acctSt"></div>
+  </div>
+  <div class="sh" style="margin-top:16px"><h3>记一笔</h3><span class="n">谁付的、分给谁</span></div>
+  <div class="card acct">
+    <form class="aform" id="acctForm" autocomplete="off">
+      <div class="row2">
+        <div><label for="afA">金额</label><input id="afA" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="0" required></div>
+        <div><label for="afD">日期</label><input id="afD" type="date" required></div>
+      </div>
+      <div><label for="afN">干什么花的</label><input id="afN" type="text" maxlength="40" placeholder="加油 / 停车 / 门票 / 晚饭" required></div>
+      <div><label>谁付的</label><div class="chips" id="afP"></div></div>
+      <div><label>分给谁</label><div class="chips" id="afS"></div></div>
+      <div class="act"><button type="submit" class="btn">记上</button><button type="button" class="btn sec" id="afCopy">复制账本</button></div>
+    </form>
+  </div>
+  <div class="sh" style="margin-top:16px"><h3>明细</h3><span class="n" id="acctCnt"></span></div>
+  <div class="card acct"><div class="list" id="acctList"></div></div>
 </section>
 
 <footer id="foot"></footer>
@@ -1170,6 +1242,7 @@ var TIPS = [
 
   /* 小红书：手机上唤起 App；微信里或没装 App 就把关键词复制好，提示去 App 粘贴 */
   var toastEl = null, toastT = 0;
+  window.toast = toast; window.copyText = copyText;
   function toast(msg){
     if(!toastEl){ toastEl = document.createElement("div"); toastEl.className = "toast"; document.body.appendChild(toastEl); }
     toastEl.textContent = msg; toastEl.classList.add("on");
@@ -1196,6 +1269,187 @@ var TIPS = [
   if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
     navigator.serviceWorker.register("./sw.js").catch(function(){});
   }
+})();
+</script>
+<script>
+/* ==== 记账：每笔一个 JSON 对象，POST 到 COS（策略签名，只能写 ledger/ 前缀）；读取走公有读列表。
+   删除 = 追加一条 {del:id} 墓碑。离线先存本地，联网后补传。旅行结束删桶即可。==== */
+var LEDGER_CFG = {"host": "beijiang-ledger-1254202958.cos.ap-guangzhou.myqcloud.com", "prefix": "ledger/", "policy": "eyJleHBpcmF0aW9uIjoiMjAyNi0xMS0zMFQxNTo1OTo1OVoiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJiZWlqaWFuZy1sZWRnZXItMTI1NDIwMjk1OCJ9LFsic3RhcnRzLXdpdGgiLCIka2V5IiwibGVkZ2VyLyJdLFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLDEsMjAwMDBdLFsic3RhcnRzLXdpdGgiLCIkQ29udGVudC1UeXBlIiwiIl0seyJxLXNpZ24tYWxnb3JpdGhtIjoic2hhMSJ9LHsicS1hayI6IkFLSUROazFCUmVqbHkydmVBZDFFSEF0V3pHTkkwaUdiamZQeCJ9LHsicS1zaWduLXRpbWUiOiIxNzg4NzEwNDAwOzE3OTYwNTQzOTkifV19", "ak": "AKIDNk1BRejly2veAd1EHAtWzGNI0iGbjfPx", "keytime": "1788710400;1796054399", "sig": "fc94e13db4598b225022ea371f69e8e8432fbea3"};
+var PEOPLE = ["陈昱州","张晓宇","王晨","牛梦瑶","彭钰"];
+var MEN = ["陈昱州","张晓宇","王晨"];
+var SEED = [
+  ["2026-09-01","D2 可可托海 雾海野奢民宿 3 间",1559,"张晓宇"],
+  ["2026-09-01","D3 布尔津 泰悦假日酒店 3 间",1407,"张晓宇"],
+  ["2026-09-01","D4 禾木 無也民宿 2 间三人房",4752,"张晓宇"],
+  ["2026-09-01","D5 贾登峪 喀纳斯生态度假酒店 3 间",4138,"王晨"],
+  ["2026-09-01","D6 克拉玛依 亚朵 3 间",1622,"王晨"],
+  ["2026-09-01","D7 清水河 丽呈花盛 3 间",852,"王晨"],
+  ["2026-09-01","D8 那拉提 文旅那拉提度假酒店 3 间",1103,"王晨"],
+  ["2026-09-01","D9 巴音布鲁克 丽呈酒店 3 间",1023,"王晨"],
+  ["2026-09-05","旅行意外险 6 人",324,"陈昱州"],
+  ["2026-09-06","禾木门票+区间车 6 人",450,"陈昱州"],
+  ["2026-09-06","喀纳斯一进票 6 人",1380,"陈昱州"],
+  ["2026-09-07","租车 一嗨 GL8 陆尚插混 9/26–10/5",7100,"陈昱州"]
+].map(function(r,i){ return {id:"seed"+(i+1), d:r[0], n:r[1], a:r[2], p:r[3], s:MEN.slice(), t:r[0]+"T00:00:00+08:00"}; });
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var LS = "bj_ledger_v1", LSQ = "bj_ledger_queue_v1", LSME = "bj_ledger_me";
+  function load(k, d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
+  function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  var remote = load(LS, {});      // key -> entry（已从云端拿到的）
+  var queue = load(LSQ, []);      // 还没传上去的 entry
+  var me = load(LSME, "");
+  var online = !!(LEDGER_CFG && LEDGER_CFG.host);
+  var syncEl = $("acctSync"), stEl = $("acctSt");
+  function fmt(n){ return (Math.round(n*100)/100).toLocaleString("zh-CN", {maximumFractionDigits:2}); }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+  function all(){
+    var m = {}; SEED.forEach(function(e){ m[e.id] = e; });
+    var list = Object.keys(remote).map(function(k){ return remote[k]; }).concat(queue);
+    list.forEach(function(e){ if(e && e.id && !e.del) m[e.id] = e; });
+    list.forEach(function(e){ if(e && e.del) delete m[e.del]; });
+    var pend = {}; queue.forEach(function(e){ if(e.id) pend[e.id] = 1; });
+    return Object.keys(m).map(function(k){ var e = m[k]; e._pend = !!pend[e.id]; return e; })
+      .sort(function(x,y){ return (y.d+y.t) < (x.d+x.t) ? -1 : 1; });
+  }
+  function compute(list){
+    var paid = {}, owe = {}, total = 0;
+    PEOPLE.forEach(function(p){ paid[p] = 0; owe[p] = 0; });
+    list.forEach(function(e){
+      var a = +e.a || 0; if(!(a > 0) || !e.s || !e.s.length) return;
+      total += a; paid[e.p] = (paid[e.p]||0) + a;
+      var sh = a / e.s.length; e.s.forEach(function(p){ owe[p] = (owe[p]||0) + sh; });
+    });
+    return {paid:paid, owe:owe, total:total};
+  }
+  function settle(bal){
+    var cr = [], db = [];
+    Object.keys(bal).forEach(function(p){ var v = Math.round(bal[p]); if(v > 0) cr.push([p,v]); else if(v < 0) db.push([p,-v]); });
+    cr.sort(function(a,b){ return b[1]-a[1]; }); db.sort(function(a,b){ return b[1]-a[1]; });
+    var out = [], i = 0, j = 0;
+    while(i < cr.length && j < db.length){
+      var x = Math.min(cr[i][1], db[j][1]);
+      out.push(db[j][0] + " → " + cr[i][0] + " <b>" + fmt(x) + "</b>");
+      cr[i][1] -= x; db[j][1] -= x; if(cr[i][1] <= 0) i++; if(db[j][1] <= 0) j++;
+    }
+    return out;
+  }
+  function render(){
+    var list = all(), c = compute(list);
+    var pre = 0; list.forEach(function(e){ if(/^seed/.test(e.id)) pre += +e.a || 0; });
+    $("acctSum").innerHTML = '<div><b>'+fmt(c.total)+'</b><span>合计 · '+list.length+' 笔</span></div><div><b>'+fmt(pre)+'</b><span>出发前已付</span></div><div><b>'+fmt(c.total-pre)+'</b><span>路上花的</span></div>';
+    var tb = $("acctBal").querySelector("tbody"), rows = "", bal = {};
+    PEOPLE.forEach(function(p){
+      var b = (c.paid[p]||0) - (c.owe[p]||0); bal[p] = b;
+      if(!c.paid[p] && !c.owe[p]) return;
+      rows += '<tr><td>'+esc(p)+'</td><td class="n">'+fmt(c.paid[p]||0)+'</td><td class="n">'+fmt(c.owe[p]||0)+'</td><td class="n '+(b>0.5?'pos':b<-0.5?'neg':'')+'">'+(b>0?'+':'')+fmt(b)+'</td></tr>';
+    });
+    tb.innerHTML = rows;
+    var s = settle(bal);
+    $("acctSettle").innerHTML = s.length ? '结清方案：' + s.join('；') : '';
+    $("acctCnt").textContent = list.length + ' 笔';
+    $("acctList").innerHTML = list.length ? list.map(function(e){
+      return '<div class="it'+(e._pend?' pend':'')+'"><div><div class="t">'+esc(e.n)+'</div><div class="m">'+esc(e.d)+' · '+esc(e.p)+' 付 · 分给 '+(e.s.length===PEOPLE.length?'全员':e.s.length===3&&MEN.every(function(m){return e.s.indexOf(m)>=0})?'三人':esc(e.s.join("、")))+'</div></div>'
+        +'<div><div class="a">'+fmt(+e.a)+'</div><div class="del"><button type="button" data-del="'+esc(e.id)+'">删除</button></div></div></div>';
+    }).join("") : '<div class="empty">还没有记录</div>';
+  }
+
+  /* ---- 云端同步 ---- */
+  function listKeys(){
+    return fetch("https://"+LEDGER_CFG.host+"/?prefix="+encodeURIComponent(LEDGER_CFG.prefix)+"&max-keys=1000&_="+Date.now(), {cache:"no-store"})
+      .then(function(r){ if(!r.ok) throw new Error("list "+r.status); return r.text(); })
+      .then(function(x){ var ks = [], re = /<Key>([^<]+)<\/Key>/g, m; while((m = re.exec(x))) ks.push(m[1]); return ks; });
+  }
+  function pull(){
+    if(!online) return Promise.resolve();
+    return listKeys().then(function(keys){
+      var miss = keys.filter(function(k){ return !remote[k]; });
+      return Promise.all(miss.map(function(k){
+        return fetch("https://"+LEDGER_CFG.host+"/"+k, {cache:"no-store"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(e){ if(e) remote[k] = e; }).catch(function(){});
+      })).then(function(){
+        var have = {}; keys.forEach(function(k){ have[k] = 1; });
+        Object.keys(remote).forEach(function(k){ if(!have[k]) delete remote[k]; });
+        save(LS, remote);
+      });
+    });
+  }
+  function post(e){
+    var key = LEDGER_CFG.prefix + (e.del ? "del-" : "") + (e.id || uid()) + ".json";
+    var fd = new FormData();
+    fd.append("key", key); fd.append("policy", LEDGER_CFG.policy);
+    fd.append("q-sign-algorithm", "sha1"); fd.append("q-ak", LEDGER_CFG.ak);
+    fd.append("q-key-time", LEDGER_CFG.keytime); fd.append("q-signature", LEDGER_CFG.sig);
+    fd.append("Content-Type", "application/json");
+    fd.append("file", new Blob([JSON.stringify(e)], {type:"application/json"}), "e.json");
+    return fetch("https://"+LEDGER_CFG.host+"/", {method:"POST", body:fd}).then(function(r){ if(!(r.ok || r.status===204)) throw new Error("post "+r.status); remote[key] = e; save(LS, remote); });
+  }
+  var syncing = false;
+  function flush(){
+    if(!online || syncing || !queue.length) return Promise.resolve();
+    syncing = true;
+    var q = queue.slice();
+    return q.reduce(function(p, e){ return p.then(function(){ return post(e).then(function(){ queue = queue.filter(function(x){ return x !== e; }); save(LSQ, queue); }); }); }, Promise.resolve())
+      .then(function(){ syncing = false; }, function(err){ syncing = false; throw err; });
+  }
+  function sync(){
+    if(!online){ syncEl.textContent = "仅本机"; return; }
+    syncEl.textContent = "同步中…";
+    flush().then(pull).then(function(){ syncEl.textContent = "已同步"; stEl.textContent = ""; stEl.className = "st"; render(); })
+      .catch(function(err){ syncEl.textContent = queue.length ? "有 "+queue.length+" 笔待传" : "离线"; stEl.textContent = "云端暂时连不上，记录已存在本机，联网后自动补传"; stEl.className = "st err"; render(); });
+  }
+
+  /* ---- 表单 ---- */
+  var payer = me || "", split = MEN.slice();
+  function chips(){
+    $("afP").innerHTML = PEOPLE.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" class="'+(p===payer?'on':'')+'">'+esc(p)+'</button>'; }).join("");
+    $("afS").innerHTML = '<button type="button" class="pre" data-pre="men">三人</button><button type="button" class="pre" data-pre="all">全员</button>' +
+      PEOPLE.map(function(p){ return '<button type="button" data-s="'+esc(p)+'" class="'+(split.indexOf(p)>=0?'on':'')+'">'+esc(p)+'</button>'; }).join("");
+  }
+  $("afP").addEventListener("click", function(ev){ var b = ev.target.closest("button[data-p]"); if(!b) return; payer = b.getAttribute("data-p"); me = payer; save(LSME, me); chips(); });
+  $("afS").addEventListener("click", function(ev){
+    var b = ev.target.closest("button"); if(!b) return;
+    if(b.dataset.pre === "men") split = MEN.slice(); else if(b.dataset.pre === "all") split = PEOPLE.slice();
+    else { var p = b.getAttribute("data-s"); var i = split.indexOf(p); if(i >= 0) split.splice(i,1); else split.push(p); }
+    chips();
+  });
+  function today(){ var d = new Date(Date.now() + 8*3600e3); return d.toISOString().slice(0,10); }
+  $("afD").value = today();
+  $("acctForm").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var a = parseFloat($("afA").value), n = $("afN").value.trim(), d = $("afD").value;
+    if(!(a > 0)){ toast("金额没填"); return; }
+    if(!n){ toast("写一下干什么花的"); return; }
+    if(!payer){ toast("选一下谁付的"); return; }
+    if(!split.length){ toast("至少分给一个人"); return; }
+    var e = {id:uid(), d:d, n:n, a:Math.round(a*100)/100, p:payer, s:split.slice(), t:new Date().toISOString(), by:me};
+    queue.push(e); save(LSQ, queue);
+    $("afA").value = ""; $("afN").value = ""; $("afD").value = today();
+    render(); toast("记上了：" + n + " " + fmt(a)); sync();
+  });
+  $("acctList").addEventListener("click", function(ev){
+    var b = ev.target.closest("button[data-del]"); if(!b) return;
+    var id = b.getAttribute("data-del"), e = all().filter(function(x){ return x.id === id; })[0]; if(!e) return;
+    if(!confirm("删除「"+e.n+" "+fmt(+e.a)+"」？")) return;
+    var qi = -1; queue.forEach(function(x,i){ if(x.id === id) qi = i; });
+    if(qi >= 0){ queue.splice(qi,1); save(LSQ, queue); render(); return; }
+    queue.push({id:uid(), del:id, t:new Date().toISOString(), by:me}); save(LSQ, queue); render(); sync();
+  });
+  $("afCopy").addEventListener("click", function(){
+    var list = all(), c = compute(list), lines = ["北疆账本 " + today(), "公摊合计 " + fmt(c.total), ""];
+    PEOPLE.forEach(function(p){ if(c.paid[p] || c.owe[p]) lines.push(p + "：垫付 " + fmt(c.paid[p]||0) + "，应摊 " + fmt(c.owe[p]||0) + "，结余 " + fmt((c.paid[p]||0)-(c.owe[p]||0))); });
+    var bal = {}; PEOPLE.forEach(function(p){ bal[p] = (c.paid[p]||0)-(c.owe[p]||0); });
+    var s = settle(bal); if(s.length) lines.push("", "结清：" + s.map(function(x){ return x.replace(/<\/?b>/g,""); }).join("；"));
+    lines.push(""); list.slice().reverse().forEach(function(e){ lines.push(e.d + " " + e.n + " " + fmt(+e.a) + " " + e.p + "付 分" + e.s.length + "人"); });
+    copyText(lines.join("\n")); toast("账本已复制，可以贴到微信群");
+  });
+
+  chips(); render(); sync();
+  window.addEventListener("online", sync);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) sync(); });
+  var acctSec = document.getElementById("acct");
+  if(acctSec){ var t = setInterval(function(){ if(!document.hidden) sync(); }, 60000); }
 })();
 </script>
 </body>
