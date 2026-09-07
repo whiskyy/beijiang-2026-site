@@ -331,6 +331,10 @@ a.opt .on{color:var(--blue)}
 
 
 
+
+
+
+
 /* ==== 记账 ==== */
 .acct{padding:14px}
 .acct .asum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
@@ -381,7 +385,6 @@ a.opt .on{color:var(--blue)}
 .acct details.who{margin-top:10px}
 .acct details.who summary{font-size:12px;color:var(--ink3);cursor:pointer;min-height:32px;display:flex;align-items:center}
 
-
 /* ==== 趣味：光线/月亮/新疆话 + 路上玩 ==== */
 .tour.sun>summary::before{content:"今日";flex:none;font-size:11px;font-weight:700;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
 .tour.game>summary::before{content:"路上玩";flex:none;font-size:11px;font-weight:700;color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 45%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
@@ -409,9 +412,29 @@ a.opt .on{color:var(--blue)}
 .gsheet .act .btn{margin:0;min-height:46px;display:inline-flex;align-items:center;padding:0 22px;font-size:15px}
 .gsheet .act .btn.sec{background:transparent;color:var(--ink);border-color:var(--rule)}
 .gsheet .chips{justify-content:center;margin:6px 0 4px}
-.gsheet .roll{font-size:34px;font-weight:800;text-align:center;padding:26px 0;min-height:1.3em}
-.gsheet .roll.done{color:var(--gold)}
-@media (prefers-reduced-motion:reduce){.gsheet .roll{transition:none}}
+.tour.diary>summary::before{content:"这天";flex:none;font-size:11px;font-weight:700;color:var(--green);border:1px solid color-mix(in srgb,var(--green) 45%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
+.tour.diary .tbody{padding:4px 12px 12px}
+.dlist .dnote{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0;border-top:1px dashed var(--rule);font-size:13.5px;line-height:1.55;color:var(--ink)}
+.dlist .dnote:first-child{border-top:0}
+.dlist .dnote .m{font-size:11.5px;color:var(--ink3)}
+.dlist .dnote.pend .m::after{content:" · 待同步";color:var(--gold)}
+.dlist .dnote button{min-height:32px;min-width:40px;border:0;background:none;color:var(--ink3);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline dotted;align-self:start}
+.dlist .none{font-size:13px;color:var(--ink3);padding:6px 0}
+.dform{display:grid;gap:8px;margin-top:8px;padding-top:10px;border-top:1px solid var(--rule)}
+.dform .row{display:flex;gap:8px}
+.dform input{flex:1;min-width:0;min-height:44px;padding:8px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);color:var(--ink);font-size:16px;font-family:inherit}
+.dform input:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.dform .btn{margin:0;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;font-size:14px;flex:none}
+.bingo{padding:14px}
+.bingo .bhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-size:12px;color:var(--ink3)}
+.bingo .bhead b{font-size:15px;color:var(--ink)}
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.bgrid button{min-height:64px;padding:6px 4px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);color:var(--ink2);font-size:12px;line-height:1.35;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;user-select:none;text-align:center}
+.bgrid button.on{background:color-mix(in srgb,var(--gold) 18%,var(--bg));border-color:var(--gold);color:var(--ink);font-weight:700}
+.bgrid button small{font-size:10px;font-weight:600;color:var(--gold)}
+.bgrid button:active{filter:brightness(.92)}
+.bingo .bnote{font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.5}
+.mechips{margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -456,6 +479,16 @@ a.opt .on{color:var(--blue)}
   <div class="card mapbox">
     <div class="mapwrap"><svg viewBox="0 0 900 825" role="img" aria-label="北疆十日自驾路线图，真实道路走线"><path d="M355,727 L374,720 L407,721 L419,715 L444,720 L467,717 L487,717 L489,720 L495,720 L503,725 L511,726 L513,728 L513,732 L517,737 L526,739 L532,743 L533,748 L530,756 L539,745 L553,742 L560,738 L571,737 L582,719 L590,716 L593,711 L593,706 L602,694 L602,684 L611,670 L614,661 L617,658 L620,659 L626,654 L630,655 L634,641" class="altcas"/><path d="M355,727 L374,720 L407,721 L419,715 L444,720 L467,717 L487,717 L489,720 L495,720 L503,725 L511,726 L513,728 L513,732 L517,737 L526,739 L532,743 L533,748 L530,756 L539,745 L553,742 L560,738 L571,737 L582,719 L590,716 L593,711 L593,706 L602,694 L602,684 L611,670 L614,661 L617,658 L620,659 L626,654 L630,655 L634,641" class="alt"/><g class="cas"><path d="M634,642 L632,633 L634,622 L640,613 L641,607 L666,603 L690,604 L706,608 L720,607 L724,586 L729,580 L731,573 L733,552 L731,538 L733,529 L748,518 L751,511 L776,484 L780,460 L785,452 L789,439 L786,394 L792,351 L791,343 L795,313 L793,307 L790,304 L791,301 L789,299 L793,285 L788,277 L791,276 L790,273 L793,273 L797,270 L806,272 L805,262 L809,251 L808,251"/><path d="M808,251 L819,248 L810,250 L805,262 L806,272 L797,270 L793,273 L790,273 L791,276 L787,277 L793,285 L790,294 L790,304 L783,297 L754,286 L731,271 L724,264 L708,255 L696,252 L693,247 L683,246 L668,238 L650,233 L638,225 L618,223 L607,213 L590,208 L576,196 L573,191"/><path d="M573,191 L558,175 L563,180 L568,178 L569,170 L572,169 L571,155 L573,152 L578,150 L583,151 L583,145 L588,138 L585,134 L587,130 L586,125 L592,122 L602,104 L607,102 L610,102 L613,98 L611,97 L612,93 L624,91 L627,87"/><path d="M627,87 L624,91 L612,93 L611,97 L613,99 L610,103 L607,102 L602,104 L599,100 L596,99 L595,95 L597,96"/><path d="M597,96 L596,99 L601,103 L601,106 L595,114 L592,122 L586,125 L587,130 L585,134 L588,138 L587,141 L583,144 L583,151 L578,150 L573,152 L571,155 L573,172 L568,190 L578,198 L578,208 L571,213 L567,236 L561,250 L557,252 L557,260 L553,262 L544,284 L529,296 L521,305 L509,315 L507,332 L504,332 L503,333 L496,362 L481,377 L480,380 L474,378 L470,385 L453,395 L438,421 L431,425 L432,426 L429,432 L424,436 L418,438 L416,442"/><path d="M416,442 L418,446 L410,457 L400,496 L403,511 L412,520 L416,549 L415,564 L410,574 L387,576 L383,574 L374,577 L355,579 L340,569 L332,567 L315,566 L312,561 L306,557 L297,558 L282,550 L270,550 L260,546 L257,552 L246,556 L244,558 L236,557 L230,561 L204,558 L196,551 L189,548 L137,550 L134,551 L129,559 L113,565 L115,567 L113,566 L107,570 L92,590 L87,594 L82,596 L82,598"/><path d="M82,598 L85,596 L87,608 L94,612 L97,618 L109,623 L119,621 L128,626 L127,627 L130,626 L132,623 L136,624 L140,627 L148,627 L156,631 L169,640 L175,647 L180,648 L196,661 L215,662 L227,665 L243,664 L281,670 L285,669 L288,671 L301,672 L308,676 L315,677 L323,684 L346,695"/><path d="M346,695 L345,703 L346,694 L360,696 L367,700 L370,704 L368,706 L370,705 L372,707 L369,709 L374,712 L371,714 L370,722 L355,727"/><path d="M355,727 L370,722 L371,714 L374,713 L369,709 L372,707 L370,705 L368,706 L370,704 L366,699 L372,694 L372,689 L373,690 L374,689 L374,682 L379,679 L378,673 L381,673 L372,668 L368,658 L376,657 L377,654 L376,654 L380,652 L376,648 L381,642 L381,634 L385,628 L392,624 L396,616 L400,614 L401,608 L407,610 L417,575 L430,578 L438,578 L445,581 L468,581 L473,585 L481,585 L496,590 L505,591 L515,588 L534,595 L539,594 L544,597 L557,597 L572,601 L599,622 L615,630 L618,631 L620,629 L626,632 L634,641"/><path d="M634,641 L627,633 L621,630 L623,628"/></g><g class="rt"><path d="M634,642 L632,633 L634,622 L640,613 L641,607 L666,603 L690,604 L706,608 L720,607 L724,586 L729,580 L731,573 L733,552 L731,538 L733,529 L748,518 L751,511 L776,484 L780,460 L785,452 L789,439 L786,394 L792,351 L791,343 L795,313 L793,307 L790,304 L791,301 L789,299 L793,285 L788,277 L791,276 L790,273 L793,273 L797,270 L806,272 L805,262 L809,251 L808,251"/><path d="M808,251 L819,248 L810,250 L805,262 L806,272 L797,270 L793,273 L790,273 L791,276 L787,277 L793,285 L790,294 L790,304 L783,297 L754,286 L731,271 L724,264 L708,255 L696,252 L693,247 L683,246 L668,238 L650,233 L638,225 L618,223 L607,213 L590,208 L576,196 L573,191"/><path d="M573,191 L558,175 L563,180 L568,178 L569,170 L572,169 L571,155 L573,152 L578,150 L583,151 L583,145 L588,138 L585,134 L587,130 L586,125 L592,122 L602,104 L607,102 L610,102 L613,98 L611,97 L612,93 L624,91 L627,87"/><path d="M627,87 L624,91 L612,93 L611,97 L613,99 L610,103 L607,102 L602,104 L599,100 L596,99 L595,95 L597,96"/><path d="M597,96 L596,99 L601,103 L601,106 L595,114 L592,122 L586,125 L587,130 L585,134 L588,138 L587,141 L583,144 L583,151 L578,150 L573,152 L571,155 L573,172 L568,190 L578,198 L578,208 L571,213 L567,236 L561,250 L557,252 L557,260 L553,262 L544,284 L529,296 L521,305 L509,315 L507,332 L504,332 L503,333 L496,362 L481,377 L480,380 L474,378 L470,385 L453,395 L438,421 L431,425 L432,426 L429,432 L424,436 L418,438 L416,442"/><path d="M416,442 L418,446 L410,457 L400,496 L403,511 L412,520 L416,549 L415,564 L410,574 L387,576 L383,574 L374,577 L355,579 L340,569 L332,567 L315,566 L312,561 L306,557 L297,558 L282,550 L270,550 L260,546 L257,552 L246,556 L244,558 L236,557 L230,561 L204,558 L196,551 L189,548 L137,550 L134,551 L129,559 L113,565 L115,567 L113,566 L107,570 L92,590 L87,594 L82,596 L82,598"/><path d="M82,598 L85,596 L87,608 L94,612 L97,618 L109,623 L119,621 L128,626 L127,627 L130,626 L132,623 L136,624 L140,627 L148,627 L156,631 L169,640 L175,647 L180,648 L196,661 L215,662 L227,665 L243,664 L281,670 L285,669 L288,671 L301,672 L308,676 L315,677 L323,684 L346,695"/><path d="M346,695 L345,703 L346,694 L360,696 L367,700 L370,704 L368,706 L370,705 L372,707 L369,709 L374,712 L371,714 L370,722 L355,727"/><path d="M355,727 L370,722 L371,714 L374,713 L369,709 L372,707 L370,705 L368,706 L370,704 L366,699 L372,694 L372,689 L373,690 L374,689 L374,682 L379,679 L378,673 L381,673 L372,668 L368,658 L376,657 L377,654 L376,654 L380,652 L376,648 L381,642 L381,634 L385,628 L392,624 L396,616 L400,614 L401,608 L407,610 L417,575 L430,578 L438,578 L445,581 L468,581 L473,585 L481,585 L496,590 L505,591 L515,588 L534,595 L539,594 L544,597 L557,597 L572,601 L599,622 L615,630 L618,631 L620,629 L626,632 L634,641"/><path d="M634,641 L627,633 L621,630 L623,628"/></g><circle cx="587" cy="72" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="483" cy="376" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="134" cy="551" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="127" cy="626" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="372" cy="658" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="415" cy="582" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="559" cy="175" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="378" cy="755" r="5.5" fill="var(--route)" stroke="var(--card)" stroke-width="2.5"/><circle cx="634" cy="641" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="808" cy="251" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="573" cy="191" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="619" cy="88" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="597" cy="96" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="416" cy="442" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="82" cy="598" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="346" cy="695" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><circle cx="355" cy="727" r="11" fill="var(--card)" stroke="var(--route)" stroke-width="4"/><text x="643" y="677" text-anchor="start" class="lb">乌鲁木齐</text><text x="643" y="697" text-anchor="start" class="tg">D1 · D10 宿</text><text x="799" y="216" text-anchor="end" class="lb">可可托海</text><text x="799" y="236" text-anchor="end" class="tg">D2 宿</text><text x="564" y="227" text-anchor="end" class="lb">布尔津</text><text x="564" y="247" text-anchor="end" class="tg">D3 宿</text><text x="628" y="53" text-anchor="start" class="lb">禾木</text><text x="628" y="73" text-anchor="start" class="tg">D4 宿</text><text x="606" y="132" text-anchor="start" class="lb">贾登峪</text><text x="606" y="152" text-anchor="start" class="tg">D5 宿</text><text x="407" y="407" text-anchor="end" class="lb">克拉玛依</text><text x="407" y="427" text-anchor="end" class="tg">D6 宿</text><text x="82" y="561" text-anchor="middle" class="lb">清水河</text><text x="82" y="581" text-anchor="middle" class="tg">D7 宿</text><text x="337" y="730" text-anchor="end" class="lb">那拉提</text><text x="337" y="750" text-anchor="end" class="tg">D8 宿</text><text x="364" y="692" text-anchor="start" class="lb">巴音布鲁克</text><text x="364" y="712" text-anchor="start" class="tg">D9 宿</text><text x="578" y="37" text-anchor="end" class="lb">喀纳斯</text><text x="578" y="57" text-anchor="end" class="tg">D5</text><text x="492" y="412" text-anchor="start" class="lb">魔鬼城</text><text x="492" y="432" text-anchor="start" class="tg">D6</text><text x="143" y="587" text-anchor="start" class="lb">赛里木湖</text><text x="143" y="607" text-anchor="start" class="tg">D7</text><text x="118" y="662" text-anchor="end" class="lb">伊宁</text><text x="118" y="682" text-anchor="end" class="tg">D8</text><text x="363" y="623" text-anchor="end" class="lb">乔尔玛</text><text x="363" y="643" text-anchor="end" class="tg">D10</text><text x="424" y="618" text-anchor="start" class="lb">独山子</text><text x="424" y="638" text-anchor="start" class="tg">D10</text><text x="789" y="102" text-anchor="middle" class="rg" transform="rotate(-26 789 102)">阿尔泰山</text><text x="645" y="716" text-anchor="middle" class="rg" transform="rotate(0 645 716)">天 山</text><text x="641" y="420" text-anchor="middle" class="rg" transform="rotate(0 641 420)">准噶尔盆地</text><text x="207" y="697" text-anchor="middle" class="rg" transform="rotate(0 207 697)">伊犁河谷</text><g class="sb"><path d="M28,799 h102"/><text x="79" y="791" text-anchor="middle">100 km</text></g><text x="538" y="780" class="vb">乌尉高速 · 备用</text></svg></div>
     <div class="cap">空心圆过夜，实心点途经，虚线为乌尉高速备用线。</div>
+  </div>
+
+
+
+  <div class="sh" style="margin-top:16px"><h3>北疆 Bingo</h3><span class="n">六个人一起集</span></div>
+  <div class="card bingo" id="bingo">
+    <div class="chips mechips" data-me></div>
+    <div class="bhead"><b><span data-bcnt>0</span> / 16</b><span>做到了就点亮，写上是谁</span></div>
+    <div class="bgrid" data-bgrid></div>
+    <div class="bnote">点亮的格子六个人手机上都能看到。点错了再点一下取消。</div>
   </div>
 </section>
 
@@ -513,6 +546,14 @@ a.opt .on{color:var(--blue)}
   <div class="sh" style="margin-top:16px"><h3>门票</h3><span class="n">人均，含区间车</span></div>
   <div class="card tkt" id="tktBox"></div>
 </section>
+
+
+
+
+
+
+
+
 
 
 
@@ -1131,11 +1172,17 @@ function funBlock(d){
     (x ? '<div class="frow"><b>新疆话</b><span><span class="w">'+x[0]+'</span><span class="py">'+x[1]+'</span>'+x[2]+'<span class="ex">'+x[3]+'</span></span></div>' : '')+
     '</div></details>';
 }
+function diaryBlock(d){
+  return '<details class="tour diary" data-date="'+d.date+'"><summary>大家说<span class="tsub" data-cnt></span>'+CHEV+'</summary><div class="tbody">'+
+    '<div class="dlist"></div>'+
+    '<form class="dform"><div class="chips mechips" data-me></div><div class="row"><input type="text" maxlength="80" placeholder="这天想留一句" required><button type="submit" class="btn">留下</button></div></form>'+
+    '</div></details>';
+}
 function gameBlock(d){
   if(!GAME_DAYS[d.d]) return "";
-  return '<details class="tour game"><summary>车上不无聊<span class="tsub">谁是卧底 · 抽签</span>'+CHEV+'</summary><div class="tbody">'+
-    '<div class="frow"><span>长途日。副驾负责发牌，手机传一圈，每人只看自己的词。</span></div>'+
-    '<div class="gbtns"><button type="button" class="btn" data-game="spy">谁是卧底</button><button type="button" class="btn sec" data-game="draw">抽签</button></div>'+
+  return '<details class="tour game"><summary>车上不无聊<span class="tsub">谁是卧底</span>'+CHEV+'</summary><div class="tbody">'+
+    '<div class="frow"><span>长途日。副驾负责发牌，手机传一圈，每人只看自己的词，然后轮流描述、投票。</span></div>'+
+    '<div class="gbtns"><button type="button" class="btn" data-game="spy">开一局</button></div>'+
     '</div></details>';
 }
   function renderTour(t){
@@ -1191,7 +1238,7 @@ function gameBlock(d){
       funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div></div></details>'+
       tours.map(renderTour).join('')+gameBlock(d)+
       mealBlock(d)+
-      (d.pic?d.pic.map(function(p){var dm = IMGD[p[0]]; return '<figure class="photo"><img src="img/'+p[0]+'"'+(dm?' width="'+dm[0]+'" height="'+dm[1]+'"':'')+' alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+
+      (d.pic?d.pic.map(function(p){var dm = IMGD[p[0]]; return '<figure class="photo"><img src="img/'+p[0]+'"'+(dm?' width="'+dm[0]+'" height="'+dm[1]+'"':'')+' alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+diaryBlock(d)+
       '</div></details>';
   });
   document.getElementById("dayList").innerHTML = dh;
@@ -1395,15 +1442,29 @@ var SEED = [
   function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 
-  function all(){
+  /* 云端所有对象合并（含日记/打卡等 k 类型），墓碑生效；账目 = 没有 k 的 */
+  function rawAll(){
     var m = {}; SEED.forEach(function(e){ m[e.id] = e; });
     var list = Object.keys(remote).map(function(k){ return remote[k]; }).concat(queue);
     list.forEach(function(e){ if(e && e.id && !e.del) m[e.id] = e; });
     list.forEach(function(e){ if(e && e.del) delete m[e.del]; });
     var pend = {}; queue.forEach(function(e){ if(e.id) pend[e.id] = 1; });
-    return Object.keys(m).map(function(k){ var e = m[k]; e._pend = !!pend[e.id]; return e; })
+    return Object.keys(m).map(function(k){ var e = m[k]; e._pend = !!pend[e.id]; return e; });
+  }
+  function all(){
+    return rawAll().filter(function(e){ return !e.k; })
       .sort(function(x,y){ return (y.d+y.t) < (x.d+x.t) ? -1 : 1; });
   }
+  function emit(){ try{ window.dispatchEvent(new CustomEvent("ledger-sync")); }catch(e){} }
+  window.LEDGER = {
+    raw: rawAll, uid: uid,
+    add: function(e){ queue.push(e); save(LSQ, queue); render(); emit(); sync(); },
+    remove: function(id){
+      var qi = -1; queue.forEach(function(x,i){ if(x.id === id) qi = i; });
+      if(qi >= 0){ queue.splice(qi,1); save(LSQ, queue); render(); emit(); return; }
+      queue.push({id:uid(), del:id, t:new Date().toISOString()}); save(LSQ, queue); render(); emit(); sync();
+    }
+  };
   function compute(list){
     var paid = {}, owe = {}, total = 0;
     PEOPLE.forEach(function(p){ paid[p] = 0; owe[p] = 0; });
@@ -1485,8 +1546,8 @@ var SEED = [
   function sync(){
     if(!online){ syncEl.textContent = "仅本机"; return; }
     syncEl.textContent = "同步中…";
-    flush().then(pull).then(function(){ syncEl.textContent = "已同步"; stEl.textContent = ""; stEl.className = "st"; render(); })
-      .catch(function(err){ syncEl.textContent = queue.length ? "有 "+queue.length+" 笔待传" : "离线"; stEl.textContent = "云端暂时连不上，记录已存在本机，联网后自动补传"; stEl.className = "st err"; render(); });
+    flush().then(pull).then(function(){ syncEl.textContent = "已同步"; stEl.textContent = ""; stEl.className = "st"; render(); emit(); })
+      .catch(function(err){ syncEl.textContent = queue.length ? "有 "+queue.length+" 笔待传" : "离线"; stEl.textContent = "云端暂时连不上，记录已存在本机，联网后自动补传"; stEl.className = "st err"; render(); emit(); });
   }
 
   /* ---- 表单 ---- */
@@ -1494,7 +1555,7 @@ var SEED = [
   function chips(){
     $("afP").innerHTML = PEOPLE.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" class="'+(p===payer?'on':'')+'">'+esc(p)+'</button>'; }).join("");
   }
-  var QUICK = ["加油","吃饭","零食","水果","停车","路桥","门票","区间车","住宿","买水"];
+  var QUICK = ["加油","吃饭","零食","水果","门票"];
   $("afQ").innerHTML = QUICK.map(function(q){ return '<button type="button" data-q="'+q+'">'+q+'</button>'; }).join("");
   $("afQ").addEventListener("click", function(ev){
     var b = ev.target.closest("button[data-q]"); if(!b) return;
@@ -1556,7 +1617,7 @@ var SEED = [
     fEl.classList.add("on"); clearTimeout(fT); fT = setTimeout(function(){ fEl.classList.remove("on"); }, 7000);
   }
 
-  chips(); render(); sync();
+  chips(); render(); emit(); sync();
   window.addEventListener("online", sync);
   document.addEventListener("visibilitychange", function(){ if(!document.hidden) sync(); });
   var acctSec = document.getElementById("acct");
@@ -1568,7 +1629,6 @@ var SEED = [
 (function(){
   var CREW = ["陈昱州","张晓宇","王晨","牛梦瑶","彭钰","杜紫荆"];
   var PAIRS = [["馕","烧饼"],["手抓饭","炒饭"],["喀纳斯","赛里木湖"],["骆驼","马"],["大盘鸡","椒麻鸡"],["拌面","炒面"],["酸奶","奶皮子"],["雪山","冰川"],["独库公路","318 国道"],["胡杨","白桦"],["牦牛","骆驼"],["葡萄干","杏干"],["奶茶","咖啡"],["帐篷","木屋"],["高德","百度地图"],["火锅","烤肉"],["向日葵","薰衣草"],["月亮","太阳"],["微信","支付宝"],["薯片","锅巴"],["周杰伦","林俊杰"],["羊肉串","烤全羊"],["禾木","白哈巴"],["西瓜","哈密瓜"],["火车","高铁"],["洗澡","泡澡"],["拖鞋","凉鞋"],["日出","日落"]];
-  var TASKS = ["坐副驾","这顿买单","点歌","唱一首","讲个笑话","下车加油","去买水","今晚洗碗"];
   var sheet = document.getElementById("gsheet"), pane = document.getElementById("gpane");
   function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function open(html){ pane.innerHTML = html; sheet.classList.add("on"); document.body.style.overflow = "hidden"; }
@@ -1605,32 +1665,63 @@ var SEED = [
       '<div class="act"><button type="button" class="btn" data-a="spy">再来一局</button><button type="button" class="btn sec" data-x>收工</button></div>');
   }
 
-  /* 抽签 */
-  var task = TASKS[0], rolling = false;
-  function drawView(){
-    open(head("抽签")+'<div class="chips">'+TASKS.map(function(t){ return '<button type="button" data-t="'+esc(t)+'" class="'+(t===task?'on':'')+'">'+esc(t)+'</button>'; }).join('')+'</div>'+
-      '<div class="roll" id="groll">？</div><div class="mid">谁来<b>'+esc(task)+'</b></div>'+
-      '<div class="act"><button type="button" class="btn" data-a="roll">抽</button></div>');
+  /* ==== 大家说（每天一句）+ 北疆 Bingo：走记账同一条云端通道，对象带 k 字段 ==== */
+  var BINGO = ["拍到牛羊过马路","吃到手抓饭","看到雪山","拍到星空","吃到烤包子","看到牦牛","骑了马","看到日出","拍到一只鹰","买到干果","住进木屋","走进白桦林","喀纳斯拍到「湖怪」","独库公路遇到雪","六星街合影","喝到咸奶茶"];
+  var ME_K = "bj_me6", me6 = "";
+  try{ me6 = localStorage.getItem(ME_K) || ""; }catch(e){}
+  function setMe(n){ me6 = n; try{ localStorage.setItem(ME_K, n); }catch(e){} renderMe(); }
+  function renderMe(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-me]"), function(el){
+      el.innerHTML = CREW.map(function(p){ return '<button type="button" data-mep="'+esc(p)+'" class="'+(p===me6?'on':'')+'">'+esc(p)+'</button>'; }).join("");
+    });
   }
-  function roll(){
-    if(rolling) return; rolling = true;
-    var el = document.getElementById("groll"), n = 0, total = 18 + Math.floor(Math.random()*8), pick = CREW[Math.floor(Math.random()*CREW.length)];
-    el.classList.remove("done");
-    (function tick(){
-      el.textContent = n < total ? CREW[n % CREW.length] : pick;
-      if(n < total){ n++; setTimeout(tick, 60 + n*12); } else { el.classList.add("done"); rolling = false; }
-    })();
+  document.addEventListener("click", function(e){ var b = e.target.closest("button[data-mep]"); if(b) setMe(b.getAttribute("data-mep")); });
+  function iso(md){ var a = md.split("/"); return "2026-"+(a[0].length<2?"0":"")+a[0]+"-"+(a[1].length<2?"0":"")+a[1]; }
+  function hm(t){ try{ return new Date(t).toLocaleTimeString("zh-CN", {hour:"2-digit", minute:"2-digit", hour12:false, timeZone:"Asia/Shanghai"}); }catch(e){ return ""; } }
+  function needMe(){ if(me6) return true; if(window.toast) toast("先点一下你是谁"); return false; }
+  function renderShared(){
+    if(!window.LEDGER) return;
+    var raw = LEDGER.raw(), notes = raw.filter(function(e){ return e.k === "note"; }), marks = raw.filter(function(e){ return e.k === "bingo"; });
+    Array.prototype.forEach.call(document.querySelectorAll(".tour.diary"), function(el){
+      var d = iso(el.getAttribute("data-date")), list = notes.filter(function(n){ return n.d === d; }).sort(function(a,b){ return a.t < b.t ? -1 : 1; });
+      el.querySelector("[data-cnt]").textContent = list.length ? list.length + " 条" : "";
+      el.querySelector(".dlist").innerHTML = list.length ? list.map(function(n){
+        return '<div class="dnote'+(n._pend?' pend':'')+'"><div>'+esc(n.text)+'<div class="m">'+esc(n.by)+' · '+hm(n.t)+'</div></div><button type="button" data-ndel="'+esc(n.id)+'">删</button></div>';
+      }).join("") : '<div class="none">还没人留话</div>';
+    });
+    var grid = document.querySelector("[data-bgrid]"); if(!grid) return;
+    var by = {}; marks.forEach(function(m){ if(!by[m.c] || m.t < by[m.c].t) by[m.c] = m; });
+    grid.innerHTML = BINGO.map(function(t, i){ var m = by[i]; return '<button type="button" data-bc="'+i+'" class="'+(m?'on':'')+'">'+esc(t)+(m?'<small>'+esc(m.by)+'</small>':'')+'</button>'; }).join("");
+    document.querySelector("[data-bcnt]").textContent = Object.keys(by).length;
   }
+  document.addEventListener("submit", function(e){
+    var f = e.target.closest(".dform"); if(!f) return;
+    e.preventDefault(); if(!needMe()) return;
+    var inp = f.querySelector("input"), text = inp.value.trim(); if(!text) return;
+    var d = iso(f.closest(".tour.diary").getAttribute("data-date"));
+    LEDGER.add({id: LEDGER.uid(), k:"note", d:d, text:text, by:me6, t:new Date().toISOString()});
+    inp.value = ""; inp.blur();
+  });
+  document.addEventListener("click", function(e){
+    var del = e.target.closest("button[data-ndel]");
+    if(del){ if(confirm("删掉这句？")) LEDGER.remove(del.getAttribute("data-ndel")); return; }
+    var c = e.target.closest("button[data-bc]"); if(!c) return;
+    if(!needMe()) return;
+    var i = +c.getAttribute("data-bc"), cur = LEDGER.raw().filter(function(m){ return m.k === "bingo" && m.c === i; });
+    if(cur.length){ cur.forEach(function(m){ LEDGER.remove(m.id); }); }
+    else LEDGER.add({id: LEDGER.uid(), k:"bingo", c:i, by:me6, t:new Date().toISOString()});
+  });
+  window.addEventListener("ledger-sync", renderShared);
+  renderMe(); renderShared();
 
   document.addEventListener("click", function(e){
     var b = e.target.closest("button[data-game]"); if(!b) return;
-    if(b.getAttribute("data-game") === "spy") spyStart(); else drawView();
+    if(b.getAttribute("data-game") === "spy") spyStart();
   });
   pane.addEventListener("click", function(e){
-    var t = e.target.closest("button[data-t]"); if(t){ task = t.getAttribute("data-t"); drawView(); return; }
     var a = e.target.closest("button[data-a]"); if(!a) return;
     var k = a.getAttribute("data-a");
-    if(k==="show") spyShow(); else if(k==="next") spyNext(); else if(k==="reveal") spyReveal(); else if(k==="spy") spyStart(); else if(k==="roll") roll();
+    if(k==="show") spyShow(); else if(k==="next") spyNext(); else if(k==="reveal") spyReveal(); else if(k==="spy") spyStart();
   });
 })();
 </script>
