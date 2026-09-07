@@ -335,6 +335,7 @@ a.opt .on{color:var(--blue)}
 
 
 
+
 /* ==== 记账 ==== */
 .acct{padding:14px}
 .acct .asum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
@@ -412,29 +413,6 @@ a.opt .on{color:var(--blue)}
 .gsheet .act .btn{margin:0;min-height:46px;display:inline-flex;align-items:center;padding:0 22px;font-size:15px}
 .gsheet .act .btn.sec{background:transparent;color:var(--ink);border-color:var(--rule)}
 .gsheet .chips{justify-content:center;margin:6px 0 4px}
-.tour.diary>summary::before{content:"这天";flex:none;font-size:11px;font-weight:700;color:var(--green);border:1px solid color-mix(in srgb,var(--green) 45%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
-.tour.diary .tbody{padding:4px 12px 12px}
-.dlist .dnote{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0;border-top:1px dashed var(--rule);font-size:13.5px;line-height:1.55;color:var(--ink)}
-.dlist .dnote:first-child{border-top:0}
-.dlist .dnote .m{font-size:11.5px;color:var(--ink3)}
-.dlist .dnote.pend .m::after{content:" · 待同步";color:var(--gold)}
-.dlist .dnote button{min-height:32px;min-width:40px;border:0;background:none;color:var(--ink3);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline dotted;align-self:start}
-.dlist .none{font-size:13px;color:var(--ink3);padding:6px 0}
-.dform{display:grid;gap:8px;margin-top:8px;padding-top:10px;border-top:1px solid var(--rule)}
-.dform .row{display:flex;gap:8px}
-.dform input{flex:1;min-width:0;min-height:44px;padding:8px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);color:var(--ink);font-size:16px;font-family:inherit}
-.dform input:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
-.dform .btn{margin:0;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;font-size:14px;flex:none}
-.bingo{padding:14px}
-.bingo .bhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-size:12px;color:var(--ink3)}
-.bingo .bhead b{font-size:15px;color:var(--ink)}
-.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.bgrid button{min-height:64px;padding:6px 4px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);color:var(--ink2);font-size:12px;line-height:1.35;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;user-select:none;text-align:center}
-.bgrid button.on{background:color-mix(in srgb,var(--gold) 18%,var(--bg));border-color:var(--gold);color:var(--ink);font-weight:700}
-.bgrid button small{font-size:10px;font-weight:600;color:var(--gold)}
-.bgrid button:active{filter:brightness(.92)}
-.bingo .bnote{font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.5}
-.mechips{margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -483,13 +461,6 @@ a.opt .on{color:var(--blue)}
 
 
 
-  <div class="sh" style="margin-top:16px"><h3>北疆 Bingo</h3><span class="n">六个人一起集</span></div>
-  <div class="card bingo" id="bingo">
-    <div class="chips mechips" data-me></div>
-    <div class="bhead"><b><span data-bcnt>0</span> / 16</b><span>做到了就点亮，写上是谁</span></div>
-    <div class="bgrid" data-bgrid></div>
-    <div class="bnote">点亮的格子六个人手机上都能看到。点错了再点一下取消。</div>
-  </div>
 </section>
 
 
@@ -546,6 +517,8 @@ a.opt .on{color:var(--blue)}
   <div class="sh" style="margin-top:16px"><h3>门票</h3><span class="n">人均，含区间车</span></div>
   <div class="card tkt" id="tktBox"></div>
 </section>
+
+
 
 
 
@@ -1172,12 +1145,6 @@ function funBlock(d){
     (x ? '<div class="frow"><b>新疆话</b><span><span class="w">'+x[0]+'</span><span class="py">'+x[1]+'</span>'+x[2]+'<span class="ex">'+x[3]+'</span></span></div>' : '')+
     '</div></details>';
 }
-function diaryBlock(d){
-  return '<details class="tour diary" data-date="'+d.date+'"><summary>大家说<span class="tsub" data-cnt></span>'+CHEV+'</summary><div class="tbody">'+
-    '<div class="dlist"></div>'+
-    '<form class="dform"><div class="chips mechips" data-me></div><div class="row"><input type="text" maxlength="80" placeholder="这天想留一句" required><button type="submit" class="btn">留下</button></div></form>'+
-    '</div></details>';
-}
 function gameBlock(d){
   if(!GAME_DAYS[d.d]) return "";
   return '<details class="tour game"><summary>车上不无聊<span class="tsub">谁是卧底</span>'+CHEV+'</summary><div class="tbody">'+
@@ -1238,7 +1205,7 @@ function gameBlock(d){
       funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div></div></details>'+
       tours.map(renderTour).join('')+gameBlock(d)+
       mealBlock(d)+
-      (d.pic?d.pic.map(function(p){var dm = IMGD[p[0]]; return '<figure class="photo"><img src="img/'+p[0]+'"'+(dm?' width="'+dm[0]+'" height="'+dm[1]+'"':'')+' alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+diaryBlock(d)+
+      (d.pic?d.pic.map(function(p){var dm = IMGD[p[0]]; return '<figure class="photo"><img src="img/'+p[0]+'"'+(dm?' width="'+dm[0]+'" height="'+dm[1]+'"':'')+' alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+
       '</div></details>';
   });
   document.getElementById("dayList").innerHTML = dh;
@@ -1664,55 +1631,6 @@ var SEED = [
     open(head("谁是卧底")+'<div class="who">卧底是</div><div class="big">'+esc(g.order[g.spy])+'</div><div class="mid">平民的词 <b>'+esc(g.pair[0])+'</b>，卧底的词 <b>'+esc(g.pair[1])+'</b></div>'+
       '<div class="act"><button type="button" class="btn" data-a="spy">再来一局</button><button type="button" class="btn sec" data-x>收工</button></div>');
   }
-
-  /* ==== 大家说（每天一句）+ 北疆 Bingo：走记账同一条云端通道，对象带 k 字段 ==== */
-  var BINGO = ["拍到牛羊过马路","吃到手抓饭","看到雪山","拍到星空","吃到烤包子","看到牦牛","骑了马","看到日出","拍到一只鹰","买到干果","住进木屋","走进白桦林","喀纳斯拍到「湖怪」","独库公路遇到雪","六星街合影","喝到咸奶茶"];
-  var ME_K = "bj_me6", me6 = "";
-  try{ me6 = localStorage.getItem(ME_K) || ""; }catch(e){}
-  function setMe(n){ me6 = n; try{ localStorage.setItem(ME_K, n); }catch(e){} renderMe(); }
-  function renderMe(){
-    Array.prototype.forEach.call(document.querySelectorAll("[data-me]"), function(el){
-      el.innerHTML = CREW.map(function(p){ return '<button type="button" data-mep="'+esc(p)+'" class="'+(p===me6?'on':'')+'">'+esc(p)+'</button>'; }).join("");
-    });
-  }
-  document.addEventListener("click", function(e){ var b = e.target.closest("button[data-mep]"); if(b) setMe(b.getAttribute("data-mep")); });
-  function iso(md){ var a = md.split("/"); return "2026-"+(a[0].length<2?"0":"")+a[0]+"-"+(a[1].length<2?"0":"")+a[1]; }
-  function hm(t){ try{ return new Date(t).toLocaleTimeString("zh-CN", {hour:"2-digit", minute:"2-digit", hour12:false, timeZone:"Asia/Shanghai"}); }catch(e){ return ""; } }
-  function needMe(){ if(me6) return true; if(window.toast) toast("先点一下你是谁"); return false; }
-  function renderShared(){
-    if(!window.LEDGER) return;
-    var raw = LEDGER.raw(), notes = raw.filter(function(e){ return e.k === "note"; }), marks = raw.filter(function(e){ return e.k === "bingo"; });
-    Array.prototype.forEach.call(document.querySelectorAll(".tour.diary"), function(el){
-      var d = iso(el.getAttribute("data-date")), list = notes.filter(function(n){ return n.d === d; }).sort(function(a,b){ return a.t < b.t ? -1 : 1; });
-      el.querySelector("[data-cnt]").textContent = list.length ? list.length + " 条" : "";
-      el.querySelector(".dlist").innerHTML = list.length ? list.map(function(n){
-        return '<div class="dnote'+(n._pend?' pend':'')+'"><div>'+esc(n.text)+'<div class="m">'+esc(n.by)+' · '+hm(n.t)+'</div></div><button type="button" data-ndel="'+esc(n.id)+'">删</button></div>';
-      }).join("") : '<div class="none">还没人留话</div>';
-    });
-    var grid = document.querySelector("[data-bgrid]"); if(!grid) return;
-    var by = {}; marks.forEach(function(m){ if(!by[m.c] || m.t < by[m.c].t) by[m.c] = m; });
-    grid.innerHTML = BINGO.map(function(t, i){ var m = by[i]; return '<button type="button" data-bc="'+i+'" class="'+(m?'on':'')+'">'+esc(t)+(m?'<small>'+esc(m.by)+'</small>':'')+'</button>'; }).join("");
-    document.querySelector("[data-bcnt]").textContent = Object.keys(by).length;
-  }
-  document.addEventListener("submit", function(e){
-    var f = e.target.closest(".dform"); if(!f) return;
-    e.preventDefault(); if(!needMe()) return;
-    var inp = f.querySelector("input"), text = inp.value.trim(); if(!text) return;
-    var d = iso(f.closest(".tour.diary").getAttribute("data-date"));
-    LEDGER.add({id: LEDGER.uid(), k:"note", d:d, text:text, by:me6, t:new Date().toISOString()});
-    inp.value = ""; inp.blur();
-  });
-  document.addEventListener("click", function(e){
-    var del = e.target.closest("button[data-ndel]");
-    if(del){ if(confirm("删掉这句？")) LEDGER.remove(del.getAttribute("data-ndel")); return; }
-    var c = e.target.closest("button[data-bc]"); if(!c) return;
-    if(!needMe()) return;
-    var i = +c.getAttribute("data-bc"), cur = LEDGER.raw().filter(function(m){ return m.k === "bingo" && m.c === i; });
-    if(cur.length){ cur.forEach(function(m){ LEDGER.remove(m.id); }); }
-    else LEDGER.add({id: LEDGER.uid(), k:"bingo", c:i, by:me6, t:new Date().toISOString()});
-  });
-  window.addEventListener("ledger-sync", renderShared);
-  renderMe(); renderShared();
 
   document.addEventListener("click", function(e){
     var b = e.target.closest("button[data-game]"); if(!b) return;
