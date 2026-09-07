@@ -338,6 +338,7 @@ a.opt .on{color:var(--blue)}
 
 
 
+
 /* ==== 记账 ==== */
 .acct{padding:14px}
 .acct .asum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
@@ -529,6 +530,8 @@ a.opt .on{color:var(--blue)}
   <div class="sh" style="margin-top:16px"><h3>门票</h3><span class="n">人均，含区间车</span></div>
   <div class="card tkt" id="tktBox"></div>
 </section>
+
+
 
 
 
@@ -1538,7 +1541,7 @@ var SEED = [
   function chips(){
     $("afP").innerHTML = PEOPLE.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" class="'+(p===payer?'on':'')+'">'+esc(p)+'</button>'; }).join("");
   }
-  var QUICK = ["加油","吃饭","零食水果","门票"], cat = "";
+  var QUICK = ["加油","吃饭","零食水果","门票","特产","打车","杂物","其他"], cat = "";
   function segQ(){ $("afQ").innerHTML = QUICK.map(function(q){ return '<button type="button" data-q="'+q+'" class="'+(q===cat?'on':'')+'">'+q+'</button>'; }).join(""); }
   segQ();
   $("afQ").addEventListener("click", function(ev){
