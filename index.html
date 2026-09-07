@@ -326,6 +326,10 @@ a.opt .on{color:var(--blue)}
 
 
 
+
+
+
+
 /* ==== 记账 ==== */
 .acct{padding:14px}
 .acct .asum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
@@ -339,6 +343,8 @@ a.opt .on{color:var(--blue)}
 .acct td.pos{color:var(--green);font-weight:600}.acct td.neg{color:var(--red);font-weight:600}
 .acct .settle{font-size:13px;line-height:1.7;margin:10px 0 0;color:var(--ink2)}
 .acct .settle b{color:var(--ink)}
+.acct .lnk{display:inline-flex;align-items:center;min-height:36px;margin-top:6px;padding:0;border:0;background:none;color:var(--blue);font-size:12.5px;font-family:inherit;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.aform .hint{font-size:12px;color:var(--ink3)}
 .acct .st{font-size:12px;color:var(--ink3);margin-top:8px;line-height:1.5}
 .acct .st.err{color:var(--red)}
 .acct .st:empty,.acct .settle:empty{display:none}
@@ -364,8 +370,25 @@ a.opt .on{color:var(--blue)}
 .acct .list .it .del button{min-height:32px;min-width:44px;padding:4px 8px;border:0;background:transparent;color:var(--ink3);font-size:12px;font-family:inherit;cursor:pointer;text-decoration:underline dotted}
 .acct .list .it.pend .t::after{content:" 待同步";font-size:11px;color:var(--gold);font-weight:600}
 .acct .empty{font-size:13px;color:var(--ink3);padding:10px 0}
+.fcard{position:fixed;left:14px;right:14px;bottom:calc(20px + env(safe-area-inset-bottom));z-index:98;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:14px;padding:16px 18px 14px;box-shadow:0 12px 40px rgba(0,0,0,.28);opacity:0;transform:translateY(16px);transition:opacity .25s,transform .25s;pointer-events:none}
+.fcard.on{opacity:1;transform:none;pointer-events:auto}
+.fcard .fk{font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.04em;margin-bottom:8px}
+.fcard .fq{font-size:16px;line-height:1.6;font-weight:600}
+.fcard .fa{font-size:12px;color:var(--ink3);margin-top:6px;text-align:right}
+@media (prefers-reduced-motion:reduce){.fcard{transition:none}}
 .acct details.who{margin-top:10px}
 .acct details.who summary{font-size:12px;color:var(--ink3);cursor:pointer;min-height:32px;display:flex;align-items:center}
+
+/* ==== 黄历 ==== */
+.tour.alm>summary::before{content:"黄历";flex:none;font-size:11px;font-weight:700;color:var(--red);border:1px solid color-mix(in srgb,var(--red) 45%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
+.tour.alm .tbody{padding:4px 12px 10px}
+.alrow{display:flex;gap:8px;padding:6px 0;border-top:1px dashed var(--rule);font-size:13px;line-height:1.55;color:var(--ink2)}
+.alrow:first-child{border-top:0}
+.alrow b{flex:none;min-width:2.2em;color:var(--ink3);font-size:11px;font-weight:700;padding-top:3px}
+.alrow.yi b{color:var(--green)}.alrow.ji b{color:var(--red)}
+.alsx{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 10px;font-size:12px;line-height:1.5;color:var(--ink2);padding:6px 0 0;border-top:1px dashed var(--rule)}
+.alsx span b{color:var(--ink);font-weight:700;margin-right:3px}
+.alnote{font-size:11px;color:var(--ink3);padding-top:6px}
 </style>
 </head>
 <body>
@@ -471,6 +494,10 @@ a.opt .on{color:var(--blue)}
 
 
 
+
+
+
+
 <section id="acct">
   <div class="sh"><h2>记账</h2><span class="n" id="acctSync">本地</span></div>
   <div class="card acct">
@@ -478,8 +505,9 @@ a.opt .on{color:var(--blue)}
     <table id="acctBal"><thead><tr><th>人</th><th class="n">垫付</th><th class="n">应摊</th><th class="n">结余</th></tr></thead><tbody></tbody></table>
     <div class="settle" id="acctSettle"></div>
     <div class="st" id="acctSt"></div>
+    <button type="button" class="lnk" id="afCopy">复制这份结算，发到群里</button>
   </div>
-  <div class="sh" style="margin-top:16px"><h3>记一笔</h3><span class="n">谁付的、分给谁</span></div>
+  <div class="sh" style="margin-top:16px"><h3>记一笔</h3><span class="n">谁垫的钱就选谁</span></div>
   <div class="card acct">
     <form class="aform" id="acctForm" autocomplete="off">
       <div class="row2">
@@ -488,8 +516,7 @@ a.opt .on{color:var(--blue)}
       </div>
       <div><label for="afN">干什么花的</label><input id="afN" type="text" maxlength="40" placeholder="加油 / 停车 / 门票 / 晚饭" required></div>
       <div><label>谁付的</label><div class="chips" id="afP"></div></div>
-      <div><label>分给谁</label><div class="chips" id="afS"></div></div>
-      <div class="act"><button type="submit" class="btn">记上</button><button type="button" class="btn sec" id="afCopy">复制账本</button></div>
+      <div class="act"><button type="submit" class="btn">记上</button><span class="hint">三个人平摊</span></div>
     </form>
   </div>
   <div class="sh" style="margin-top:16px"><h3>明细</h3><span class="n" id="acctCnt"></span></div>
@@ -1048,6 +1075,32 @@ var TIPS = [
   })();
   var OPEN_D = TODAY_D || 1;
   var dh = "";
+var ALMANAC = {"9/25": {"head": "9月25日 农历八月十五 星期五 秋分", "gz": "壬寅", "cai": "正南", "shi": "子丑辰巳未戌", "chong": "虎日冲猴（丙申）煞北", "yi": "开光 解除 拆卸 修造 动土 竖柱", "ji": "出火 搬新房 搬家 祈福 祭祀 安床"}, "9/26": {"head": "9月26日 农历八月十六 星期六 秋分", "gz": "癸卯", "cai": "正南", "shi": "子寅卯午未酉", "chong": "兔日冲鸡（丁酉）煞西", "yi": "破屋 坏垣 看病 啥都别干", "ji": "搬家 搬新房"}, "9/27": {"head": "9月27日 农历八月十七 星期日 秋分", "gz": "甲辰", "cai": "东北", "shi": "寅辰巳申酉亥", "chong": "龙日冲狗（戊戌）煞南", "yi": "结婚 提亲 订婚 祭祀 祈福 求子", "ji": "开业 开仓 安门 安葬"}, "9/28": {"head": "9月28日 农历八月十八 星期一 秋分", "gz": "乙巳", "cai": "东北", "shi": "丑辰午未戌亥子", "chong": "蛇日冲猪（己亥）煞东", "yi": "结婚 提亲 订婚 祭祀 祈福 求子", "ji": "安葬 买牲口 出行 行丧 伐木 栽种"}, "9/29": {"head": "9月29日 农历八月十九 星期二 秋分", "gz": "丙午", "cai": "西南", "shi": "子丑卯午申酉", "chong": "马日冲鼠（庚子）煞北", "yi": "祭祀 成年礼 捕捉 啥都别干", "ji": "结婚 开业 盖屋 上梁 合寿木"}, "9/30": {"head": "9月30日 农历八月二十 星期三 秋分", "gz": "丁未", "cai": "西南", "shi": "寅卯巳申戌亥子", "chong": "羊日冲牛（辛丑）煞西", "yi": "祭祀 解除 结网 打猎 捕鱼 聚会", "ji": "开业 祈福 动土 破土 入殓 安葬"}, "10/1": {"head": "10月1日 农历八月廿一 星期四 秋分", "gz": "戊申", "cai": "正北", "shi": "子丑辰巳未戌", "chong": "猴日冲虎（壬寅）煞南", "yi": "成年礼 洗澡 出行 修造 动土 搬家", "ji": "结婚 开业 祭祀 祈福 斋醮 提亲"}, "10/2": {"head": "10月2日 农历八月廿二 星期五 秋分", "gz": "己酉", "cai": "正北", "shi": "子寅卯午未酉", "chong": "鸡日冲兔（癸卯）煞东", "yi": "祭祀 出行", "ji": "结婚 搬新房 修造 动土 聚会 破土"}, "10/3": {"head": "10月3日 农历八月廿三 星期六 秋分", "gz": "庚戌", "cai": "正东", "shi": "寅辰巳申酉亥", "chong": "狗日冲龙（甲辰）煞北", "yi": "结婚 订婚 提亲 祭祀 祈福 出行", "ji": "针灸 伐木 上梁 造庙 行丧 安葬"}, "10/4": {"head": "10月4日 农历八月廿四 星期日 秋分", "gz": "辛亥", "cai": "正东", "shi": "丑辰午未戌亥子", "chong": "猪日冲蛇（乙巳）煞西", "yi": "出行 开业 交易 签约 装机器 出火", "ji": "结婚 安葬 动土 造桥"}, "10/5": {"head": "10月5日 农历八月廿五 星期一 秋分", "gz": "壬子", "cai": "正南", "shi": "子丑卯午申酉", "chong": "鼠日冲马（丙午）煞南", "yi": "祭祀 洗澡 修饰垣墙 修路 啥都别干", "ji": "斋醮 结婚 搬家 出行 上梁 搬新房"}};
+var SX = ["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"];
+var SXF = {
+  "鼠":["开心，渐进","宜早起看日出","财气在路上","少熬夜多看山","随遇而安","今天适合拍照"],
+  "牛":["节节高","稳稳当当","宜多走几步","口福不浅","踏实就是运气","适合开车"],
+  "虎":["宜淡定","别急，风景在后面","有贵人同车","宜多喝水","今天你最能扛","适合领队"],
+  "兔":["宜有分寸","心细捡便宜","宜与人为善","适合买特产","走路看脚下","甜的都归你"],
+  "龙":["利事业，感情幸福","气场全开","宜大胆点菜","镜头感在线","今日主角","宜早睡"],
+  "蛇":["人见人爱","宜安静看云","直觉准","宜谈价","有小惊喜","别忘涂防晒"],
+  "马":["宜平和，多点耐心","跑得快也要停一停","脚力最好","宜换人开车","今天吃辣","别丢东西"],
+  "羊":["宜计划","照着行程走最顺","宜早点出发","有口福","软一点更好","宜多拍合影"],
+  "猴":["渐入佳境","机灵一整天","宜讲笑话","别贪路","宜记账","有好运气"],
+  "鸡":["财运佳","宜早起","嗓子好，宜唱歌","宜整理行李","别抢话","今天最上镜"],
+  "狗":["宜稳进","忠于计划","宜看星星","有人惦记你","脚步慢一点","宜守着火炉"],
+  "猪":["宜修心养性","吃饱就是福","宜午睡","别买太多","宜喝奶茶","今天最松弛"]
+};
+function almBlock(d){
+  var a = ALMANAC[d.date]; if(!a) return "";
+  var sx = SX.map(function(s, i){ var p = SXF[s]; return '<span><b>'+s+'</b>'+p[(d.d*7 + i*3) % p.length]+'</span>'; }).join('');
+  return '<details class="tour alm"><summary>'+a.head+CHEV+'</summary><div class="tbody">'+
+    '<div class="alrow"><b>今日</b><span>'+a.gz+'日 · '+a.chong+' · 财神'+a.cai+' · 吉时 '+a.shi+'</span></div>'+
+    '<div class="alrow yi"><b>宜</b><span>'+a.yi+'</span></div>'+
+    '<div class="alrow ji"><b>忌</b><span>'+a.ji+'</span></div>'+
+    '<div class="alsx">'+sx+'</div>'+
+    '<div class="alnote">宜忌来自通书，生肖是随口一说，图一乐。</div></div></details>';
+}
   function renderTour(t){
     var cls = /^沿途/.test(t.n) ? "tour road" : "tour spot";
     var st = t.steps.map(function(x){
@@ -1098,7 +1151,7 @@ var TIPS = [
       '<div class="dti"><div class="r">'+d.r+'</div><div class="m">'+d.date+' '+d.wk+' · '+d.m+'</div></div>'+
       '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
       '</summary><div class="dbody">'+miniMap(d.d, col, d.rt, stayLine)+
-      '<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div></div></details>'+
+      almBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div></div></details>'+
       tours.map(renderTour).join('')+
       mealBlock(d)+
       (d.pic?d.pic.map(function(p){var dm = IMGD[p[0]]; return '<figure class="photo"><img src="img/'+p[0]+'"'+(dm?' width="'+dm[0]+'" height="'+dm[1]+'"':'')+' alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+
@@ -1275,8 +1328,7 @@ var TIPS = [
 /* ==== 记账：每笔一个 JSON 对象，POST 到 COS（策略签名，只能写 ledger/ 前缀）；读取走公有读列表。
    删除 = 追加一条 {del:id} 墓碑。离线先存本地，联网后补传。旅行结束删桶即可。==== */
 var LEDGER_CFG = {"host": "beijiang-ledger-1254202958.cos.ap-guangzhou.myqcloud.com", "prefix": "ledger/", "policy": "eyJleHBpcmF0aW9uIjoiMjAyNi0xMS0zMFQxNTo1OTo1OVoiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJiZWlqaWFuZy1sZWRnZXItMTI1NDIwMjk1OCJ9LFsic3RhcnRzLXdpdGgiLCIka2V5IiwibGVkZ2VyLyJdLFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLDEsMjAwMDBdLFsic3RhcnRzLXdpdGgiLCIkQ29udGVudC1UeXBlIiwiIl0seyJxLXNpZ24tYWxnb3JpdGhtIjoic2hhMSJ9LHsicS1hayI6IkFLSUROazFCUmVqbHkydmVBZDFFSEF0V3pHTkkwaUdiamZQeCJ9LHsicS1zaWduLXRpbWUiOiIxNzg4NzEwNDAwOzE3OTYwNTQzOTkifV19", "ak": "AKIDNk1BRejly2veAd1EHAtWzGNI0iGbjfPx", "keytime": "1788710400;1796054399", "sig": "fc94e13db4598b225022ea371f69e8e8432fbea3"};
-var PEOPLE = ["陈昱州","张晓宇","王晨","牛梦瑶","彭钰"];
-var MEN = ["陈昱州","张晓宇","王晨"];
+var PEOPLE = ["陈昱州","张晓宇","王晨"];
 var SEED = [
   ["2026-09-01","D2 可可托海 雾海野奢民宿 3 间",1559,"张晓宇"],
   ["2026-09-01","D3 布尔津 泰悦假日酒店 3 间",1407,"张晓宇"],
@@ -1290,7 +1342,7 @@ var SEED = [
   ["2026-09-06","禾木门票+区间车 6 人",450,"陈昱州"],
   ["2026-09-06","喀纳斯一进票 6 人",1380,"陈昱州"],
   ["2026-09-07","租车 一嗨 GL8 陆尚插混 9/26–10/5",7100,"陈昱州"]
-].map(function(r,i){ return {id:"seed"+(i+1), d:r[0], n:r[1], a:r[2], p:r[3], s:MEN.slice(), t:r[0]+"T00:00:00+08:00"}; });
+].map(function(r,i){ return {id:"seed"+(i+1), d:r[0], n:r[1], a:r[2], p:r[3], t:r[0]+"T00:00:00+08:00"}; });
 (function(){
   var $ = function(id){ return document.getElementById(id); };
   var LS = "bj_ledger_v1", LSQ = "bj_ledger_queue_v1", LSME = "bj_ledger_me";
@@ -1302,6 +1354,7 @@ var SEED = [
   var online = !!(LEDGER_CFG && LEDGER_CFG.host);
   var syncEl = $("acctSync"), stEl = $("acctSt");
   function fmt(n){ return (Math.round(n*100)/100).toLocaleString("zh-CN", {maximumFractionDigits:2}); }
+  function fm0(n){ return Math.round(n).toLocaleString("zh-CN"); }
   function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 
@@ -1318,9 +1371,9 @@ var SEED = [
     var paid = {}, owe = {}, total = 0;
     PEOPLE.forEach(function(p){ paid[p] = 0; owe[p] = 0; });
     list.forEach(function(e){
-      var a = +e.a || 0; if(!(a > 0) || !e.s || !e.s.length) return;
+      var a = +e.a || 0; if(!(a > 0)) return;
       total += a; paid[e.p] = (paid[e.p]||0) + a;
-      var sh = a / e.s.length; e.s.forEach(function(p){ owe[p] = (owe[p]||0) + sh; });
+      var sh = a / PEOPLE.length; PEOPLE.forEach(function(p){ owe[p] = (owe[p]||0) + sh; });
     });
     return {paid:paid, owe:owe, total:total};
   }
@@ -1331,7 +1384,7 @@ var SEED = [
     var out = [], i = 0, j = 0;
     while(i < cr.length && j < db.length){
       var x = Math.min(cr[i][1], db[j][1]);
-      out.push(db[j][0] + " → " + cr[i][0] + " <b>" + fmt(x) + "</b>");
+      out.push(db[j][0] + " → " + cr[i][0] + " <b>" + fm0(x) + "</b>");
       cr[i][1] -= x; db[j][1] -= x; if(cr[i][1] <= 0) i++; if(db[j][1] <= 0) j++;
     }
     return out;
@@ -1339,11 +1392,10 @@ var SEED = [
   function render(){
     var list = all(), c = compute(list);
     var pre = 0; list.forEach(function(e){ if(/^seed/.test(e.id)) pre += +e.a || 0; });
-    $("acctSum").innerHTML = '<div><b>'+fmt(c.total)+'</b><span>合计 · '+list.length+' 笔</span></div><div><b>'+fmt(pre)+'</b><span>出发前已付</span></div><div><b>'+fmt(c.total-pre)+'</b><span>路上花的</span></div>';
+    $("acctSum").innerHTML = '<div><b>'+fm0(c.total)+'</b><span>合计 · '+list.length+' 笔</span></div><div><b>'+fm0(c.total-pre)+'</b><span>路上花的</span></div><div><b>'+fm0(c.total/PEOPLE.length)+'</b><span>每人应摊</span></div>';
     var tb = $("acctBal").querySelector("tbody"), rows = "", bal = {};
     PEOPLE.forEach(function(p){
       var b = (c.paid[p]||0) - (c.owe[p]||0); bal[p] = b;
-      if(!c.paid[p] && !c.owe[p]) return;
       rows += '<tr><td>'+esc(p)+'</td><td class="n">'+fmt(c.paid[p]||0)+'</td><td class="n">'+fmt(c.owe[p]||0)+'</td><td class="n '+(b>0.5?'pos':b<-0.5?'neg':'')+'">'+(b>0?'+':'')+fmt(b)+'</td></tr>';
     });
     tb.innerHTML = rows;
@@ -1351,7 +1403,7 @@ var SEED = [
     $("acctSettle").innerHTML = s.length ? '结清方案：' + s.join('；') : '';
     $("acctCnt").textContent = list.length + ' 笔';
     $("acctList").innerHTML = list.length ? list.map(function(e){
-      return '<div class="it'+(e._pend?' pend':'')+'"><div><div class="t">'+esc(e.n)+'</div><div class="m">'+esc(e.d)+' · '+esc(e.p)+' 付 · 分给 '+(e.s.length===PEOPLE.length?'全员':e.s.length===3&&MEN.every(function(m){return e.s.indexOf(m)>=0})?'三人':esc(e.s.join("、")))+'</div></div>'
+      return '<div class="it'+(e._pend?' pend':'')+'"><div><div class="t">'+esc(e.n)+'</div><div class="m">'+esc(e.d)+' · '+esc(e.p)+' 付</div></div>'
         +'<div><div class="a">'+fmt(+e.a)+'</div><div class="del"><button type="button" data-del="'+esc(e.id)+'">删除</button></div></div></div>';
     }).join("") : '<div class="empty">还没有记录</div>';
   }
@@ -1401,19 +1453,11 @@ var SEED = [
   }
 
   /* ---- 表单 ---- */
-  var payer = me || "", split = MEN.slice();
+  var payer = me || "";
   function chips(){
     $("afP").innerHTML = PEOPLE.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" class="'+(p===payer?'on':'')+'">'+esc(p)+'</button>'; }).join("");
-    $("afS").innerHTML = '<button type="button" class="pre" data-pre="men">三人</button><button type="button" class="pre" data-pre="all">全员</button>' +
-      PEOPLE.map(function(p){ return '<button type="button" data-s="'+esc(p)+'" class="'+(split.indexOf(p)>=0?'on':'')+'">'+esc(p)+'</button>'; }).join("");
   }
   $("afP").addEventListener("click", function(ev){ var b = ev.target.closest("button[data-p]"); if(!b) return; payer = b.getAttribute("data-p"); me = payer; save(LSME, me); chips(); });
-  $("afS").addEventListener("click", function(ev){
-    var b = ev.target.closest("button"); if(!b) return;
-    if(b.dataset.pre === "men") split = MEN.slice(); else if(b.dataset.pre === "all") split = PEOPLE.slice();
-    else { var p = b.getAttribute("data-s"); var i = split.indexOf(p); if(i >= 0) split.splice(i,1); else split.push(p); }
-    chips();
-  });
   function today(){ var d = new Date(Date.now() + 8*3600e3); return d.toISOString().slice(0,10); }
   $("afD").value = today();
   $("acctForm").addEventListener("submit", function(ev){
@@ -1422,11 +1466,10 @@ var SEED = [
     if(!(a > 0)){ toast("金额没填"); return; }
     if(!n){ toast("写一下干什么花的"); return; }
     if(!payer){ toast("选一下谁付的"); return; }
-    if(!split.length){ toast("至少分给一个人"); return; }
-    var e = {id:uid(), d:d, n:n, a:Math.round(a*100)/100, p:payer, s:split.slice(), t:new Date().toISOString(), by:me};
+    var e = {id:uid(), d:d, n:n, a:Math.round(a*100)/100, p:payer, t:new Date().toISOString(), by:me};
     queue.push(e); save(LSQ, queue);
     $("afA").value = ""; $("afN").value = ""; $("afD").value = today();
-    render(); toast("记上了：" + n + " " + fmt(a)); sync();
+    render(); fortune(n, a); sync();
   });
   $("acctList").addEventListener("click", function(ev){
     var b = ev.target.closest("button[data-del]"); if(!b) return;
@@ -1437,13 +1480,35 @@ var SEED = [
     queue.push({id:uid(), del:id, t:new Date().toISOString(), by:me}); save(LSQ, queue); render(); sync();
   });
   $("afCopy").addEventListener("click", function(){
-    var list = all(), c = compute(list), lines = ["北疆账本 " + today(), "公摊合计 " + fmt(c.total), ""];
-    PEOPLE.forEach(function(p){ if(c.paid[p] || c.owe[p]) lines.push(p + "：垫付 " + fmt(c.paid[p]||0) + "，应摊 " + fmt(c.owe[p]||0) + "，结余 " + fmt((c.paid[p]||0)-(c.owe[p]||0))); });
+    var list = all(), c = compute(list), lines = ["北疆账本 " + today(), "公摊合计 " + fm0(c.total) + "，三人各 " + fm0(c.total/PEOPLE.length), ""];
+    PEOPLE.forEach(function(p){ if(c.paid[p] || c.owe[p]) lines.push(p + "：垫付 " + fm0(c.paid[p]||0) + "，应摊 " + fm0(c.owe[p]||0) + "，结余 " + fm0((c.paid[p]||0)-(c.owe[p]||0))); });
     var bal = {}; PEOPLE.forEach(function(p){ bal[p] = (c.paid[p]||0)-(c.owe[p]||0); });
     var s = settle(bal); if(s.length) lines.push("", "结清：" + s.map(function(x){ return x.replace(/<\/?b>/g,""); }).join("；"));
-    lines.push(""); list.slice().reverse().forEach(function(e){ lines.push(e.d + " " + e.n + " " + fmt(+e.a) + " " + e.p + "付 分" + e.s.length + "人"); });
-    copyText(lines.join("\n")); toast("账本已复制，可以贴到微信群");
+    lines.push(""); list.slice().reverse().forEach(function(e){ lines.push(e.d + " " + e.n + " " + fmt(+e.a) + " " + e.p + "付"); });
+    copyText(lines.join("\n")); toast("已复制，去群里粘贴");
   });
+
+  /* 记上之后送一句话 */
+  var FORTUNES = [
+    ["行到水穷处，坐看云起时。","王维"],["此心安处是吾乡。","苏轼"],["明月出天山，苍茫云海间。","李白"],
+    ["北风卷地白草折，胡天八月即飞雪。","岑参"],["忽如一夜春风来，千树万树梨花开。","岑参"],["大漠孤烟直，长河落日圆。","王维"],
+    ["竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。","苏轼"],["久在樊笼里，复得返自然。","陶渊明"],["且放白鹿青崖间，须行即骑访名山。","李白"],
+    ["莫愁前路无知己，天下谁人不识君。","高适"],["人生得意须尽欢，莫使金樽空对月。","李白"],["青海长云暗雪山，孤城遥望玉门关。","王昌龄"],
+    ["黄河远上白云间，一片孤城万仞山。","王之涣"],["会当凌绝顶，一览众山小。","杜甫"],["山重水复疑无路，柳暗花明又一村。","陆游"],
+    ["天地者，万物之逆旅；光阴者，百代之过客。","李白"],["世界那么大，我想去看看。","顾少强"],["生活不止眼前的苟且，还有诗和远方。","高晓松"],
+    ["我们的征途是星辰大海。","田中芳树"],["钱没有花掉，只是换成了风景。",""],["花在路上的钱，都会以回忆的形式还回来。",""],
+    ["账可以慢慢算，日落不等人。",""],["这一笔，买的是一起在场。",""],["今天的支出已折算成故事，不退不换。",""],
+    ["记完账，抬头看山。",""],["山不会因为账单多一点而矮一点。",""],["好风景不打折，好朋友也不。",""],
+    ["最贵的不是门票，是六个人都凑齐了。",""],["油钱是给远方交的房租。",""],["别算了，风在喀纳斯等你。",""]
+  ];
+  var fEl = null, fT = 0;
+  function fortune(n, a){
+    var q = FORTUNES[Math.floor(Math.random()*FORTUNES.length)];
+    if(!fEl){ fEl = document.createElement("div"); fEl.className = "fcard"; fEl.setAttribute("role","status"); document.body.appendChild(fEl);
+      fEl.addEventListener("click", function(){ fEl.classList.remove("on"); }); }
+    fEl.innerHTML = '<div class="fk">记上了 · '+esc(n)+' '+fmt(a)+'</div><div class="fq">'+esc(q[0])+'</div>'+(q[1]?'<div class="fa">'+esc(q[1])+'</div>':'');
+    fEl.classList.add("on"); clearTimeout(fT); fT = setTimeout(function(){ fEl.classList.remove("on"); }, 7000);
+  }
 
   chips(); render(); sync();
   window.addEventListener("online", sync);
