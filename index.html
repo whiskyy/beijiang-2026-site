@@ -330,6 +330,7 @@ a.opt .on{color:var(--blue)}
 
 
 
+
 /* ==== 记账 ==== */
 .acct{padding:14px}
 .acct .asum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
@@ -357,6 +358,7 @@ a.opt .on{color:var(--blue)}
 .chips button{min-height:36px;padding:6px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--ink2);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;user-select:none}
 .chips button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chips button.pre{border-style:dashed}
+.chips.quick{margin-bottom:8px}
 .chips button:active{filter:brightness(.9)}
 .aform .act{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .aform .act .btn{margin:0;min-height:44px;padding:0 18px;display:inline-flex;align-items:center;font-size:14px}
@@ -379,16 +381,37 @@ a.opt .on{color:var(--blue)}
 .acct details.who{margin-top:10px}
 .acct details.who summary{font-size:12px;color:var(--ink3);cursor:pointer;min-height:32px;display:flex;align-items:center}
 
-/* ==== 黄历 ==== */
-.tour.alm>summary::before{content:"黄历";flex:none;font-size:11px;font-weight:700;color:var(--red);border:1px solid color-mix(in srgb,var(--red) 45%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
-.tour.alm .tbody{padding:4px 12px 10px}
-.alrow{display:flex;gap:8px;padding:6px 0;border-top:1px dashed var(--rule);font-size:13px;line-height:1.55;color:var(--ink2)}
-.alrow:first-child{border-top:0}
-.alrow b{flex:none;min-width:2.2em;color:var(--ink3);font-size:11px;font-weight:700;padding-top:3px}
-.alrow.yi b{color:var(--green)}.alrow.ji b{color:var(--red)}
-.alsx{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 10px;font-size:12px;line-height:1.5;color:var(--ink2);padding:6px 0 0;border-top:1px dashed var(--rule)}
-.alsx span b{color:var(--ink);font-weight:700;margin-right:3px}
-.alnote{font-size:11px;color:var(--ink3);padding-top:6px}
+
+/* ==== 趣味：光线/月亮/新疆话 + 路上玩 ==== */
+.tour.sun>summary::before{content:"今日";flex:none;font-size:11px;font-weight:700;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
+.tour.game>summary::before{content:"路上玩";flex:none;font-size:11px;font-weight:700;color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 45%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
+.tour.sun .tbody,.tour.game .tbody{padding:4px 12px 12px}
+.frow{display:flex;gap:10px;padding:7px 0;border-top:1px dashed var(--rule);font-size:13px;line-height:1.55;color:var(--ink2)}
+.frow:first-child{border-top:0}
+.frow b{flex:none;min-width:2.4em;color:var(--ink3);font-size:11px;font-weight:700;padding-top:3px}
+.frow .w{font-size:18px;font-weight:700;color:var(--ink);margin-right:6px}
+.frow .py{font-size:12px;color:var(--ink3);margin-right:6px}
+.frow .ex{display:block;color:var(--ink3);font-size:12px;margin-top:2px}
+.gbtns{display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
+.gbtns .btn{margin:0;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;font-size:14px}
+.gbtns .btn.sec{background:transparent;color:var(--ink);border-color:var(--rule)}
+.gsheet{position:fixed;inset:0;z-index:97;display:none;align-items:flex-end;background:rgba(0,0,0,.45)}
+.gsheet.on{display:flex}
+.gsheet .pane{width:100%;max-height:88vh;overflow:auto;background:var(--card);color:var(--ink);border-radius:18px 18px 0 0;padding:16px 18px calc(22px + env(safe-area-inset-bottom));box-sizing:border-box}
+.gsheet .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.gsheet .top h3{font-size:16px;margin:0}
+.gsheet .x{min-width:44px;min-height:44px;border:0;background:none;color:var(--ink3);font-size:22px;line-height:1;cursor:pointer;font-family:inherit}
+.gsheet .big{font-size:30px;font-weight:800;text-align:center;padding:26px 0;letter-spacing:.04em}
+.gsheet .mid{font-size:15px;line-height:1.6;color:var(--ink2);text-align:center;padding:8px 0}
+.gsheet .mid b{color:var(--ink)}
+.gsheet .who{font-size:13px;color:var(--ink3);text-align:center}
+.gsheet .act{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.gsheet .act .btn{margin:0;min-height:46px;display:inline-flex;align-items:center;padding:0 22px;font-size:15px}
+.gsheet .act .btn.sec{background:transparent;color:var(--ink);border-color:var(--rule)}
+.gsheet .chips{justify-content:center;margin:6px 0 4px}
+.gsheet .roll{font-size:34px;font-weight:800;text-align:center;padding:26px 0;min-height:1.3em}
+.gsheet .roll.done{color:var(--gold)}
+@media (prefers-reduced-motion:reduce){.gsheet .roll{transition:none}}
 </style>
 </head>
 <body>
@@ -498,6 +521,7 @@ a.opt .on{color:var(--blue)}
 
 
 
+
 <section id="acct">
   <div class="sh"><h2>记账</h2><span class="n" id="acctSync">本地</span></div>
   <div class="card acct">
@@ -514,7 +538,7 @@ a.opt .on{color:var(--blue)}
         <div><label for="afA">金额</label><input id="afA" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="0" required></div>
         <div><label for="afD">日期</label><input id="afD" type="date" required></div>
       </div>
-      <div><label for="afN">干什么花的</label><input id="afN" type="text" maxlength="40" placeholder="加油 / 停车 / 门票 / 晚饭" required></div>
+      <div><label for="afN">干什么花的</label><div class="chips quick" id="afQ"></div><input id="afN" type="text" maxlength="40" placeholder="或者自己写" required></div>
       <div><label>谁付的</label><div class="chips" id="afP"></div></div>
       <div class="act"><button type="submit" class="btn">记上</button><span class="hint">三个人平摊</span></div>
     </form>
@@ -522,6 +546,8 @@ a.opt .on{color:var(--blue)}
   <div class="sh" style="margin-top:16px"><h3>明细</h3><span class="n" id="acctCnt"></span></div>
   <div class="card acct"><div class="list" id="acctList"></div></div>
 </section>
+
+<div class="gsheet" id="gsheet" role="dialog" aria-modal="true"><div class="pane" id="gpane"></div></div>
 
 <footer id="foot"></footer>
 </main>
@@ -1075,31 +1101,42 @@ var TIPS = [
   })();
   var OPEN_D = TODAY_D || 1;
   var dh = "";
-var ALMANAC = {"9/25": {"head": "9月25日 农历八月十五 星期五 秋分", "gz": "壬寅", "cai": "正南", "shi": "子丑辰巳未戌", "chong": "虎日冲猴（丙申）煞北", "yi": "开光 解除 拆卸 修造 动土 竖柱", "ji": "出火 搬新房 搬家 祈福 祭祀 安床"}, "9/26": {"head": "9月26日 农历八月十六 星期六 秋分", "gz": "癸卯", "cai": "正南", "shi": "子寅卯午未酉", "chong": "兔日冲鸡（丁酉）煞西", "yi": "破屋 坏垣 看病 啥都别干", "ji": "搬家 搬新房"}, "9/27": {"head": "9月27日 农历八月十七 星期日 秋分", "gz": "甲辰", "cai": "东北", "shi": "寅辰巳申酉亥", "chong": "龙日冲狗（戊戌）煞南", "yi": "结婚 提亲 订婚 祭祀 祈福 求子", "ji": "开业 开仓 安门 安葬"}, "9/28": {"head": "9月28日 农历八月十八 星期一 秋分", "gz": "乙巳", "cai": "东北", "shi": "丑辰午未戌亥子", "chong": "蛇日冲猪（己亥）煞东", "yi": "结婚 提亲 订婚 祭祀 祈福 求子", "ji": "安葬 买牲口 出行 行丧 伐木 栽种"}, "9/29": {"head": "9月29日 农历八月十九 星期二 秋分", "gz": "丙午", "cai": "西南", "shi": "子丑卯午申酉", "chong": "马日冲鼠（庚子）煞北", "yi": "祭祀 成年礼 捕捉 啥都别干", "ji": "结婚 开业 盖屋 上梁 合寿木"}, "9/30": {"head": "9月30日 农历八月二十 星期三 秋分", "gz": "丁未", "cai": "西南", "shi": "寅卯巳申戌亥子", "chong": "羊日冲牛（辛丑）煞西", "yi": "祭祀 解除 结网 打猎 捕鱼 聚会", "ji": "开业 祈福 动土 破土 入殓 安葬"}, "10/1": {"head": "10月1日 农历八月廿一 星期四 秋分", "gz": "戊申", "cai": "正北", "shi": "子丑辰巳未戌", "chong": "猴日冲虎（壬寅）煞南", "yi": "成年礼 洗澡 出行 修造 动土 搬家", "ji": "结婚 开业 祭祀 祈福 斋醮 提亲"}, "10/2": {"head": "10月2日 农历八月廿二 星期五 秋分", "gz": "己酉", "cai": "正北", "shi": "子寅卯午未酉", "chong": "鸡日冲兔（癸卯）煞东", "yi": "祭祀 出行", "ji": "结婚 搬新房 修造 动土 聚会 破土"}, "10/3": {"head": "10月3日 农历八月廿三 星期六 秋分", "gz": "庚戌", "cai": "正东", "shi": "寅辰巳申酉亥", "chong": "狗日冲龙（甲辰）煞北", "yi": "结婚 订婚 提亲 祭祀 祈福 出行", "ji": "针灸 伐木 上梁 造庙 行丧 安葬"}, "10/4": {"head": "10月4日 农历八月廿四 星期日 秋分", "gz": "辛亥", "cai": "正东", "shi": "丑辰午未戌亥子", "chong": "猪日冲蛇（乙巳）煞西", "yi": "出行 开业 交易 签约 装机器 出火", "ji": "结婚 安葬 动土 造桥"}, "10/5": {"head": "10月5日 农历八月廿五 星期一 秋分", "gz": "壬子", "cai": "正南", "shi": "子丑卯午申酉", "chong": "鼠日冲马（丙午）煞南", "yi": "祭祀 洗澡 修饰垣墙 修路 啥都别干", "ji": "斋醮 结婚 搬家 出行 上梁 搬新房"}};
-var SX = ["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"];
-var SXF = {
-  "鼠":["开心，渐进","宜早起看日出","财气在路上","少熬夜多看山","随遇而安","今天适合拍照"],
-  "牛":["节节高","稳稳当当","宜多走几步","口福不浅","踏实就是运气","适合开车"],
-  "虎":["宜淡定","别急，风景在后面","有贵人同车","宜多喝水","今天你最能扛","适合领队"],
-  "兔":["宜有分寸","心细捡便宜","宜与人为善","适合买特产","走路看脚下","甜的都归你"],
-  "龙":["利事业，感情幸福","气场全开","宜大胆点菜","镜头感在线","今日主角","宜早睡"],
-  "蛇":["人见人爱","宜安静看云","直觉准","宜谈价","有小惊喜","别忘涂防晒"],
-  "马":["宜平和，多点耐心","跑得快也要停一停","脚力最好","宜换人开车","今天吃辣","别丢东西"],
-  "羊":["宜计划","照着行程走最顺","宜早点出发","有口福","软一点更好","宜多拍合影"],
-  "猴":["渐入佳境","机灵一整天","宜讲笑话","别贪路","宜记账","有好运气"],
-  "鸡":["财运佳","宜早起","嗓子好，宜唱歌","宜整理行李","别抢话","今天最上镜"],
-  "狗":["宜稳进","忠于计划","宜看星星","有人惦记你","脚步慢一点","宜守着火炉"],
-  "猪":["宜修心养性","吃饱就是福","宜午睡","别买太多","宜喝奶茶","今天最松弛"]
+var SUN = {"9/25": {"rise": "08:00", "riseAt": "乌鲁木齐", "set": "20:04", "setAt": "乌鲁木齐", "gold": "19:26", "blue": "20:33", "lunar": "八月十五", "moon": "满月", "moonrise": "18:52", "moonset": "06:11", "illum": 97, "fest": "中秋节"}, "9/26": {"rise": "08:01", "riseAt": "乌鲁木齐", "set": "19:53", "setAt": "可可托海", "gold": "19:13", "blue": "20:24", "lunar": "八月十六", "moon": "满月", "moonrise": "19:04", "moonset": "07:11", "illum": 100, "fest": ""}, "9/27": {"rise": "07:54", "riseAt": "可可托海", "set": "20:03", "setAt": "布尔津", "gold": "19:22", "blue": "20:34", "lunar": "八月十七", "moon": "亏凸月", "moonrise": "19:33", "moonset": null, "illum": 100, "fest": ""}, "9/28": {"rise": "08:07", "riseAt": "布尔津", "set": "19:58", "setAt": "禾木", "gold": "19:17", "blue": "20:30", "lunar": "八月十八", "moon": "亏凸月", "moonrise": "19:46", "moonset": "08:36", "illum": 98, "fest": ""}, "9/29": {"rise": "08:07", "riseAt": "禾木", "set": "19:57", "setAt": "贾登峪", "gold": "19:16", "blue": "20:29", "lunar": "八月十九", "moon": "亏凸月", "moonrise": "20:05", "moonset": "09:55", "illum": 93, "fest": ""}, "9/30": {"rise": "08:09", "riseAt": "贾登峪", "set": "20:05", "setAt": "克拉玛依", "gold": "19:26", "blue": "20:35", "lunar": "八月二十", "moon": "亏凸月", "moonrise": "20:49", "moonset": "11:16", "illum": 86, "fest": ""}, "10/1": {"rise": "08:19", "riseAt": "克拉玛依", "set": "20:20", "setAt": "清水河", "gold": "19:41", "blue": "20:48", "lunar": "八月廿一", "moon": "亏凸月", "moonrise": "21:45", "moonset": "12:49", "illum": 77, "fest": ""}, "10/2": {"rise": "08:35", "riseAt": "清水河", "set": "20:06", "setAt": "那拉提", "gold": "19:28", "blue": "20:34", "lunar": "八月廿二", "moon": "下弦月", "moonrise": "22:22", "moonset": "13:50", "illum": 67, "fest": ""}, "10/3": {"rise": "08:24", "riseAt": "那拉提", "set": "20:04", "setAt": "巴音布鲁克", "gold": "19:26", "blue": "20:32", "lunar": "八月廿三", "moon": "下弦月", "moonrise": "23:22", "moonset": "15:01", "illum": 55, "fest": ""}, "10/4": {"rise": "08:24", "riseAt": "巴音布鲁克", "set": "19:48", "setAt": "乌鲁木齐", "gold": "19:09", "blue": "20:16", "lunar": "八月廿四", "moon": "残月", "moonrise": "00:15", "moonset": "15:52", "illum": 43, "fest": ""}, "10/5": {"rise": "08:12", "riseAt": "乌鲁木齐", "set": "19:46", "setAt": "乌鲁木齐", "gold": "19:07", "blue": "20:14", "lunar": "八月廿五", "moon": "残月", "moonrise": "01:34", "moonset": "16:41", "illum": 32, "fest": ""}};
+var XJ = {
+  "9/25": ["亚克西","yakexi","好、棒（维吾尔语）","服务员端上大盘鸡，说一句亚克西。"],
+  "9/26": ["攒劲","zǎn jìn","厉害、带劲（新疆普通话）","这个风景攒劲得很！"],
+  "9/27": ["皮牙子","pí yá zi","洋葱","点拌面时说：多放皮牙子。"],
+  "9/28": ["热合买提","rehmet","谢谢（维吾尔语）","民宿老板帮忙搬行李，热合买提。"],
+  "9/29": ["歹得很","dǎi de hěn","好得很（新疆话里的「歹」是好）","这个抓饭歹得很。"],
+  "9/30": ["没麻搭","méi má da","没问题、没麻烦","车加满油了吗？没麻搭。"],
+  "10/1": ["阿达西","adash","朋友（维吾尔语）","六个阿达西，一台车。"],
+  "10/2": ["巴郎子 / 丫头子","bā láng zi","小伙子 / 姑娘","三个巴郎子开车，三个丫头子拍照。"],
+  "10/3": ["干撒呢","gàn sá ne","干什么呢","你在后座干撒呢？睡着了？"],
+  "10/4": ["胡里麻汤","hú li má tāng","稀里糊涂","独库公路别开得胡里麻汤的。"],
+  "10/5": ["霍西","khosh","再见（维吾尔语）","北疆，霍西。"]
 };
-function almBlock(d){
-  var a = ALMANAC[d.date]; if(!a) return "";
-  var sx = SX.map(function(s, i){ var p = SXF[s]; return '<span><b>'+s+'</b>'+p[(d.d*7 + i*3) % p.length]+'</span>'; }).join('');
-  return '<details class="tour alm"><summary>'+a.head+CHEV+'</summary><div class="tbody">'+
-    '<div class="alrow"><b>今日</b><span>'+a.gz+'日 · '+a.chong+' · 财神'+a.cai+' · 吉时 '+a.shi+'</span></div>'+
-    '<div class="alrow yi"><b>宜</b><span>'+a.yi+'</span></div>'+
-    '<div class="alrow ji"><b>忌</b><span>'+a.ji+'</span></div>'+
-    '<div class="alsx">'+sx+'</div>'+
-    '<div class="alnote">宜忌来自通书，生肖是随口一说，图一乐。</div></div></details>';
+var GAME_DAYS = {2:1,3:1,6:1,7:1,8:1,10:1};
+function moonTip(s){
+  if(s.fest && /中秋/.test(s.fest)) return "今晚中秋，"+s.setAt+"月出 "+s.moonrise+"，月亮 "+s.illum+"%，出去赏月。";
+  var late = s.moonrise && (s.moonrise >= "22:00" || s.moonrise < "06:00");
+  if(late || s.illum < 50) return "月亮 "+(s.moonrise ? s.moonrise+" 才出来" : "很晚才出")+"，天黑后到月出前是看星星的窗口，亮度 "+s.illum+"%。";
+  return "月亮 "+s.illum+"%，"+s.moonrise+" 升起，晚上很亮，拍月亮比看星星合适。";
+}
+function funBlock(d){
+  var s = SUN[d.date], x = XJ[d.date]; if(!s) return "";
+  var sum = "日出 "+s.rise+" · 日落 "+s.set+" · "+s.moon;
+  return '<details class="tour sun"><summary>'+sum+CHEV+'</summary><div class="tbody">'+
+    '<div class="frow"><b>光线</b><span>'+s.riseAt+' '+s.rise+' 日出；'+s.setAt+' '+s.set+' 日落，黄金时刻 '+s.gold+' 起，蓝调到 '+s.blue+'。</span></div>'+
+    '<div class="frow"><b>月亮</b><span>'+s.lunar+' '+s.moon+(s.fest?'（'+s.fest+'）':'')+'。'+moonTip(s)+'</span></div>'+
+    (x ? '<div class="frow"><b>新疆话</b><span><span class="w">'+x[0]+'</span><span class="py">'+x[1]+'</span>'+x[2]+'<span class="ex">'+x[3]+'</span></span></div>' : '')+
+    '</div></details>';
+}
+function gameBlock(d){
+  if(!GAME_DAYS[d.d]) return "";
+  return '<details class="tour game"><summary>车上不无聊<span class="tsub">谁是卧底 · 抽签</span>'+CHEV+'</summary><div class="tbody">'+
+    '<div class="frow"><span>长途日。副驾负责发牌，手机传一圈，每人只看自己的词。</span></div>'+
+    '<div class="gbtns"><button type="button" class="btn" data-game="spy">谁是卧底</button><button type="button" class="btn sec" data-game="draw">抽签</button></div>'+
+    '</div></details>';
 }
   function renderTour(t){
     var cls = /^沿途/.test(t.n) ? "tour road" : "tour spot";
@@ -1151,8 +1188,8 @@ function almBlock(d){
       '<div class="dti"><div class="r">'+d.r+'</div><div class="m">'+d.date+' '+d.wk+' · '+d.m+'</div></div>'+
       '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
       '</summary><div class="dbody">'+miniMap(d.d, col, d.rt, stayLine)+
-      almBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div></div></details>'+
-      tours.map(renderTour).join('')+
+      funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div></div></details>'+
+      tours.map(renderTour).join('')+gameBlock(d)+
       mealBlock(d)+
       (d.pic?d.pic.map(function(p){var dm = IMGD[p[0]]; return '<figure class="photo"><img src="img/'+p[0]+'"'+(dm?' width="'+dm[0]+'" height="'+dm[1]+'"':'')+' alt="'+p[1]+'" loading="lazy"><figcaption>'+p[2]+'</figcaption></figure>'}).join(''):'')+
       '</div></details>';
@@ -1457,6 +1494,15 @@ var SEED = [
   function chips(){
     $("afP").innerHTML = PEOPLE.map(function(p){ return '<button type="button" data-p="'+esc(p)+'" class="'+(p===payer?'on':'')+'">'+esc(p)+'</button>'; }).join("");
   }
+  var QUICK = ["加油","吃饭","零食","水果","停车","路桥","门票","区间车","住宿","买水"];
+  $("afQ").innerHTML = QUICK.map(function(q){ return '<button type="button" data-q="'+q+'">'+q+'</button>'; }).join("");
+  $("afQ").addEventListener("click", function(ev){
+    var b = ev.target.closest("button[data-q]"); if(!b) return;
+    $("afN").value = b.getAttribute("data-q");
+    Array.prototype.forEach.call($("afQ").children, function(x){ x.classList.toggle("on", x === b); });
+    if(!$("afA").value) $("afA").focus();
+  });
+  $("afN").addEventListener("input", function(){ Array.prototype.forEach.call($("afQ").children, function(x){ x.classList.toggle("on", x.getAttribute("data-q") === $("afN").value); }); });
   $("afP").addEventListener("click", function(ev){ var b = ev.target.closest("button[data-p]"); if(!b) return; payer = b.getAttribute("data-p"); me = payer; save(LSME, me); chips(); });
   function today(){ var d = new Date(Date.now() + 8*3600e3); return d.toISOString().slice(0,10); }
   $("afD").value = today();
@@ -1468,7 +1514,7 @@ var SEED = [
     if(!payer){ toast("选一下谁付的"); return; }
     var e = {id:uid(), d:d, n:n, a:Math.round(a*100)/100, p:payer, t:new Date().toISOString(), by:me};
     queue.push(e); save(LSQ, queue);
-    $("afA").value = ""; $("afN").value = ""; $("afD").value = today();
+    $("afA").value = ""; $("afN").value = ""; $("afD").value = today(); Array.prototype.forEach.call($("afQ").children, function(x){ x.classList.remove("on"); });
     render(); fortune(n, a); sync();
   });
   $("acctList").addEventListener("click", function(ev){
@@ -1515,6 +1561,77 @@ var SEED = [
   document.addEventListener("visibilitychange", function(){ if(!document.hidden) sync(); });
   var acctSec = document.getElementById("acct");
   if(acctSec){ var t = setInterval(function(){ if(!document.hidden) sync(); }, 60000); }
+})();
+</script>
+<script>
+/* ==== 路上玩：谁是卧底 / 抽签 ==== */
+(function(){
+  var CREW = ["陈昱州","张晓宇","王晨","牛梦瑶","彭钰","杜紫荆"];
+  var PAIRS = [["馕","烧饼"],["手抓饭","炒饭"],["喀纳斯","赛里木湖"],["骆驼","马"],["大盘鸡","椒麻鸡"],["拌面","炒面"],["酸奶","奶皮子"],["雪山","冰川"],["独库公路","318 国道"],["胡杨","白桦"],["牦牛","骆驼"],["葡萄干","杏干"],["奶茶","咖啡"],["帐篷","木屋"],["高德","百度地图"],["火锅","烤肉"],["向日葵","薰衣草"],["月亮","太阳"],["微信","支付宝"],["薯片","锅巴"],["周杰伦","林俊杰"],["羊肉串","烤全羊"],["禾木","白哈巴"],["西瓜","哈密瓜"],["火车","高铁"],["洗澡","泡澡"],["拖鞋","凉鞋"],["日出","日落"]];
+  var TASKS = ["坐副驾","这顿买单","点歌","唱一首","讲个笑话","下车加油","去买水","今晚洗碗"];
+  var sheet = document.getElementById("gsheet"), pane = document.getElementById("gpane");
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function open(html){ pane.innerHTML = html; sheet.classList.add("on"); document.body.style.overflow = "hidden"; }
+  function close(){ sheet.classList.remove("on"); document.body.style.overflow = ""; }
+  sheet.addEventListener("click", function(e){ if(e.target === sheet) close(); });
+  function head(t){ return '<div class="top"><h3>'+t+'</h3><button type="button" class="x" data-x aria-label="关闭">×</button></div>'; }
+  pane.addEventListener("click", function(e){ if(e.target.closest("[data-x]")) close(); });
+
+  /* 谁是卧底 */
+  var g = null;
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function spyStart(){
+    var pr = PAIRS[Math.floor(Math.random()*PAIRS.length)]; if(Math.random()<.5) pr = [pr[1], pr[0]];
+    g = {order: shuffle(CREW.slice()), spy: Math.floor(Math.random()*CREW.length), pair: pr, i: 0};
+    spyHand();
+  }
+  function spyHand(){
+    open(head("谁是卧底")+'<div class="who">第 '+(g.i+1)+' / 6 位</div><div class="big">'+esc(g.order[g.i])+'</div><div class="mid">把手机给 <b>'+esc(g.order[g.i])+'</b>，别人别看</div>'+
+      '<div class="act"><button type="button" class="btn" data-a="show">我是本人，看词</button></div>');
+  }
+  function spyShow(){
+    var w = g.i === g.spy ? g.pair[1] : g.pair[0];
+    open(head("谁是卧底")+'<div class="who">'+esc(g.order[g.i])+' 的词</div><div class="big">'+esc(w)+'</div><div class="mid">记住它，别念出来</div>'+
+      '<div class="act"><button type="button" class="btn" data-a="next">记住了，传给下一位</button></div>');
+  }
+  function spyNext(){
+    g.i++;
+    if(g.i < g.order.length){ spyHand(); return; }
+    open(head("谁是卧底")+'<div class="big">开始</div><div class="mid">按 <b>'+g.order.map(esc).join(' → ')+'</b> 的顺序，每人一句描述自己的词，不能说出词本身。<br>一轮后投票淘汰一人，被淘汰的是卧底则平民赢；卧底撑到剩 3 人就赢。</div>'+
+      '<div class="act"><button type="button" class="btn sec" data-a="reveal">揭晓卧底</button></div>');
+  }
+  function spyReveal(){
+    open(head("谁是卧底")+'<div class="who">卧底是</div><div class="big">'+esc(g.order[g.spy])+'</div><div class="mid">平民的词 <b>'+esc(g.pair[0])+'</b>，卧底的词 <b>'+esc(g.pair[1])+'</b></div>'+
+      '<div class="act"><button type="button" class="btn" data-a="spy">再来一局</button><button type="button" class="btn sec" data-x>收工</button></div>');
+  }
+
+  /* 抽签 */
+  var task = TASKS[0], rolling = false;
+  function drawView(){
+    open(head("抽签")+'<div class="chips">'+TASKS.map(function(t){ return '<button type="button" data-t="'+esc(t)+'" class="'+(t===task?'on':'')+'">'+esc(t)+'</button>'; }).join('')+'</div>'+
+      '<div class="roll" id="groll">？</div><div class="mid">谁来<b>'+esc(task)+'</b></div>'+
+      '<div class="act"><button type="button" class="btn" data-a="roll">抽</button></div>');
+  }
+  function roll(){
+    if(rolling) return; rolling = true;
+    var el = document.getElementById("groll"), n = 0, total = 18 + Math.floor(Math.random()*8), pick = CREW[Math.floor(Math.random()*CREW.length)];
+    el.classList.remove("done");
+    (function tick(){
+      el.textContent = n < total ? CREW[n % CREW.length] : pick;
+      if(n < total){ n++; setTimeout(tick, 60 + n*12); } else { el.classList.add("done"); rolling = false; }
+    })();
+  }
+
+  document.addEventListener("click", function(e){
+    var b = e.target.closest("button[data-game]"); if(!b) return;
+    if(b.getAttribute("data-game") === "spy") spyStart(); else drawView();
+  });
+  pane.addEventListener("click", function(e){
+    var t = e.target.closest("button[data-t]"); if(t){ task = t.getAttribute("data-t"); drawView(); return; }
+    var a = e.target.closest("button[data-a]"); if(!a) return;
+    var k = a.getAttribute("data-a");
+    if(k==="show") spyShow(); else if(k==="next") spyNext(); else if(k==="reveal") spyReveal(); else if(k==="spy") spyStart(); else if(k==="roll") roll();
+  });
 })();
 </script>
 </body>
