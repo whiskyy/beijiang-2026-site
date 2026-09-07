@@ -340,6 +340,12 @@ a.opt .on{color:var(--blue)}
 
 
 
+
+
+
+
+
+
 /* ==== 记账 ==== */
 .acct{padding:14px}
 .acct .asum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
@@ -411,10 +417,14 @@ a.opt .on{color:var(--blue)}
 .frow{display:flex;gap:10px;padding:7px 0;border-top:1px dashed var(--rule);font-size:13px;line-height:1.55;color:var(--ink2)}
 .frow:first-child{border-top:0}
 .frow b{flex:none;min-width:2.4em;color:var(--ink3);font-size:11px;font-weight:700;padding-top:3px}
-.frow .w{font-size:18px;font-weight:700;color:var(--ink);margin-right:6px}
-.frow .py{font-size:12px;color:var(--ink3);margin-right:6px}
+.frow .w{display:block;font-size:17px;font-weight:700;color:var(--ink);line-height:1.4}
+.frow .py{display:block;font-size:12.5px;color:var(--ink2);margin-top:2px}
+.frow .xrow{display:flex;gap:6px;align-items:center;margin-top:6px}
+.frow .xa,.frow .xb{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--blue);font-size:12.5px;font-weight:600;font-family:inherit;text-decoration:none;cursor:pointer;white-space:nowrap}
+.frow .xb{color:var(--ink2)}
+.frow .xa.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.frow .xa:active,.frow .xb:active{transform:scale(.96)}
 .frow .ex{display:block;color:var(--ink3);font-size:12px;margin-top:2px}
-#foot .play .btn{margin:0 4px;min-height:36px;display:inline-flex;align-items:center;padding:0 12px;font-size:13px;vertical-align:middle}
 .gbtns{display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
 .gbtns .btn{margin:0;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;font-size:14px}
 .gbtns .btn.sec{background:transparent;color:var(--ink);border-color:var(--rule)}
@@ -536,6 +546,18 @@ a.opt .on{color:var(--blue)}
   <div class="sh" style="margin-top:16px"><h3>门票</h3><span class="n">人均，含区间车</span></div>
   <div class="card tkt" id="tktBox"></div>
 </section>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1143,18 +1165,36 @@ var TIPS = [
   var dh = "";
 var SUN = {"9/25": {"rise": "08:00", "riseAt": "乌鲁木齐", "set": "20:04", "setAt": "乌鲁木齐", "gold": "19:26", "blue": "20:33", "lunar": "八月十五", "moon": "满月", "moonrise": "18:52", "moonset": "06:11", "illum": 97, "fest": "中秋节"}, "9/26": {"rise": "08:01", "riseAt": "乌鲁木齐", "set": "19:53", "setAt": "可可托海", "gold": "19:13", "blue": "20:24", "lunar": "八月十六", "moon": "满月", "moonrise": "19:04", "moonset": "07:11", "illum": 100, "fest": ""}, "9/27": {"rise": "07:54", "riseAt": "可可托海", "set": "20:03", "setAt": "布尔津", "gold": "19:22", "blue": "20:34", "lunar": "八月十七", "moon": "亏凸月", "moonrise": "19:33", "moonset": null, "illum": 100, "fest": ""}, "9/28": {"rise": "08:07", "riseAt": "布尔津", "set": "19:58", "setAt": "禾木", "gold": "19:17", "blue": "20:30", "lunar": "八月十八", "moon": "亏凸月", "moonrise": "19:46", "moonset": "08:36", "illum": 98, "fest": ""}, "9/29": {"rise": "08:07", "riseAt": "禾木", "set": "19:57", "setAt": "贾登峪", "gold": "19:16", "blue": "20:29", "lunar": "八月十九", "moon": "亏凸月", "moonrise": "20:05", "moonset": "09:55", "illum": 93, "fest": ""}, "9/30": {"rise": "08:09", "riseAt": "贾登峪", "set": "20:05", "setAt": "克拉玛依", "gold": "19:26", "blue": "20:35", "lunar": "八月二十", "moon": "亏凸月", "moonrise": "20:49", "moonset": "11:16", "illum": 86, "fest": ""}, "10/1": {"rise": "08:19", "riseAt": "克拉玛依", "set": "20:20", "setAt": "清水河", "gold": "19:41", "blue": "20:48", "lunar": "八月廿一", "moon": "亏凸月", "moonrise": "21:45", "moonset": "12:49", "illum": 77, "fest": ""}, "10/2": {"rise": "08:35", "riseAt": "清水河", "set": "20:06", "setAt": "那拉提", "gold": "19:28", "blue": "20:34", "lunar": "八月廿二", "moon": "下弦月", "moonrise": "22:22", "moonset": "13:50", "illum": 67, "fest": ""}, "10/3": {"rise": "08:24", "riseAt": "那拉提", "set": "20:04", "setAt": "巴音布鲁克", "gold": "19:26", "blue": "20:32", "lunar": "八月廿三", "moon": "下弦月", "moonrise": "23:22", "moonset": "15:01", "illum": 55, "fest": ""}, "10/4": {"rise": "08:24", "riseAt": "巴音布鲁克", "set": "19:48", "setAt": "乌鲁木齐", "gold": "19:09", "blue": "20:16", "lunar": "八月廿四", "moon": "残月", "moonrise": "00:15", "moonset": "15:52", "illum": 43, "fest": ""}, "10/5": {"rise": "08:12", "riseAt": "乌鲁木齐", "set": "19:46", "setAt": "乌鲁木齐", "gold": "19:07", "blue": "20:14", "lunar": "八月廿五", "moon": "残月", "moonrise": "01:34", "moonset": "16:41", "illum": 32, "fest": ""}};
 var XJ = {
-  "9/25": ["亚克西","yakexi","好、棒（维吾尔语）","服务员端上大盘鸡，说一句亚克西。"],
-  "9/26": ["攒劲","zǎn jìn","厉害、带劲（新疆普通话）","这个风景攒劲得很！"],
-  "9/27": ["皮牙子","pí yá zi","洋葱","点拌面时说：多放皮牙子。"],
-  "9/28": ["热合买提","rehmet","谢谢（维吾尔语）","民宿老板帮忙搬行李，热合买提。"],
-  "9/29": ["歹得很","dǎi de hěn","好得很（新疆话里的「歹」是好）","这个抓饭歹得很。"],
-  "9/30": ["没麻搭","méi má da","没问题、没麻烦","车加满油了吗？没麻搭。"],
-  "10/1": ["阿达西","adash","朋友（维吾尔语）","六个阿达西，一台车。"],
-  "10/2": ["巴郎子 / 丫头子","bā láng zi","小伙子 / 姑娘","三个巴郎子开车，三个丫头子拍照。"],
-  "10/3": ["干撒呢","gàn sá ne","干什么呢","你在后座干撒呢？睡着了？"],
-  "10/4": ["胡里麻汤","hú li má tāng","稀里糊涂","独库公路别开得胡里麻汤的。"],
-  "10/5": ["霍西","khosh","再见（维吾尔语）","北疆，霍西。"]
+  "9/25": ["哎～彭油！你把我一点空气不给","掐脖子，我快窒息了","谁再说「随便」，我给他一点空气不给。","https://www.bilibili.com/video/BV16kPAe1Eon","audio/kongqi.m4a"],
+  "9/26": ["车肚子里我在的时候，我肚子里酒不在","开车不喝酒，交警原话","开车那个巴郎子：车肚子里他在的时候，他肚子里酒不在。","https://www.bilibili.com/video/BV16kPAe1Eon","audio/chedu.m4a"],
+  "9/27": ["谁的沟子在这里吹口哨？","谁在放屁","车窗关着 350 公里，谁的沟子在这里吹口哨？自己举手。","https://www.bilibili.com/video/BV16kPAe1Eon","audio/gouzi.m4a"],
+  "9/28": ["没穿衣服的巴郎子在我腿上一顿开餐厅","我被狗咬了","禾木的狗见人就亲，别让没穿衣服的巴郎子在你腿上开餐厅。","https://www.bilibili.com/video/BV16kPAe1Eon","audio/balangzi.m4a"],
+  "9/29": ["外面雄鹰一样的男人，家里鸽子一样的","出门是条汉子，回家怂得很","三个巴郎子：外面雄鹰一样的男人，家里鸽子一样的。","https://www.bilibili.com/video/BV16kPAe1Eon","audio/xiongying.m4a"],
+  "9/30": ["诶朋友，这是我的沟子，不是马路","你撞到我了","魔鬼城排队被挤：诶朋友，这是我的沟子，不是马路。","https://www.bilibili.com/video/BV16kPAe1Eon","audio/malu.m4a"],
+  "10/1": ["哎～捧油！你鸽子一样叮叮当叮叮当的","太吵了","后排三个丫头子鸽子一样叮叮当叮叮当的，副驾要疯。","https://www.bilibili.com/video/BV16kPAe1Eon","audio/gezi.m4a"],
+  "10/2": ["哎朋友，冰牙子一样的情绪你有呢","说人冷漠","叫拍照不配合的：冰牙子一样的情绪你有呢。","https://www.bilibili.com/video/BV1URdaYDEvn",""],
+  "10/3": ["你的勾子我脚上有","我要踢你了，阴阳式威胁","谁十点还不起床：你的勾子我脚上有。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E5%8B%BE%E5%AD%90%20%E6%88%91%E8%84%9A%E4%B8%8A%E6%9C%89",""],
+  "10/4": ["改装车～送～玫瑰金","飙车违法，玫瑰金是手铐","独库公路想飙的人：改装车～送～玫瑰金，手铐色号。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E6%94%B9%E8%A3%85%E8%BD%A6%20%E7%8E%AB%E7%91%B0%E9%87%91",""],
+  "10/5": ["你的说话说话，我的说话不说话吗","凭什么你说了算","最后一顿选哪家：你的说话说话，我的说话不说话吗？","https://www.bilibili.com/video/BV1Gv9iYPEu1",""]
 };
+var XJ_MORE = [
+  ["一会让你的眼泪，塔里木河一样流下来","你等着哭吧","没等到湖怪的人。","https://www.bilibili.com/video/BV1ZjGGzVEqQ",""],
+  ["这个地毯我一会洗脸的时候擦脸用","喀什式阴阳：嫌东西差","买到不满意的特产时说。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E5%9C%B0%E6%AF%AF%20%E6%93%A6%E8%84%B8%20%E5%96%80%E4%BB%80",""],
+  ["阿达西，你脑子浆糊一样的时候，雄鹰一样男人的话，不妨听一听","你糊涂的时候听我的","导航争论结束语。","https://www.bilibili.com/video/BV16kPAe1Eon",""],
+  ["Apple U，把你的沟子放旁边一下哈～","让一让","后排换座位。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E6%B2%9F%E5%AD%90%20%E6%94%BE%E6%97%81%E8%BE%B9",""],
+  ["你已经长得骆驼那么大了","这么大人了还……","还要人叫起床的人。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E9%AA%86%E9%A9%BC%E9%82%A3%E4%B9%88%E5%A4%A7",""],
+  ["急屎沟子","急性子","催出发的那个人。","https://search.bilibili.com/all?keyword=%E6%96%B0%E7%96%86%E6%96%B9%E8%A8%80%20%E6%80%A5%E5%B1%8E%E6%B2%9F%E5%AD%90",""],
+  ["天还高着呢，地还宽着呢，红票子塔里木河一样流着呢","再装点，钱哗哗的","往车里塞行李时说。","https://www.bilibili.com/video/BV15qAJz6E2R",""],
+  ["那很好了","万能安慰，语气要淡定","航班延误？那很好了，再吃一顿抓饭。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E9%82%A3%E5%BE%88%E5%A5%BD%E4%BA%86",""],
+  ["阿达西，你的脑瓜子天山雪水一样透亮的呢","夸人聪明","抢到票的那个人当得起。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E5%A4%A9%E5%B1%B1%E9%9B%AA%E6%B0%B4%20%E8%84%91%E7%93%9C%E5%AD%90",""],
+  ["我的拳不是你爸爸的手，也不是你妈妈的心，这个是很黑的东西，他的名字就是一拳","我的拳头很硬","念完自己先笑。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E6%88%91%E7%9A%84%E6%8B%B3%20%E4%B8%80%E6%8B%B3",""],
+  ["手机的医院","手机维修店","馕言文造词法：X 的医院。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E6%89%8B%E6%9C%BA%E7%9A%84%E5%8C%BB%E9%99%A2",""],
+  ["勺子","傻子","把车钥匙锁车里的。","https://search.bilibili.com/all?keyword=%E6%96%B0%E7%96%86%E8%AF%9D%20%E5%8B%BA%E5%AD%90",""],
+  ["塔西浪","完蛋、挂了","禾木晚上不穿羽绒服，塔西浪。","https://search.bilibili.com/all?keyword=%E6%96%B0%E7%96%86%E8%AF%9D%20%E5%A1%94%E8%A5%BF%E6%B5%AA",""],
+  ["你的嘴巴不在服务区吗？","你怎么不说话","巴音布鲁克没信号，嘴也没信号。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E5%98%B4%E5%B7%B4%20%E4%B8%8D%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%8C%BA",""],
+  ["拉条子吃不吃？一辈子拉给你～","一辈子的爱","走之前最后一碗。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E6%8B%89%E6%9D%A1%E5%AD%90%20%E4%B8%80%E8%BE%88%E5%AD%90",""],
+  ["前方 5 公里，是一直～～走","「一直」拖越长路越远","戈壁直路专用。","https://search.bilibili.com/all?keyword=%E9%A6%95%E8%A8%80%E6%96%87%20%E5%89%8D%E6%96%B9%20%E4%B8%80%E7%9B%B4%E8%B5%B0",""]
+];
 var GAME_DAYS = {2:1,3:1,6:1,7:1,8:1,10:1};
 function moonTip(s){
   if(s.fest && /中秋/.test(s.fest)) return "今晚中秋，"+s.setAt+"月出 "+s.moonrise+"，月亮 "+s.illum+"%，出去赏月。";
@@ -1162,13 +1202,20 @@ function moonTip(s){
   if(late || s.illum < 50) return "月亮 "+(s.moonrise ? s.moonrise+" 才出来" : "很晚才出")+"，天黑后到月出前是看星星的窗口，亮度 "+s.illum+"%。";
   return "月亮 "+s.illum+"%，"+s.moonrise+" 升起，晚上很亮，拍月亮比看星星合适。";
 }
+function xjInner(x){
+  var play = x[4] ? '<button type="button" class="xa" data-play="'+x[4]+'">▶ 听原声</button>'
+                  : (x[3] ? '<a class="xa lnk" href="'+x[3]+'" target="_blank" rel="noopener">去 B 站听</a>' : '');
+  return '<span class="w">'+x[0]+'</span><span class="py">'+x[1]+'</span><span class="ex">'+x[2]+'</span>'+
+    '<span class="xrow">'+play+'<button type="button" class="xb" data-xmore>换一句</button></span>';
+}
+window.xjInner = xjInner; window.XJ_MORE = XJ_MORE;
 function funBlock(d){
   var s = SUN[d.date], x = XJ[d.date]; if(!s) return "";
   var sum = "日出 "+s.rise+" · 日落 "+s.set+" · "+s.moon;
   return '<details class="tour sun"><summary>'+sum+CHEV+'</summary><div class="tbody">'+
     '<div class="frow"><b>光线</b><span>'+s.riseAt+' '+s.rise+' 日出；'+s.setAt+' '+s.set+' 日落，黄金时刻 '+s.gold+' 起，蓝调到 '+s.blue+'。</span></div>'+
     '<div class="frow"><b>月亮</b><span>'+s.lunar+' '+s.moon+(s.fest?'（'+s.fest+'）':'')+'。'+moonTip(s)+'</span></div>'+
-    (x ? '<div class="frow"><b>新疆话</b><span><span class="w">'+x[0]+'</span><span class="py">'+x[1]+'</span>'+x[2]+'<span class="ex">'+x[3]+'</span></span></div>' : '')+
+    (x ? '<div class="frow xj" data-xd="'+d.date+'"><b>馕言文</b><span>'+xjInner(x)+'</span></div>' : '')+
     '</div></details>';
 }
 function gameBlock(d){
@@ -1277,7 +1324,7 @@ function gameBlock(d){
   /* 页脚 */
   document.getElementById("foot").innerHTML =
     "<p class='play'>车上玩牌：<b>巫师牌</b>，3–6 人。规则看 <a href='https://zhuanlan.zhihu.com/p/420507499' target='_blank' rel='noopener'>知乎图文</a> 或 <a href='https://www.bilibili.com/video/BV1C5411R7ch/' target='_blank' rel='noopener'>B 站讲解</a>。</p>" +
-    "<p class='play spy'>不用牌的：<button type='button' class='btn' data-game='spy'>谁是卧底</button>，手机传一圈，每人只看自己的词，再轮流描述、投票。</p>" +
+    "<p class='play spy'>不用牌的：<a href='#' data-game='spy'>谁是卧底</a>，手机传一圈，每人只看自己的词，再轮流描述、投票。</p>" +
     "<details class='a2hs' id='a2hs'><summary>加到手机桌面，像 App 一样打开</summary>"+
     "<p><b>iPhone</b>：Safari 打开，底部「分享」→「添加到主屏幕」。</p>"+
     "<p><b>安卓</b>：Chrome 菜单 →「添加到主屏幕」。<button id='installBtn' class='btn' hidden>一键安装</button></p></details>"+
@@ -1659,8 +1706,27 @@ var SEED = [
       '<div class="act"><button type="button" class="btn" data-a="spy">再来一局</button><button type="button" class="btn sec" data-x>收工</button></div>');
   }
 
+  /* 馕言文：播放本地音频片段（一次只响一个） */
+  var au = null, auBtn = null;
+  function stopAu(){ if(au){ au.pause(); au.currentTime = 0; } if(auBtn){ auBtn.textContent = "▶ 听原声"; auBtn.classList.remove("on"); auBtn = null; } }
   document.addEventListener("click", function(e){
-    var b = e.target.closest("button[data-game]"); if(!b) return;
+    var b = e.target.closest("button[data-play]"); if(!b) return;
+    if(auBtn === b){ stopAu(); return; }
+    stopAu();
+    if(!au){ au = new Audio(); au.preload = "none"; au.addEventListener("ended", stopAu); au.addEventListener("error", function(){ if(window.toast) toast("这段音频没加载出来"); stopAu(); }); }
+    au.src = b.getAttribute("data-play"); auBtn = b; b.textContent = "■ 停"; b.classList.add("on");
+    var pr = au.play(); if(pr && pr.catch) pr.catch(function(){ stopAu(); });
+  });
+  /* 馕言文：换一句 */
+  document.addEventListener("click", function(e){
+    var b = e.target.closest("button[data-xmore]"); if(!b) return;
+    var row = b.closest(".frow.xj"), cur = row.querySelector(".w").textContent, pool = XJ_MORE.filter(function(x){ return x[0] !== cur; });
+    var x = pool[Math.floor(Math.random()*pool.length)];
+    stopAu(); row.querySelector("span").innerHTML = xjInner(x);
+  });
+  document.addEventListener("click", function(e){
+    var b = e.target.closest("[data-game]"); if(!b) return;
+    e.preventDefault();
     if(b.getAttribute("data-game") === "spy") spyStart();
   });
   pane.addEventListener("click", function(e){
