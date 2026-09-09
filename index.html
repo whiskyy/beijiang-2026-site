@@ -216,16 +216,6 @@ dl.tips dd b{color:var(--ink)}
 .dti .r{font-size:var(--f-l);font-weight:600;line-height:1.4}
 .dti .m{font-size:var(--f-xs);color:var(--ink3);margin-top:1px}
 .dbody{padding:14px 16px 18px;border-top:1px solid var(--rule)}
-.daychips{position:fixed;right:calc(6px + env(safe-area-inset-right));top:50%;transform:translateY(-50%);z-index:9;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:6px 0;opacity:0;pointer-events:none;transition:opacity .2s}
-.daychips.show{opacity:1}.daychips.show .chip{pointer-events:auto}
-.chip{position:relative;display:inline-flex;align-items:center;justify-content:flex-end;min-width:22px;height:22px;padding:0 5px;border-radius:5px;font-size:var(--f-xs);color:var(--ink3);text-decoration:none;-webkit-user-select:none;user-select:none;font-variant-numeric:tabular-nums;text-shadow:0 0 6px var(--bg),0 0 2px var(--bg);transition:transform .1s,color .15s}
-.chip::after{content:"";position:absolute;inset:-4px}
-.chip em{display:none;font-style:normal;position:absolute;right:100%;top:0;margin-right:4px;height:22px;line-height:22px;padding:0 6px;border-radius:5px;background:var(--c);white-space:nowrap;pointer-events:none}
-.chip.on{background:var(--c);color:var(--dntext);font-weight:600;text-shadow:none;box-shadow:0 2px 8px rgba(0,0,0,.18)}
-.chip.on em{display:inline}
-.chip:active{transform:scale(.94)}
-@media (min-width:900px){.daychips{right:auto;left:calc(50% - 330px - 60px);align-items:flex-start}.chip{justify-content:flex-start}}
-@media (orientation:landscape) and (max-height:500px){.daychips{display:none!important}}
 
 /* 小地图 + 工具行 */
 .minimap{margin:0 0 14px;background:var(--soft);border-radius:var(--r-s);padding:8px}
@@ -335,7 +325,7 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 .wakehelp ol{margin:6px 0 0;padding-left:1.4em}.wakehelp li{margin:3px 0}
 .wakehelp .btn{margin:8px 0 4px}.wakehelp .sub{display:block;margin:2px 0 6px}
 
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.chev,.toast,.pl,.tour>summary,.day>summary,.daychips,.chip,.vt,.fcard,.seg .pet{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.chev,.toast,.pl,.tour>summary,.day>summary,.vt,.fcard,.seg .pet{transition:none}}
 
 /* ==== 趣味：天气/光线/月亮 + 路上玩 ==== */
 .gsheet{position:fixed;inset:0;z-index:97;display:none;align-items:flex-end;background:rgba(0,0,0,.45)}
@@ -480,7 +470,6 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
       </tbody>
     </table>
   </details>
-  <div class="daychips" id="daychips" aria-label="跳到某一天"></div>
   <div id="dayList"></div>
 </section>
 
@@ -1427,27 +1416,9 @@ function funBlock(d){
       '</div></details>';
   });
   document.getElementById("dayList").innerHTML = dh;
-  /* 日期胶囊：吸顶，点一下只展开那一天 */
-  var chipsEl = document.getElementById("daychips");
-  if(chipsEl){
-    chipsEl.innerHTML = DAYS.map(function(d){ var s = SEGS[d.d]||[]; var to = s.length ? s[s.length-1] : ""; return '<a class="chip" href="#day-'+d.d+'" data-d="'+d.d+'" style="--c:var(--d'+Math.min(d.d,10)+')" aria-label="D'+d.d+' '+to+'">'+d.d+'<em>'+to+'</em></a>'; }).join("");
-    function syncChips(){
-      var open = Array.prototype.filter.call(document.querySelectorAll("details.day"), function(x){return x.open});
-      var last = open.length ? open[open.length-1].id.replace("day-","") : "";
-      Array.prototype.forEach.call(chipsEl.children, function(c){ c.classList.toggle("on", c.getAttribute("data-d")===last); });
-    }
-    /* 只在行程分区滚到屏幕中间时露出索引 */
-    try{ new IntersectionObserver(function(en){ chipsEl.classList.toggle("show", en[0].isIntersecting); }, {rootMargin:"-40% 0px -40% 0px"}).observe(document.getElementById("days")); }catch(e){ chipsEl.classList.add("show"); }
-    function rememberOpen(){ syncChips(); var ids = Array.prototype.map.call(document.querySelectorAll("details.day[open]"), function(o){ return o.id.slice(4); }); try{ sessionStorage.setItem("bj_open_day", ids.join(",")); }catch(e){} }
-    document.querySelectorAll("details.day").forEach(function(x){ x.addEventListener("toggle", rememberOpen); });
-    chipsEl.addEventListener("click", function(e){
-      var c = e.target.closest("a.chip"); if(!c) return; e.preventDefault();
-      var id = c.getAttribute("href").slice(1);
-      document.querySelectorAll("details.day").forEach(function(x){ x.open = (x.id===id); });
-      var el = document.getElementById(id); if(el) el.scrollIntoView({block:"start"});
-    });
-    syncChips();
-  }
+  /* 记住展开了哪几天（刷新后恢复） */
+  function rememberOpen(){ var ids = Array.prototype.map.call(document.querySelectorAll("details.day[open]"), function(o){ return o.id.slice(4); }); try{ sessionStorage.setItem("bj_open_day", ids.join(",")); }catch(e){} }
+  document.querySelectorAll("details.day").forEach(function(x){ x.addEventListener("toggle", rememberOpen); });
   /* 只有「今天」按钮会带 #day-N；用完就把 hash 清掉，不然刷新时浏览器恢复位置和锚点滚动会打架（用户说"刷新后位置乱跳"） */
   function openHashDay(){ var m = /^#day-(\d+)$/.exec(location.hash); if(m){ var el = document.getElementById("day-"+m[1]); if(el){ el.open = true; el.scrollIntoView({block:"start"}); } try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} } }
   window.addEventListener("hashchange", openHashDay);
