@@ -110,6 +110,13 @@ section{margin:30px 0;scroll-margin-top:52px}
 .mapwrap .rt path{fill:none;stroke:var(--route);stroke-width:6;stroke-linejoin:round;stroke-linecap:round}
 .mapwrap .dim path{fill:none;stroke:var(--dim);stroke-width:5;stroke-linejoin:round;stroke-linecap:round}
 .mapwrap .lb{font-size:25px;font-weight:700;fill:var(--ink);stroke:var(--halo);stroke-width:7;paint-order:stroke;stroke-linejoin:round}
+/* @@MAPMARK-CSS */
+.mk{cursor:pointer}.mk text{font-size:17px;font-weight:700;fill:#fff;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.mk.food circle{fill:var(--gold);stroke:var(--card);stroke-width:3}.mk.sight circle{fill:var(--green);stroke:var(--card);stroke-width:3}
+.lb2{font-size:21px;font-weight:600;fill:var(--ink2);stroke:var(--halo);stroke-width:5;paint-order:stroke;stroke-linejoin:round}
+.mklg{display:flex;gap:14px;font-size:11px;color:var(--ink3);padding:0 4px}.mklg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.mklg .f i{background:var(--gold)}.mklg .s i{background:var(--green)}
+/* @@MAPMARK-CSS-END */
 .mapwrap .tg{font-size:18px;font-weight:600;fill:var(--ink2);stroke:var(--halo);stroke-width:6;paint-order:stroke;stroke-linejoin:round;font-variant-numeric:tabular-nums}
 .mapwrap .rg{font-size:21px;font-weight:600;fill:var(--ink2);letter-spacing:.3em;opacity:.75;stroke:var(--halo);stroke-width:5;paint-order:stroke}
 .mapwrap .vb{font-size:17px;fill:var(--ink2);stroke:var(--halo);stroke-width:5;paint-order:stroke}
@@ -231,6 +238,20 @@ section{margin:30px 0;scroll-margin-top:52px}
 .tstep b{color:var(--ink)}
 .tnote{display:grid;grid-template-columns:50px 1fr;gap:10px;margin-top:6px;font-size:12px;line-height:1.55;color:var(--ink2)}
 .tnote .k{color:var(--ink3);font-weight:600}
+/* @@VOTE-CSS */
+.vote{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;padding:8px 10px;background:var(--card);border:1px solid var(--rule);border-radius:8px;font-size:12px;color:var(--ink2)}
+.vote .vk{font-weight:600;color:var(--ink3)}
+.vote .vb{min-height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--rule);background:var(--soft);color:var(--ink);font:inherit;font-size:13px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.vote .vb b{font-weight:700;margin-left:4px;color:var(--ink3)}
+.vote .vb.go.on{background:var(--green);border-color:var(--green);color:#fff}.vote .vb.no.on{background:var(--red);border-color:var(--red);color:#fff}.vote .vb.on b{color:#fff}
+.vote .vw{flex:1 1 100%;font-size:11.5px;color:var(--ink3);line-height:1.5}
+.vote .vme{margin-left:auto;font-size:11.5px;color:var(--blue);cursor:pointer;text-decoration:none;min-height:36px;display:inline-flex;align-items:center}
+.vbadge{margin-left:6px;font-size:11px;font-weight:600;color:var(--green);white-space:nowrap}.vbadge.no{color:var(--red)}
+#vsheet{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--card);border-radius:14px 14px 0 0;box-shadow:0 -6px 30px rgba(0,0,0,.18);padding:14px 16px calc(14px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s}
+#vsheet.show{transform:none}#vsheet h4{margin:0 0 10px;font-size:14px}#vsheet .vg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#vsheet .vg button{min-height:44px;border-radius:10px;border:1px solid var(--rule);background:var(--soft);color:var(--ink);font:inherit;font-size:14px;font-weight:600}
+#vmask{position:fixed;inset:0;z-index:59;background:rgba(0,0,0,.25);display:none}#vmask.show{display:block}
+/* @@VOTE-CSS-END */
 
 .meal .ml{font-size:12px;font-weight:700;color:var(--ink3)}
 .meal .mt{font-size:13.5px;line-height:1.55;color:var(--ink2)}
@@ -1181,11 +1202,47 @@ var TIPS = [
   }
   document.getElementById("tktBox").addEventListener("click", function(e){ var r = e.target.closest("[data-todo]"); if(!r || e.target.closest("a")) return; todoToggle(r.getAttribute("data-todo")); });
 
+/* @@MAPMARK */
+  var PROJ = {k:0.444110, bx:-21000.946, by:-9961.278};
+  function projXY(ll){ var la = ll[1]*Math.PI/180; var mx = (ll[0]+180)/360*65536; var my = (1-Math.log(Math.tan(la)+1/Math.cos(la))/Math.PI)/2*65536; return [PROJ.k*mx+PROJ.bx, PROJ.k*my+PROJ.by]; }
+  function mapMarks(dn){
+    var d = DAYS[dn-1]; if(!d) return {svg:"", legend:""};
+    var segPts = (SEGS[dn]||[]).map(function(n){ return MAP.nodes[n]; }).filter(Boolean);
+    function nearSeg(p, r){ return segPts.some(function(q){ return Math.hypot(q[0]-p[0], q[1]-p[1]) < r; }); }
+    var foodNames = {}, food = {}, order = [];
+    (d.meals||[]).forEach(function(m){ (m.o||[]).forEach(function(o){
+      var c = C[o[0]]; if(!c) return; foodNames[o[0]] = 1;
+      var p = projXY(c), key = Math.round(p[0]/16)+","+Math.round(p[1]/16);
+      if(!food[key]){ var fx = p[0], fy = p[1]; if(nearSeg(p, 24)){ fx += 20; fy -= 20; } food[key] = {x:fx, y:fy, names:[], key:o[0]}; order.push(key); }
+      food[key].names.push(o[0]);
+    }); });
+    var seen = {}, sights = [];
+    function addSight(key){
+      if(!key || seen[key] || foodNames[key] || key === d.stayNav) return; var c = C[key]; if(!c) return;
+      var p = projXY(c); if(nearSeg(p, 18)) return; seen[key] = 1; sights.push({x:p[0], y:p[1], n:key});
+    }
+    (d.it||[]).forEach(function(x){ if(x.nav) addSight(x.nav); });
+    (TOURS[dn]||[]).forEach(function(t){ (t.steps||[]).forEach(function(st){ if(st[2]) addSight(st[2]); }); });
+    if(!order.length && !sights.length) return {svg:"", legend:""};
+    var out = "", placed = [];
+    sights.forEach(function(p){
+      out += '<a class="mk sight"'+navAttrs(p.n, "view")+'><circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="14"/><text x="'+p.x.toFixed(1)+'" y="'+p.y.toFixed(1)+'">景</text></a>';
+      var clash = placed.some(function(q){ return Math.abs(q[1]-p.y) < 26 && Math.abs(q[0]-p.x) < 150; }) || nearSeg([p.x,p.y], 60);
+      if(!clash){ var right = p.x < MAP.w-140; placed.push([p.x,p.y]);
+        out += '<text class="lb2" x="'+(right?p.x+18:p.x-18).toFixed(1)+'" y="'+(p.y+6).toFixed(1)+'" text-anchor="'+(right?"start":"end")+'">'+p.n+'</text>'; }
+    });
+    order.forEach(function(k){ var f = food[k];
+      out += '<a class="mk food"'+navAttrs(f.key, "view")+'><title>'+f.names.join("、")+'</title><circle cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="14"/><text x="'+f.x.toFixed(1)+'" y="'+f.y.toFixed(1)+'">吃</text></a>';
+    });
+    var lg = '<div class="mklg">'+(order.length?'<span class="f"><i></i>吃饭 '+order.length+' 处，点开导航</span>':'')+(sights.length?'<span class="s"><i></i>沿途看点 '+sights.length+' 处</span>':'')+'</div>';
+    return {svg:out, legend:lg};
+  }
+  /* @@MAPMARK-END */
   /* 当日小地图：同一张底图，当天走线高亮，其余灰 */
   function miniMap(dn, col, rt, stayLine){
     var names = SEGS[dn] || []; var mine = MAP.routes[String(dn)];
     var others = Object.keys(MAP.routes).filter(function(k){return k!==String(dn) && k!=="alt"}).map(function(k){return '<path d="'+MAP.routes[k]+'"/>'}).join("");
-    var dots="", labs="";
+        var mk = mapMarks(dn);     var dots="", labs="";
     names.forEach(function(n){
       var p = MAP.nodes[n]; if(!p) return;
       var a = p[2], x = p[0], y = p[1], tx = x, ty = y, anc = "start";
@@ -1197,7 +1254,7 @@ var TIPS = [
     return '<div class="minimap"><div class="mapwrap"><svg viewBox="0 0 '+MAP.w+' '+MAP.h+'" role="img" aria-label="第'+dn+'天路段">'+
       '<g class="dim">'+others+'</g>'+
       (mine ? '<g class="cas"><path d="'+mine+'"/></g><path d="'+mine+'" fill="none" stroke="'+col+'" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round"/>' : '')+
-      dots + labs + '</svg></div>' + musicRows(dn) + routeBtn(rt) + stayLine + '</div>';
+      dots + labs + mk.svg + '</svg></div>' + mk.legend + musicRows(dn) + routeBtn(rt) + stayLine + '</div>';
   }
   function musicRows(dn){
     var m = MUSIC[dn]; if(!m) return "";
@@ -1315,7 +1372,7 @@ function gameBlock(d){
     if(t.pic){
       notes += '<div class="tnote"><span class="k">出片</span><span>'+t.pic+'<div class="mx">'+xhsLink(t.xhs||(t.n.split(' ')[0]+' 机位'))+'</div></span></div>';
     }
-    return '<details class="'+cls+'"><summary>'+t.n.replace(/^沿途停车 · /,"")+'<span class="tsub">'+(t.sub||"")+'</span>'+
+    return '<details class="'+cls+'" data-vk="'+t.n+'"><summary>'+t.n.replace(/^沿途停车 · /,"")+'<span class="tsub">'+(t.sub||"")+'</span>'+
       '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></summary>'+
       '<div class="tbody">'+st+notes+'</div></details>';
   }
@@ -1846,5 +1903,68 @@ var SEED = [
   });
 })();
 </script>
+<script>/* @@VOTE */
+(function(){
+  var VOTERS = ["陈昱州","张晓宇","王晨","牛梦瑶","彭钰","杜紫荆"], VME = "bj_vote_me", VLS = "bj_vote_v1", pending = null;
+  function me(){
+    try{ var m = localStorage.getItem(VME); if(m && VOTERS.indexOf(m) >= 0) return m;
+      var l = localStorage.getItem("bj_ledger_me"); if(l){ try{ l = JSON.parse(l); }catch(e){} if(VOTERS.indexOf(l) >= 0) return l; } }catch(e){}
+    return "";
+  }
+  function localVotes(){ try{ return JSON.parse(localStorage.getItem(VLS) || "[]"); }catch(e){ return []; } }
+  function votes(){
+    var list = window.LEDGER ? LEDGER.raw().filter(function(e){ return e.k === "vote" && e.i && e.w; }) : localVotes();
+    var m = {};
+    list.forEach(function(e){ var b = m[e.i] || (m[e.i] = {}); var cur = b[e.w]; if(!cur || (e.t||"") > (cur.t||"")) b[e.w] = e; });
+    var out = {};
+    Object.keys(m).forEach(function(i){ out[i] = {}; Object.keys(m[i]).forEach(function(w){ var v = m[i][w].v; if(v === 1 || v === 0) out[i][w] = v; }); });
+    return out;
+  }
+  function cast(key, v){
+    var who = me(); if(!who){ pending = [key, v]; openSheet(); return; }
+    var cur = (votes()[key]||{})[who]; if(cur === v) v = -1;
+    var e = {id: (window.LEDGER ? LEDGER.uid() : Date.now().toString(36)), k:"vote", i:key, w:who, v:v, t:new Date().toISOString()};
+    if(window.LEDGER){ LEDGER.add(e); return; }
+    var l = localVotes(); l.push(e); try{ localStorage.setItem(VLS, JSON.stringify(l)); }catch(x){}
+    render();
+  }
+  function render(){
+    var all = votes(), who = me();
+    document.querySelectorAll(".tour[data-vk]").forEach(function(el){
+      var key = el.getAttribute("data-vk"), v = all[key] || {}, go = [], no = [];
+      Object.keys(v).forEach(function(w){ (v[w] === 1 ? go : no).push(w); });
+      var mine = v[who];
+      var box = el.querySelector(".vote");
+      if(!box){ box = document.createElement("div"); box.className = "vote"; el.querySelector(".tbody").appendChild(box); }
+      box.innerHTML = '<span class="vk">去不去</span>'+
+        '<button type="button" class="vb go'+(mine===1?' on':'')+'" data-v="1">去<b>'+go.length+'</b></button>'+
+        '<button type="button" class="vb no'+(mine===0?' on':'')+'" data-v="0">不去<b>'+no.length+'</b></button>'+
+        '<a class="vme">'+(who ? '我是'+who : '我是谁？')+'</a>'+
+        (go.length||no.length ? '<span class="vw">'+(go.length?'去：'+go.join("、"):'')+(go.length&&no.length?' ｜ ':'')+(no.length?'不去：'+no.join("、"):'')+'</span>' : '');
+      var sm = el.querySelector("summary"), bd = sm.querySelector(".vbadge");
+      if(go.length || no.length){
+        if(!bd){ bd = document.createElement("span"); bd.className = "vbadge"; var sub = sm.querySelector(".tsub"); sm.insertBefore(bd, sub ? sub.nextSibling : sm.querySelector(".chev")); }
+        bd.className = "vbadge" + (no.length > go.length ? " no" : ""); bd.textContent = go.length + " 去" + (no.length ? " · " + no.length + " 不去" : "");
+      } else if(bd){ bd.remove(); }
+    });
+  }
+  var sheet = document.createElement("div"); sheet.id = "vsheet";
+  sheet.innerHTML = '<h4>你是谁？只选一次，这台手机记住</h4><div class="vg">'+VOTERS.map(function(n){ return '<button type="button" data-me="'+n+'">'+n+'</button>'; }).join("")+'</div>';
+  var mask = document.createElement("div"); mask.id = "vmask";
+  document.body.appendChild(mask); document.body.appendChild(sheet);
+  function openSheet(){ sheet.classList.add("show"); mask.classList.add("show"); }
+  function closeSheet(){ sheet.classList.remove("show"); mask.classList.remove("show"); }
+  mask.addEventListener("click", function(){ pending = null; closeSheet(); });
+  sheet.addEventListener("click", function(e){ var b = e.target.closest("button[data-me]"); if(!b) return;
+    try{ localStorage.setItem(VME, b.getAttribute("data-me")); }catch(x){} closeSheet();
+    if(pending){ var p = pending; pending = null; cast(p[0], p[1]); } else render(); });
+  document.addEventListener("click", function(e){
+    var b = e.target.closest(".vote .vb"); if(b){ e.preventDefault(); cast(b.closest(".tour").getAttribute("data-vk"), +b.getAttribute("data-v")); return; }
+    var a = e.target.closest(".vote .vme"); if(a){ e.preventDefault(); pending = null; openSheet(); }
+  });
+  window.addEventListener("ledger-sync", render);
+  render();
+})();
+/* @@VOTE-END */</script>
 </body>
 </html>
