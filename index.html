@@ -165,7 +165,7 @@ a.wake{color:var(--blue);text-decoration:none;padding:9px 2px;margin:-9px -2px;b
 .sum b{color:var(--ink)}
 
 /* ---- 表格：门票 / 作息 / 费用 ---- */
-.tkt{padding:14px}.cost{padding:12px 14px 14px}.sched{padding:0 14px 4px;margin-bottom:10px}
+.tkt{padding:14px}.cost{padding:12px 14px 14px}.sched{padding:0 14px 6px;margin-bottom:10px}
 .sched>summary{display:flex;align-items:center;gap:8px;min-height:48px;padding:2px 0;cursor:pointer;font-size:var(--f-l);font-weight:600}
 .sched>summary .tsub{margin-left:auto;font-size:var(--f-xs);color:var(--ink3);font-weight:400}
 .tkt table,.cost table,.acct table{width:100%;border-collapse:collapse;font-size:var(--f-s)}
@@ -174,7 +174,11 @@ a.wake{color:var(--blue);text-decoration:none;padding:9px 2px;margin:-9px -2px;b
 td:last-child,th:last-child{padding-right:0}
 .tkt td.n,.tkt th.n,.cost td.n,.cost th.n,.acct td.n,.acct th.n{text-align:right;white-space:nowrap}
 .tkt td b,.cost td b,.acct td b{color:var(--ink);font-weight:400}
-.sched .row{padding:10px 0}.sched .row:first-child{border-top:1px solid var(--rule)}
+.sched table{width:100%;border-collapse:collapse}
+.sched th{text-align:left;font-size:var(--f-xs);color:var(--ink3);font-weight:400;padding:6px 8px 7px 0;border-bottom:1px solid var(--rule)}
+.sched td{padding:9px 8px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top;font-variant-numeric:tabular-nums}
+.sched td:first-child{width:27%}.sched td:nth-child(3){width:36%}
+.sched tr.x td:first-child{color:var(--red)}
 .tkt tr.tot td,.cost tr.tot td{border-bottom:none;border-top:2px solid var(--rule);color:var(--ink);font-weight:600}
 .tkt .d{font-size:var(--f-xs);color:var(--ink3);margin-left:3px;display:inline-block;white-space:nowrap;padding:0 4px;border-radius:3px}
 .tkt .d.pre{color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent)}
@@ -221,10 +225,10 @@ dl.tips dd b{color:var(--ink)}
 .dti .m{font-size:var(--f-xs);color:var(--ink3);margin-top:1px}
 .dbody{padding:12px 14px 14px;border-top:1px solid var(--rule)}
 .daychips{position:fixed;right:calc(6px + env(safe-area-inset-right));top:50%;transform:translateY(-50%);z-index:9;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:6px 0;opacity:0;pointer-events:none;transition:opacity .2s}
-.daychips.show{opacity:1;pointer-events:auto}
+.daychips.show{opacity:1}.daychips.show .chip{pointer-events:auto}
 .chip{position:relative;display:inline-flex;align-items:center;justify-content:flex-end;min-width:22px;height:22px;padding:0 5px;border-radius:5px;font-size:var(--f-xs);color:var(--ink3);text-decoration:none;-webkit-user-select:none;user-select:none;font-variant-numeric:tabular-nums;text-shadow:0 0 6px var(--bg),0 0 2px var(--bg);transition:transform .1s,color .15s}
 .chip::after{content:"";position:absolute;inset:-4px}
-.chip em{display:none;font-style:normal;margin-left:5px}
+.chip em{display:none;font-style:normal;position:absolute;right:100%;top:0;margin-right:4px;height:22px;line-height:22px;padding:0 6px;border-radius:5px;background:var(--c);white-space:nowrap;pointer-events:none}
 .chip.on{background:var(--c);color:var(--dntext);font-weight:600;text-shadow:none;box-shadow:0 2px 8px rgba(0,0,0,.18)}
 .chip.on em{display:inline}
 .chip:active{transform:scale(.94)}
@@ -294,15 +298,14 @@ dl.tips dd b{color:var(--ink)}
 .meal .mo{grid-area:o;list-style:none;margin:0;padding:0}
 .meal .mx{grid-area:x;margin:0 0 4px}
 .mo li{padding:0;position:relative}
-.opt{display:block;padding:7px 8px;margin:0 -8px;border-radius:var(--r-s);color:var(--ink);text-decoration:none;min-height:44px}
+.opt{display:block;padding:7px 8px 5px;margin:0 -8px;border-radius:var(--r-s);color:var(--ink);text-decoration:none;min-height:44px}
 a.opt:active{background:var(--soft)}
 .opt .on{display:block;font-size:var(--f-m);line-height:1.5}
 a.opt .on{color:var(--blue)}
 .opt .os{display:block;font-size:var(--f-s);color:var(--ink2)}
-.opt .vwho{display:block;font-size:var(--f-xs);color:var(--green);margin-top:2px}
-.mo li[data-vm] .opt .on{padding-right:76px;min-height:26px}
-.vt{position:absolute;right:10px;top:7px;min-width:44px;height:26px;padding:0 9px;border-radius:13px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink3);font-size:var(--f-xs);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:3px;transition:transform .1s ease-out}
-.vt::before{content:"";position:absolute;inset:-8px}
+.vwho{font-size:var(--f-xs);color:var(--green)}
+.vrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:0 0 8px}
+.vt{min-width:56px;height:32px;padding:0 9px;border-radius:13px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink3);font-size:var(--f-xs);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:3px;transition:transform .1s ease-out}
 .vt:active{transform:scale(.94)}
 .vt b{font-weight:600;color:var(--ink2)}
 .vt.on{background:var(--green);border-color:var(--green);color:var(--dntext)}.vt.on b{color:var(--dntext)}
@@ -471,20 +474,23 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 
 <section id="days">
   <div class="sh"><h2>逐日行程</h2></div>
-  <details class="card sched"><summary>作息表<span class="tsub">起床 · 集合 · 到达</span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></summary>
-    <div class="rows">
-      <div class="row"><div class="dt">D1</div><div>乌鲁木齐 · 中午落地，打车进城</div></div>
-      <div class="row"><div class="dt">D2</div><div>可可托海 · <a class="wake" data-t="08:30" data-d="2">08:30</a> 起 · 09:20 大堂集合，10:15 机场出发 · 17:30 到</div></div>
-      <div class="row"><div class="dt">D3</div><div>布尔津 · <a class="wake" data-t="09:15" data-d="3">09:15</a> 起 · 10:00 民宿门口集合，10:30 进景区 · 20:00 到</div></div>
-      <div class="row"><div class="dt">D4</div><div>禾木 · <a class="wake" data-t="08:30" data-d="4">08:30</a> 起 · 09:30 大堂集合，10:00 五彩滩 · 15:30 进村</div></div>
-      <div class="row"><div class="dt warn">D5</div><div>喀纳斯 · 看日出 <a class="wake" data-t="06:40" data-d="5">06:40</a> 起，不看 <a class="wake" data-t="09:00" data-d="5">09:00</a> 起 · 07:10 上观景台，10:30 民宿集合出村 · 19:00 到</div></div>
-      <div class="row"><div class="dt">D6</div><div>克拉玛依 · <a class="wake" data-t="09:00" data-d="6">09:00</a> 起 · 10:00 大堂集合出发 · 21:30 到</div></div>
-      <div class="row"><div class="dt warn">D7</div><div>赛里木湖 · <a class="wake" data-t="08:15" data-d="7">08:15</a> 起 · 09:00 大堂集合出发 · 20:00 到</div></div>
-      <div class="row"><div class="dt">D8</div><div>伊宁 → 那拉提 · <a class="wake" data-t="09:00" data-d="8">09:00</a> 起 · 10:00 大堂集合出发 · 20:30 到</div></div>
-      <div class="row"><div class="dt">D9</div><div>巴音布鲁克 · <a class="wake" data-t="08:30" data-d="9">08:30</a> 起 · 09:30 那拉提闸口集合 · 21:30 到</div></div>
-      <div class="row"><div class="dt">D10</div><div>独库 · <a class="wake" data-t="09:00" data-d="10">09:00</a> 起 · 10:00 酒店门口集合，出发前加油 · 20:30 到市区</div></div>
-      <div class="row"><div class="dt">D11</div><div>返程 · <a class="wake" data-t="08:30" data-d="11">08:30</a> 起 · 09:20 大堂集合，开车去机场 · 10:00 还车，14:45 起飞</div></div>
-    </div>
+  <details class="card sched"><summary>作息表<span class="tsub">起床 · 集合 · 落脚</span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></summary>
+    <table>
+      <thead><tr><th>天</th><th>起床</th><th>集合 · 出发</th><th>落脚</th></tr></thead>
+      <tbody>
+        <tr><td>D1 乌鲁木齐</td><td>—</td><td>中午落地，打车进城</td><td>—</td></tr>
+        <tr><td>D2 可可托海</td><td><a class="wake" data-t="08:30" data-d="2">08:30</a></td><td>09:20 大堂集合<br>10:15 机场出发</td><td>17:30</td></tr>
+        <tr><td>D3 布尔津</td><td><a class="wake" data-t="09:15" data-d="3">09:15</a></td><td>10:00 民宿门口集合<br>10:30 进景区</td><td>20:00</td></tr>
+        <tr><td>D4 禾木</td><td><a class="wake" data-t="08:30" data-d="4">08:30</a></td><td>09:30 大堂集合<br>10:00 五彩滩</td><td>15:30 进村</td></tr>
+        <tr class="x"><td>D5 喀纳斯</td><td><a class="wake" data-t="06:40" data-d="5">06:40</a> 看日出<br>不看 <a class="wake" data-t="09:00" data-d="5">09:00</a></td><td>07:10 上观景台<br>10:30 民宿集合出村</td><td>19:00</td></tr>
+        <tr><td>D6 克拉玛依</td><td><a class="wake" data-t="09:00" data-d="6">09:00</a></td><td>10:00 大堂集合出发</td><td>21:30</td></tr>
+        <tr class="x"><td>D7 赛里木湖</td><td><a class="wake" data-t="08:15" data-d="7">08:15</a></td><td>09:00 大堂集合出发</td><td>20:00</td></tr>
+        <tr><td>D8 伊宁 → 那拉提</td><td><a class="wake" data-t="09:00" data-d="8">09:00</a></td><td>10:00 大堂集合出发</td><td>20:30</td></tr>
+        <tr><td>D9 巴音布鲁克</td><td><a class="wake" data-t="08:30" data-d="9">08:30</a></td><td>09:30 那拉提闸口集合</td><td>21:30</td></tr>
+        <tr><td>D10 独库</td><td><a class="wake" data-t="09:00" data-d="10">09:00</a></td><td>10:00 酒店门口集合<br>出发前加油</td><td>20:30 市区</td></tr>
+        <tr><td>D11 返程</td><td><a class="wake" data-t="08:30" data-d="11">08:30</a></td><td>09:20 大堂集合<br>开车去机场</td><td>10:00 还车<br>14:45 起飞</td></tr>
+      </tbody>
+    </table>
   </details>
   <div class="daychips" id="daychips" aria-label="跳到某一天"></div>
   <div id="dayList"></div>
@@ -1192,7 +1198,7 @@ var TIPS = [
       var a = q[2] || "E", n = (SEGS[dn]||[]).filter(function(nm){ return MAP.nodes[nm] === q; })[0] || "", len = n.length;
       var ty = /N/.test(a) ? q[1]-18*z : /S/.test(a) ? q[1]+38*z : q[1]+10*z, x0 = /E/.test(a) ? q[0]+16*z : /W/.test(a) ? q[0]-16*z-len*27*z : q[0]-len*13.5*z;
       for(var c = 0; c <= len; c++) obst.push([x0 + c*27*z, ty-10*z, 30*z]); });
-    for(var it = 0; it < 6; it++){
+    for(var it = 0; it < 12; it++){
       all.forEach(function(a, i){ all.forEach(function(b, j){ if(j <= i) return;
         var dx = b.x - a.x, dy = b.y - a.y, dd = Math.hypot(dx, dy); if(dd >= gap) return; if(!dd){ dx = 1; dy = 0; dd = 1; }
         var push = (gap - dd) / 2; a.x -= dx/dd*push; a.y -= dy/dd*push; b.x += dx/dd*push; b.y += dy/dd*push; }); });
@@ -1929,13 +1935,13 @@ var SEED = [
     document.querySelectorAll(".mo li[data-vm]").forEach(function(li){
       var key = li.getAttribute("data-vm"), shop = li.getAttribute("data-vo"), v = all[key] || {}, names = [];
       Object.keys(v).forEach(function(w){ if(v[w][shop]) names.push(w); });
-      var b = li.querySelector(".vt");
-      if(!b){ b = document.createElement("button"); b.type = "button"; b.className = "vt"; b.setAttribute("aria-label", "投这家"); li.appendChild(b); }
+      /* 按钮放在店名说明下面一行（不贴右边缘：右侧有日期索引，贴边时手指容易点不到） */
+      var row = li.querySelector(".vrow"), b, wh;
+      if(!row){ row = document.createElement("div"); row.className = "vrow"; b = document.createElement("button"); b.type = "button"; b.className = "vt"; b.setAttribute("aria-label", "投这家"); wh = document.createElement("span"); wh.className = "vwho"; row.appendChild(b); row.appendChild(wh); li.appendChild(row); }
+      b = row.querySelector(".vt"); wh = row.querySelector(".vwho");
       var mine = !!(v[who] && v[who][shop]);
-      b.className = "vt" + (mine ? " on" : ""); b.innerHTML = (mine ? "已投" : "投") + (names.length ? "<b>" + names.length + "</b>" : "");
-      var opt = li.querySelector(".opt"), wh = opt.querySelector(".vwho");
-      if(names.length){ if(!wh){ wh = document.createElement("span"); wh.className = "vwho"; opt.appendChild(wh); } wh.textContent = names.join("、") + " 想吃"; }
-      else if(wh){ wh.remove(); }
+      b.className = "vt" + (mine ? " on" : ""); b.innerHTML = (mine ? "已投" : "投一票") + (names.length ? "<b>" + names.length + "</b>" : "");
+      wh.textContent = names.length ? names.join("、") + " 想吃" : "";
     });
     document.querySelectorAll(".tbody.meals").forEach(function(box){
       if(!box.querySelector("li[data-vm]")) return;
