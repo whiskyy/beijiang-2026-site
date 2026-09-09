@@ -341,6 +341,11 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 .gsheet .act{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
 .gsheet .act .btn{min-height:46px;padding:0 22px;font-size:var(--f-m)}
 .gsheet .chips{justify-content:center;margin:6px 0 4px}
+.gsheet .names{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 6px}
+.gsheet .names button{min-height:44px;border-radius:10px;border:1px solid var(--rule);background:var(--card);color:var(--ink);font-size:var(--f-m)}
+.gsheet .names button.on{background:var(--green);border-color:var(--green);color:var(--dntext)}
+.gsheet .names button:disabled{opacity:.35}
+.gsheet .who a{color:var(--blue);text-decoration:none}
 
 /* ==== 记账 ==== */
 .acct{padding:14px}
@@ -1875,55 +1880,83 @@ var SEED = [
 })();
 </script>
 <script>
-/* ==== 路上玩：谁是卧底 / 抽签 ==== */
+/* ==== 路上玩：谁是卧底 ==== 每人在自己手机上看词；局、投票、揭晓都走记账的共享通道（k:spy / spyv / spyr），没网时退回传手机模式 */
 (function(){
   var CREW = ["陈昱州","张晓宇","王晨","牛梦瑶","彭钰","杜紫荆"];
-  var PAIRS = [["馕","烧饼"],["手抓饭","炒饭"],["喀纳斯","赛里木湖"],["骆驼","马"],["大盘鸡","椒麻鸡"],["拌面","炒面"],["酸奶","奶皮子"],["雪山","冰川"],["独库公路","318 国道"],["胡杨","白桦"],["牦牛","骆驼"],["葡萄干","杏干"],["奶茶","咖啡"],["帐篷","木屋"],["高德","百度地图"],["火锅","烤肉"],["向日葵","薰衣草"],["月亮","太阳"],["微信","支付宝"],["薯片","锅巴"],["周杰伦","林俊杰"],["羊肉串","烤全羊"],["禾木","白哈巴"],["西瓜","哈密瓜"],["火车","高铁"],["洗澡","泡澡"],["拖鞋","凉鞋"],["日出","日落"]];
-  var sheet = document.getElementById("gsheet"), pane = document.getElementById("gpane");
-  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  var PAIRS = [["馕","烧饼"],["手抓饭","炒饭"],["喀纳斯","赛里木湖"],["骆驼","马"],["大盘鸡","椒麻鸡"],["拌面","炒面"],["酸奶","奶皮子"],["雪山","冰川"],["独库公路","318 国道"],["胡杨","白桦"],["牦牛","骆驼"],["葡萄干","杏干"],["奶茶","咖啡"],["帐篷","木屋"],["高德","百度地图"],["火锅","烤肉"],["向日葵","薰衣草"],["月亮","太阳"],["微信","支付宝"],["薯片","锅巴"],["周杰伦","林俊杰"],["羊肉串","烤全羊"],["禾木","白哈巴"],["西瓜","哈密瓜"],["火车","高铁"],["帽子","头盔"],["星空","极光"],["泡面","自热锅"],["牛肉面","拉条子"],["雪地靴","冲锋衣"]];
+  var sheet = document.getElementById("gsheet"), pane = document.getElementById("gpane"), VME = "bj_vote_me";
+  function me(){ try{ var m = localStorage.getItem(VME); if(m && CREW.indexOf(m) >= 0) return m; var l = localStorage.getItem("bj_ledger_me"); if(l){ try{ l = JSON.parse(l); }catch(e){} if(CREW.indexOf(l) >= 0) return l; } }catch(e){} return ""; }
+  function isOpen(){ return sheet.classList.contains("on"); }
   function open(html){ pane.innerHTML = html; sheet.classList.add("on"); document.body.style.overflow = "hidden"; }
   function close(){ sheet.classList.remove("on"); document.body.style.overflow = ""; }
   sheet.addEventListener("click", function(e){ if(e.target === sheet) close(); });
   function head(t){ return '<div class="top"><h3>'+t+'</h3><button type="button" class="x" data-x aria-label="关闭">×</button></div>'; }
-  pane.addEventListener("click", function(e){ if(e.target.closest("[data-x]")) close(); });
-
-  /* 谁是卧底 */
-  var g = null;
   function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
-  function spyStart(){
-    var pr = PAIRS[Math.floor(Math.random()*PAIRS.length)]; if(Math.random()<.5) pr = [pr[1], pr[0]];
-    g = {order: shuffle(CREW.slice()), spy: Math.floor(Math.random()*CREW.length), pair: pr, i: 0};
-    spyHand();
+  function pick(){ var pr = PAIRS[Math.floor(Math.random()*PAIRS.length)]; return Math.random()<.5 ? [pr[1], pr[0]] : pr; }
+  function names(sel, key){ return '<div class="names">'+CREW.map(function(n){ return '<button type="button" data-'+key+'="'+n+'"'+(n===sel?' class="on"':'')+'>'+esc(n)+'</button>'; }).join("")+'</div>'; }
+
+  /* ---- 共享局 ---- */
+  function shared(){ return !!window.LEDGER; }
+  function current(){
+    var list = LEDGER.raw(), g = null;
+    list.forEach(function(e){ if(e.k === "spy" && e.g && (!g || (e.t||"") > (g.t||""))) g = e; });
+    if(!g) return null;
+    var votes = {}, revealed = false;
+    list.forEach(function(e){ if(e.g !== g.g) return; if(e.k === "spyv" && e.w && e.s){ var c = votes[e.w]; if(!c || (e.t||"") > (c.t||"")) votes[e.w] = e; } if(e.k === "spyr") revealed = true; });
+    return {g:g, votes:votes, revealed:revealed};
   }
-  function spyHand(){
-    open(head("谁是卧底")+'<div class="who">第 '+(g.i+1)+' / 6 位</div><div class="big">'+esc(g.order[g.i])+'</div><div class="mid">把手机给 <b>'+esc(g.order[g.i])+'</b>，别人别看</div>'+
-      '<div class="act"><button type="button" class="btn" data-a="show">我是本人，看词</button></div>');
+  function render(){
+    var who = me();
+    if(!who){ open(head("谁是卧底")+'<div class="mid">先说你是谁，这台手机只选一次</div>'+names("", "me")); return; }
+    var cur = current();
+    if(!cur){ open(head("谁是卧底")+'<div class="mid">每人在自己手机上看自己的词，不用传手机。谁开局都行，开了以后大家的页脚点「谁是卧底」就能看到。</div>'+
+      '<div class="act"><button type="button" class="btn" data-a="new">开一局</button><button type="button" class="btn sec" data-a="offline">没网，传手机玩</button></div><div class="who">我是 '+esc(who)+' · <a href="#" data-a="who">换人</a></div>'); return; }
+    var g = cur.g, isSpy = g.order[g.spy] === who, word = isSpy ? g.pair[1] : g.pair[0], n = Object.keys(cur.votes).length;
+    if(cur.revealed){
+      var tally = {}; Object.keys(cur.votes).forEach(function(w){ var s = cur.votes[w].s; tally[s] = (tally[s]||0) + 1; });
+      var tl = Object.keys(tally).sort(function(a,b){ return tally[b]-tally[a]; }).map(function(s){ return esc(s)+' '+tally[s]+' 票'; }).join('，');
+      open(head("谁是卧底")+'<div class="who">卧底是</div><div class="big">'+esc(g.order[g.spy])+'</div><div class="mid">平民的词 <b>'+esc(g.pair[0])+'</b>，卧底的词 <b>'+esc(g.pair[1])+'</b>'+(tl?'<br>投票：'+tl:'')+'</div>'+
+        '<div class="act"><button type="button" class="btn" data-a="new">再来一局</button><button type="button" class="btn sec" data-x>收工</button></div>'); return;
+    }
+    var mine = cur.votes[who] ? cur.votes[who].s : "";
+    open(head("谁是卧底")+'<div class="who">'+esc(who)+' 的词，别念出来</div><div class="big">'+esc(word)+'</div>'+
+      '<div class="mid">按 <b>'+g.order.map(esc).join(' → ')+'</b> 的顺序每人一句描述，不能说出词本身；一轮后在这里投你觉得的卧底</div>'+
+      names(mine, "v").replace('data-v="'+who+'"', 'data-v="'+who+'" disabled')+
+      '<div class="who">已投 '+n+' / 6'+(mine?'，你投了 '+esc(mine):'')+'</div>'+
+      '<div class="act"><button type="button" class="btn sec" data-a="reveal">揭晓卧底</button><button type="button" class="btn sec" data-a="new">重开一局</button></div><div class="who">我是 '+esc(who)+' · <a href="#" data-a="who">换人</a></div>');
   }
-  function spyShow(){
-    var w = g.i === g.spy ? g.pair[1] : g.pair[0];
-    open(head("谁是卧底")+'<div class="who">'+esc(g.order[g.i])+' 的词</div><div class="big">'+esc(w)+'</div><div class="mid">记住它，别念出来</div>'+
-      '<div class="act"><button type="button" class="btn" data-a="next">记住了，传给下一位</button></div>');
-  }
-  function spyNext(){
-    g.i++;
-    if(g.i < g.order.length){ spyHand(); return; }
-    open(head("谁是卧底")+'<div class="big">开始</div><div class="mid">按 <b>'+g.order.map(esc).join(' → ')+'</b> 的顺序，每人一句描述自己的词，不能说出词本身。<br>一轮后投票淘汰一人，被淘汰的是卧底则平民赢；卧底撑到剩 3 人就赢。</div>'+
-      '<div class="act"><button type="button" class="btn sec" data-a="reveal">揭晓卧底</button></div>');
-  }
-  function spyReveal(){
-    open(head("谁是卧底")+'<div class="who">卧底是</div><div class="big">'+esc(g.order[g.spy])+'</div><div class="mid">平民的词 <b>'+esc(g.pair[0])+'</b>，卧底的词 <b>'+esc(g.pair[1])+'</b></div>'+
-      '<div class="act"><button type="button" class="btn" data-a="spy">再来一局</button><button type="button" class="btn sec" data-x>收工</button></div>');
-  }
+  function add(e){ e.id = LEDGER.uid(); e.t = new Date().toISOString(); LEDGER.add(e); }
+  function newGame(){ add({k:"spy", g:Date.now().toString(36), order:shuffle(CREW.slice()), spy:Math.floor(Math.random()*CREW.length), pair:pick()}); render(); }
+  function vote(s){ var cur = current(); if(!cur || cur.revealed) return; add({k:"spyv", g:cur.g.g, w:me(), s:s}); render(); }
+  function reveal(){ var cur = current(); if(!cur) return; add({k:"spyr", g:cur.g.g}); render(); }
+  var seen = "";
+  window.addEventListener("ledger-sync", function(){
+    if(!shared()) return; var cur = current(); if(!cur) return;
+    if(isOpen()) render();
+    else if(cur.g.g !== seen && !cur.revealed && (Date.now() - Date.parse(cur.g.t)) < 6*3600*1000){ seen = cur.g.g; if(window.toast) toast("谁是卧底开了一局，点页脚「谁是卧底」看你的词"); }
+  });
+
+  /* ---- 没网：传手机 ---- */
+  var g = null;
+  function offStart(){ g = {order: shuffle(CREW.slice()), spy: Math.floor(Math.random()*CREW.length), pair: pick(), i: 0}; offHand(); }
+  function offHand(){ open(head("谁是卧底 · 传手机")+'<div class="who">第 '+(g.i+1)+' / 6 位</div><div class="big">'+esc(g.order[g.i])+'</div><div class="mid">把手机给 <b>'+esc(g.order[g.i])+'</b>，别人别看</div><div class="act"><button type="button" class="btn" data-a="show">我是本人，看词</button></div>'); }
+  function offShow(){ var w = g.i === g.spy ? g.pair[1] : g.pair[0]; open(head("谁是卧底 · 传手机")+'<div class="who">'+esc(g.order[g.i])+' 的词</div><div class="big">'+esc(w)+'</div><div class="mid">记住它，别念出来</div><div class="act"><button type="button" class="btn" data-a="next">记住了，传给下一位</button></div>'); }
+  function offNext(){ g.i++; if(g.i < g.order.length){ offHand(); return; }
+    open(head("谁是卧底 · 传手机")+'<div class="big">开始</div><div class="mid">按 <b>'+g.order.map(esc).join(' → ')+'</b> 的顺序每人一句描述，不能说出词本身；一轮后投票淘汰一人</div><div class="act"><button type="button" class="btn sec" data-a="offreveal">揭晓卧底</button></div>'); }
+  function offReveal(){ open(head("谁是卧底 · 传手机")+'<div class="who">卧底是</div><div class="big">'+esc(g.order[g.spy])+'</div><div class="mid">平民的词 <b>'+esc(g.pair[0])+'</b>，卧底的词 <b>'+esc(g.pair[1])+'</b></div><div class="act"><button type="button" class="btn" data-a="offline">再来一局</button><button type="button" class="btn sec" data-x>收工</button></div>'); }
 
   document.addEventListener("click", function(e){
-    var b = e.target.closest("[data-game]"); if(!b) return;
-    e.preventDefault();
-    if(b.getAttribute("data-game") === "spy") spyStart();
+    var b = e.target.closest("[data-game]"); if(!b) return; e.preventDefault();
+    if(shared()) render(); else offStart();
   });
   pane.addEventListener("click", function(e){
-    var a = e.target.closest("button[data-a]"); if(!a) return;
+    if(e.target.closest("[data-x]")){ close(); return; }
+    var m = e.target.closest("button[data-me]"); if(m){ try{ localStorage.setItem(VME, m.getAttribute("data-me")); }catch(x){} render(); return; }
+    var v = e.target.closest("button[data-v]"); if(v && !v.disabled){ vote(v.getAttribute("data-v")); return; }
+    var a = e.target.closest("[data-a]"); if(!a) return; e.preventDefault();
     var k = a.getAttribute("data-a");
-    if(k==="show") spyShow(); else if(k==="next") spyNext(); else if(k==="reveal") spyReveal(); else if(k==="spy") spyStart();
+    if(k==="new") newGame(); else if(k==="reveal") reveal(); else if(k==="who"){ open(head("谁是卧底")+'<div class="mid">你是谁？</div>'+names(me(), "me")); }
+    else if(k==="offline") offStart(); else if(k==="show") offShow(); else if(k==="next") offNext(); else if(k==="offreveal") offReveal();
   });
 })();
 </script>
