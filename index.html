@@ -168,17 +168,13 @@ a.wake{color:var(--blue);text-decoration:none;padding:9px 2px;margin:-9px -2px;b
 .tkt{padding:14px}.cost{padding:12px 14px 14px}.sched{padding:0 14px 6px;margin-bottom:10px}
 .sched>summary{display:flex;align-items:center;gap:8px;min-height:48px;padding:2px 0;cursor:pointer;font-size:var(--f-l);font-weight:600}
 .sched>summary .tsub{margin-left:auto;font-size:var(--f-xs);color:var(--ink3);font-weight:400}
-.tkt table,.cost table,.acct table{width:100%;border-collapse:collapse;font-size:var(--f-s)}
-.tkt th,.cost th,.acct th{text-align:left;font-size:var(--f-xs);color:var(--ink3);font-weight:400;padding:6px 8px 7px 0;border-bottom:1px solid var(--rule)}
-.tkt td,.cost td,.acct td{padding:8px 8px 8px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink2);font-variant-numeric:tabular-nums}
+.tkt table,.sched table,.cost table,.acct table{width:100%;border-collapse:collapse;font-size:var(--f-s)}
+.tkt th,.sched th,.cost th,.acct th{text-align:left;font-size:var(--f-xs);color:var(--ink3);font-weight:400;padding:6px 8px 7px 0;border-bottom:1px solid var(--rule)}
+.tkt td,.sched td,.cost td,.acct td{padding:8px 8px 8px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink2);font-variant-numeric:tabular-nums}
 td:last-child,th:last-child{padding-right:0}
 .tkt td.n,.tkt th.n,.cost td.n,.cost th.n,.acct td.n,.acct th.n{text-align:right;white-space:nowrap}
 .tkt td b,.cost td b,.acct td b{color:var(--ink);font-weight:400}
-.sched table{width:100%;border-collapse:collapse}
-.sched th{text-align:left;font-size:var(--f-xs);color:var(--ink3);font-weight:400;padding:6px 8px 7px 0;border-bottom:1px solid var(--rule)}
-.sched td{padding:9px 8px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top;font-variant-numeric:tabular-nums}
-.sched td:first-child{width:27%}.sched td:nth-child(3){width:36%}
-.sched tr.x td:first-child{color:var(--red)}
+.sched td:first-child{width:26%;color:var(--ink)}.sched td:nth-child(3){width:35%}.sched td:last-child{white-space:nowrap}.sched tr.x td:first-child{color:var(--red)}
 .tkt tr.tot td,.cost tr.tot td{border-bottom:none;border-top:2px solid var(--rule);color:var(--ink);font-weight:600}
 .tkt .d{font-size:var(--f-xs);color:var(--ink3);margin-left:3px;display:inline-block;white-space:nowrap;padding:0 4px;border-radius:3px}
 .tkt .d.pre{color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent)}
@@ -482,7 +478,7 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
         <tr><td>D2 可可托海</td><td><a class="wake" data-t="08:30" data-d="2">08:30</a></td><td>09:20 大堂集合<br>10:15 机场出发</td><td>17:30</td></tr>
         <tr><td>D3 布尔津</td><td><a class="wake" data-t="09:15" data-d="3">09:15</a></td><td>10:00 民宿门口集合<br>10:30 进景区</td><td>20:00</td></tr>
         <tr><td>D4 禾木</td><td><a class="wake" data-t="08:30" data-d="4">08:30</a></td><td>09:30 大堂集合<br>10:00 五彩滩</td><td>15:30 进村</td></tr>
-        <tr class="x"><td>D5 喀纳斯</td><td><a class="wake" data-t="06:40" data-d="5">06:40</a> 看日出<br>不看 <a class="wake" data-t="09:00" data-d="5">09:00</a></td><td>07:10 上观景台<br>10:30 民宿集合出村</td><td>19:00</td></tr>
+        <tr class="x"><td>D5 喀纳斯</td><td><a class="wake" data-t="06:40" data-d="5">06:40</a> 看日出<br><a class="wake" data-t="09:00" data-d="5">09:00</a> 不看</td><td>07:10 上观景台<br>10:30 民宿集合出村</td><td>19:00</td></tr>
         <tr><td>D6 克拉玛依</td><td><a class="wake" data-t="09:00" data-d="6">09:00</a></td><td>10:00 大堂集合出发</td><td>21:30</td></tr>
         <tr class="x"><td>D7 赛里木湖</td><td><a class="wake" data-t="08:15" data-d="7">08:15</a></td><td>09:00 大堂集合出发</td><td>20:00</td></tr>
         <tr><td>D8 伊宁 → 那拉提</td><td><a class="wake" data-t="09:00" data-d="8">09:00</a></td><td>10:00 大堂集合出发</td><td>20:30</td></tr>
