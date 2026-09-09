@@ -14,7 +14,7 @@
 /* ================================================================
    北疆十日 · 样式表（2026-09-09 重构版）
    规则：字号 12/13/15/16/22/30；字重 400/600；文字色 ink/ink2/ink3 + 蓝链接/红警示/绿完成。
-   补丁脚本只追加 JS，不再追加 CSS；记账/趣味两节保留原标记供各自脚本重跑。
+   样式只在这里维护，补丁脚本不碰 CSS。
    ================================================================ */
 :root{
   --bg:#F6F3ED; --card:#FFFFFF; --soft:#F1EDE5; --ink:#1E1B17; --ink2:#5F584F; --ink3:#70695D;
@@ -115,7 +115,6 @@ header .sub{font-size:var(--f-m);color:var(--ink2)}
 .btn[hidden]{display:none}
 .tag{display:inline-block;font-size:var(--f-xs);padding:2px 6px;border-radius:4px;white-space:nowrap}
 .tag.ok{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--green)}
-.tag.wait{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red)}
 .xl{display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 11px 0 8px;border-radius:999px;border:1px solid color-mix(in srgb,var(--xhs) 40%,transparent);background:color-mix(in srgb,var(--xhs) 7%,transparent);color:var(--xhs);font-size:var(--f-xs);line-height:1;text-decoration:none;white-space:nowrap}
 .xl i{display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--xhs);color:var(--dntext);font-style:normal;font-size:11px;line-height:14px;text-align:center}
 .mx{margin-top:8px}
@@ -257,11 +256,10 @@ dl.tips dd b{color:var(--ink)}
 /* 子卡片：总览 / 沿途 / 景区 / 吃 / 今日 */
 .tour{margin:12px 0 4px;border:1px solid var(--rule);border-radius:var(--r);background:var(--card)}
 .tour>summary{display:flex;align-items:center;gap:8px;padding:11px 12px;min-height:48px;cursor:pointer;font-size:var(--f-l);font-weight:600;color:var(--ink);-webkit-user-select:none;user-select:none;white-space:nowrap}
-.tour>summary .tsub{white-space:normal}
 .tour>summary:active{background:var(--soft)}
 .tour>summary::before{flex:none;font-size:var(--f-xs);font-weight:400;color:var(--ink2);background:var(--soft);border-radius:4px;padding:1px 6px;line-height:1.5}
-.tour.plan>summary::before{content:"总览"}.tour.road>summary::before{content:"沿途"}.tour.spot>summary::before{content:"景区"}.tour.food>summary::before{content:"吃"}.tour.sun>summary::before{content:"今日"}.tour.game>summary::before{content:"路上玩"}
-.tour>summary .tsub{margin-left:auto;flex:0 1 auto;max-width:55%;font-size:var(--f-xs);font-weight:400;color:var(--ink3);text-align:right;line-height:1.4}
+.tour.plan>summary::before{content:"总览"}.tour.road>summary::before{content:"沿途"}.tour.spot>summary::before{content:"景区"}.tour.food>summary::before{content:"吃"}
+.tour>summary .tsub{margin-left:auto;flex:0 1 auto;max-width:55%;font-size:var(--f-xs);font-weight:400;color:var(--ink3);text-align:right;line-height:1.4;white-space:normal}
 .tour.sun{border:0;background:transparent;margin:6px 0 0}
 .tour.sun>summary{min-height:40px;padding:6px 4px;font-size:var(--f-s);font-weight:400;color:var(--ink2)}
 .tour.sun>summary::before{display:none}
@@ -341,9 +339,6 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.chev,.toast,.pl,.tour>summary,.day>summary,.daychips,.chip,.vt,.fcard,.seg .pet{transition:none}}
 
 /* ==== 趣味：天气/光线/月亮 + 路上玩 ==== */
-.tour.game .tbody{padding:4px 12px 12px}
-.gbtns{display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
-.gbtns .btn{min-height:44px;padding:0 16px;font-size:var(--f-m)}
 .gsheet{position:fixed;inset:0;z-index:97;display:none;align-items:flex-end;background:rgba(0,0,0,.45)}
 .gsheet.on{display:flex}
 .gsheet .pane{width:100%;max-height:88vh;overflow:auto;background:var(--card);color:var(--ink);border-radius:18px 18px 0 0;padding:16px 18px calc(22px + env(safe-area-inset-bottom))}
@@ -558,6 +553,7 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 
 <script>
 "use strict";
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 /* ===== 高德深链 =====
    坐标为 GCJ-02，2026-09 经高德官方 POI 检索逐个核对。页面不含任何 API Key。 */
 var C = {
@@ -811,7 +807,6 @@ function xhsLink(kw){
   return '<a class="xl" href="https://www.xiaohongshu.com/search_result?keyword='+q+'&source=web_explore_feed" data-x="xhsdiscover://search/result?keyword='+q+'" data-kw="'+kw.replace(/"/g,"&quot;")+'" target="_blank" rel="noopener" aria-label="小红书搜「'+kw+'」"><i>书</i>小红书 · '+kw+'</a>';
 }
 
-var IMGD = {"00.jpg": [950, 632], "01.jpg": [950, 646], "02.jpg": [950, 712], "04.jpg": [950, 646], "07.jpg": [950, 534], "09.jpg": [950, 663], "10.jpg": [950, 631], "11.jpg": [950, 633], "12.jpg": [900, 599], "13.jpg": [950, 633], "14.jpg": [950, 712], "15.jpg": [950, 712], "16.jpg": [950, 712], "17.jpg": [950, 712], "18.jpg": [950, 636], "19.jpg": [950, 633]};
 /* ===== 数据 ===== */
 var TZ = "+08:00";
 
@@ -1268,7 +1263,6 @@ var TIPS = [
   var OPEN_D = TODAY_D || 1;
   var dh = "";
 var SUN = {"9/25": {"rise": "08:00", "riseAt": "乌鲁木齐", "set": "20:04", "setAt": "乌鲁木齐", "gold": "19:26", "blue": "20:33", "lunar": "八月十五", "moon": "满月", "moonrise": "18:52", "moonset": "06:11", "illum": 97, "fest": "中秋节"}, "9/26": {"rise": "08:01", "riseAt": "乌鲁木齐", "set": "19:53", "setAt": "可可托海", "gold": "19:13", "blue": "20:24", "lunar": "八月十六", "moon": "满月", "moonrise": "19:04", "moonset": "07:11", "illum": 100, "fest": ""}, "9/27": {"rise": "07:54", "riseAt": "可可托海", "set": "20:03", "setAt": "布尔津", "gold": "19:22", "blue": "20:34", "lunar": "八月十七", "moon": "亏凸月", "moonrise": "19:33", "moonset": null, "illum": 100, "fest": ""}, "9/28": {"rise": "08:07", "riseAt": "布尔津", "set": "19:58", "setAt": "禾木", "gold": "19:17", "blue": "20:30", "lunar": "八月十八", "moon": "亏凸月", "moonrise": "19:46", "moonset": "08:36", "illum": 98, "fest": ""}, "9/29": {"rise": "08:07", "riseAt": "禾木", "set": "19:57", "setAt": "贾登峪", "gold": "19:16", "blue": "20:29", "lunar": "八月十九", "moon": "亏凸月", "moonrise": "20:05", "moonset": "09:55", "illum": 93, "fest": ""}, "9/30": {"rise": "08:09", "riseAt": "贾登峪", "set": "20:05", "setAt": "克拉玛依", "gold": "19:26", "blue": "20:35", "lunar": "八月二十", "moon": "亏凸月", "moonrise": "20:49", "moonset": "11:16", "illum": 86, "fest": ""}, "10/1": {"rise": "08:19", "riseAt": "克拉玛依", "set": "20:20", "setAt": "清水河", "gold": "19:41", "blue": "20:48", "lunar": "八月廿一", "moon": "亏凸月", "moonrise": "21:45", "moonset": "12:49", "illum": 77, "fest": ""}, "10/2": {"rise": "08:35", "riseAt": "清水河", "set": "20:06", "setAt": "那拉提", "gold": "19:28", "blue": "20:34", "lunar": "八月廿二", "moon": "下弦月", "moonrise": "22:22", "moonset": "13:50", "illum": 67, "fest": ""}, "10/3": {"rise": "08:24", "riseAt": "那拉提", "set": "20:04", "setAt": "巴音布鲁克", "gold": "19:26", "blue": "20:32", "lunar": "八月廿三", "moon": "下弦月", "moonrise": "23:22", "moonset": "15:01", "illum": 55, "fest": ""}, "10/4": {"rise": "08:24", "riseAt": "巴音布鲁克", "set": "19:48", "setAt": "乌鲁木齐", "gold": "19:09", "blue": "20:16", "lunar": "八月廿四", "moon": "残月", "moonrise": "00:15", "moonset": "15:52", "illum": 43, "fest": ""}, "10/5": {"rise": "08:12", "riseAt": "乌鲁木齐", "set": "19:46", "setAt": "乌鲁木齐", "gold": "19:07", "blue": "20:14", "lunar": "八月廿五", "moon": "残月", "moonrise": "01:34", "moonset": "16:41", "illum": 32, "fest": ""}};
-var GAME_DAYS = {2:1,3:1,6:1,7:1,8:1,10:1};
 /* 天气：Open-Meteo 免 key，一次请求 13 个点、16 天；超出预报范围先给近五年同期均值 */
 var WXS = {"乌鲁木齐": [87.62, 43.79, 800], "可可托海": [89.78, 47.2, 1200], "布尔津": [86.87, 47.7, 480], "禾木": [87.43, 48.58, 1200], "喀纳斯": [87.03, 48.73, 1370], "魔鬼城": [85.72, 46.19, 350], "克拉玛依": [84.87, 45.59, 400], "赛里木湖": [81.18, 44.6, 2070], "伊宁": [81.32, 43.92, 650], "那拉提": [84.03, 43.3, 1800], "巴音布鲁克": [84.15, 43.03, 2450], "乔尔玛": [84.43, 43.57, 2500], "独山子": [84.83, 44.39, 400]};
 var WXN = {"乌鲁木齐":{"9/24":[11,20,33],"9/25":[11,20,27],"9/26":[10,20,20],"9/27":[10,20,13],"9/28":[9,20,7],"9/29":[9,19,13],"9/30":[8,19,27],"10/1":[7,17,40],"10/2":[6,15,27],"10/3":[5,15,13],"10/4":[6,16,0],"10/5":[6,16,7],"10/6":[6,16,13]},"可可托海":{"9/24":[4,15,40],"9/25":[4,14,40],"9/26":[3,14,33],"9/27":[2,13,40],"9/28":[1,12,33],"9/29":[0,12,40],"9/30":[0,11,47],"10/1":[-1,10,53],"10/2":[-1,9,33],"10/3":[-1,9,27],"10/4":[-1,10,27],"10/5":[-1,11,33],"10/6":[-2,11,20]},"布尔津":{"9/24":[10,18,27],"9/25":[9,17,20],"9/26":[8,16,20],"9/27":[8,16,13],"9/28":[7,16,13],"9/29":[6,16,20],"9/30":[6,14,40],"10/1":[5,13,33],"10/2":[5,12,20],"10/3":[4,12,13],"10/4":[4,13,13],"10/5":[4,13,20],"10/6":[4,13,7]},"禾木":{"9/24":[5,14,33],"9/25":[4,14,27],"9/26":[3,13,27],"9/27":[2,11,33],"9/28":[2,11,47],"9/29":[1,9,53],"9/30":[0,9,60],"10/1":[-1,7,53],"10/2":[-2,7,47],"10/3":[-3,7,40],"10/4":[-3,7,33],"10/5":[-4,8,27],"10/6":[-4,8,20]},"喀纳斯":{"9/24":[4,13,53],"9/25":[3,12,40],"9/26":[2,11,33],"9/27":[2,10,33],"9/28":[1,9,47],"9/29":[1,8,47],"9/30":[0,7,53],"10/1":[0,6,47],"10/2":[-1,6,40],"10/3":[-1,6,33],"10/4":[-1,7,33],"10/5":[-2,7,33],"10/6":[-2,7,33]},"魔鬼城":{"9/24":[12,22,27],"9/25":[10,21,27],"9/26":[10,20,13],"9/27":[10,20,20],"9/28":[9,20,13],"9/29":[9,19,20],"9/30":[8,18,20],"10/1":[8,17,27],"10/2":[6,16,13],"10/3":[6,16,7],"10/4":[5,16,0],"10/5":[6,16,7],"10/6":[5,16,7]},"克拉玛依":{"9/24":[13,22,13],"9/25":[13,22,13],"9/26":[12,22,7],"9/27":[12,22,7],"9/28":[11,21,7],"9/29":[11,20,13],"9/30":[10,19,20],"10/1":[9,17,27],"10/2":[8,16,20],"10/3":[8,16,20],"10/4":[8,16,7],"10/5":[8,16,7],"10/6":[7,16,0]},"赛里木湖":{"9/24":[5,11,40],"9/25":[4,12,27],"9/26":[4,12,20],"9/27":[4,12,20],"9/28":[4,11,20],"9/29":[3,9,27],"9/30":[2,8,33],"10/1":[1,7,40],"10/2":[0,6,40],"10/3":[0,6,40],"10/4":[1,7,27],"10/5":[1,8,20],"10/6":[1,8,20]},"伊宁":{"9/24":[12,24,13],"9/25":[11,24,13],"9/26":[11,24,13],"9/27":[11,24,20],"9/28":[10,24,13],"9/29":[10,22,13],"9/30":[9,22,13],"10/1":[8,20,20],"10/2":[8,19,20],"10/3":[7,19,20],"10/4":[8,20,13],"10/5":[7,21,13],"10/6":[7,20,7]},"那拉提":{"9/24":[5,14,80],"9/25":[5,15,53],"9/26":[5,16,27],"9/27":[5,15,20],"9/28":[4,15,20],"9/29":[4,14,27],"9/30":[4,14,47],"10/1":[3,12,53],"10/2":[2,12,53],"10/3":[1,11,40],"10/4":[1,11,27],"10/5":[1,12,20],"10/6":[1,12,13]},"巴音布鲁克":{"9/24":[1,11,53],"9/25":[0,11,33],"9/26":[0,12,13],"9/27":[0,11,20],"9/28":[0,11,20],"9/29":[0,11,33],"9/30":[0,11,40],"10/1":[-1,9,47],"10/2":[-2,8,33],"10/3":[-2,7,40],"10/4":[-2,7,27],"10/5":[-2,8,20],"10/6":[-2,8,7]},"乔尔玛":{"9/24":[0,9,73],"9/25":[-1,9,47],"9/26":[-2,10,33],"9/27":[-2,9,33],"9/28":[-3,9,33],"9/29":[-2,9,33],"9/30":[-2,9,53],"10/1":[-3,7,60],"10/2":[-6,6,60],"10/3":[-7,5,53],"10/4":[-7,5,40],"10/5":[-7,5,20],"10/6":[-7,5,13]},"独山子":{"9/24":[13,22,27],"9/25":[13,22,33],"9/26":[12,22,20],"9/27":[12,21,20],"9/28":[11,21,20],"9/29":[10,20,27],"9/30":[9,19,40],"10/1":[8,17,47],"10/2":[7,16,33],"10/3":[7,16,13],"10/4":[7,17,0],"10/5":[7,17,7],"10/6":[7,16,13]}};
@@ -1332,13 +1326,6 @@ function funBlock(d){
     wxRow(d)+
     '<div class="frow"><b>光线</b><span>'+s.riseAt+' '+s.rise+' 日出；'+s.setAt+' '+s.set+' 日落，黄金时刻 '+s.gold+' 起，蓝调到 '+s.blue+'。</span></div>'+
     '<div class="frow"><b>月亮</b><span>'+s.lunar+' '+s.moon+(s.fest?'（'+s.fest+'）':'')+'。'+moonTip(s)+'</span></div>'+
-    '</div></details>';
-}
-function gameBlock(d){
-  if(!GAME_DAYS[d.d]) return "";
-  return '<details class="tour game"><summary>车上不无聊<span class="tsub">谁是卧底</span>'+CHEV+'</summary><div class="tbody">'+
-    '<div class="frow"><span>长途日。副驾负责发牌，手机传一圈，每人只看自己的词，然后轮流描述、投票。</span></div>'+
-    '<div class="gbtns"><button type="button" class="btn" data-game="spy">开一局</button></div>'+
     '</div></details>';
 }
   function renderTour(t){
