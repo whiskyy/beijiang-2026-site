@@ -1696,7 +1696,7 @@ var SEED = [
   }
   function emit(){ try{ window.dispatchEvent(new CustomEvent("ledger-sync")); }catch(e){} }
   window.LEDGER = {
-    raw: rawAll, uid: uid,
+    raw: rawAll, uid: uid, sync: sync,
     add: function(e){ queue.push(e); save(LSQ, queue); render(); emit(); sync(); },
     remove: function(id){
       var qi = -1; queue.forEach(function(x,i){ if(x.id === id) qi = i; });
@@ -1887,8 +1887,11 @@ var SEED = [
   var sheet = document.getElementById("gsheet"), pane = document.getElementById("gpane"), VME = "bj_vote_me";
   function me(){ try{ var m = localStorage.getItem(VME); if(m && CREW.indexOf(m) >= 0) return m; var l = localStorage.getItem("bj_ledger_me"); if(l){ try{ l = JSON.parse(l); }catch(e){} if(CREW.indexOf(l) >= 0) return l; } }catch(e){} return ""; }
   function isOpen(){ return sheet.classList.contains("on"); }
-  function open(html){ pane.innerHTML = html; sheet.classList.add("on"); document.body.style.overflow = "hidden"; }
-  function close(){ sheet.classList.remove("on"); document.body.style.overflow = ""; }
+  /* 弹层开着时每 4 秒拉一次云端，六台手机的局、票、揭晓才跟得上；关了就停 */
+  var poll = null;
+  function open(html){ pane.innerHTML = html; sheet.classList.add("on"); document.body.style.overflow = "hidden";
+    if(!poll && window.LEDGER && LEDGER.sync) poll = setInterval(function(){ if(!document.hidden) LEDGER.sync(); }, 4000); }
+  function close(){ sheet.classList.remove("on"); document.body.style.overflow = ""; if(poll){ clearInterval(poll); poll = null; } }
   sheet.addEventListener("click", function(e){ if(e.target === sheet) close(); });
   function head(t){ return '<div class="top"><h3>'+t+'</h3><button type="button" class="x" data-x aria-label="关闭">×</button></div>'; }
   function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
