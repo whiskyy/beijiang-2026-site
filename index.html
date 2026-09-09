@@ -1909,19 +1909,24 @@ var SEED = [
     return "";
   }
   function localVotes(){ try{ return JSON.parse(localStorage.getItem(VLS) || "[]"); }catch(e){ return []; } }
-  /* 结果：{餐次key: {人: 店名}} */
+  /* 结果：{餐次key: {人: {店名:1}}}，每人可多选；兼容旧对象（v 为店名字符串 = 投这家） */
   function votes(){
     var list = window.LEDGER ? LEDGER.raw().filter(function(e){ return e.k === "vote" && e.i && e.w; }) : localVotes();
     var m = {};
-    list.forEach(function(e){ var b = m[e.i] || (m[e.i] = {}); var cur = b[e.w]; if(!cur || (e.t||"") > (cur.t||"")) b[e.w] = e; });
+    list.forEach(function(e){
+      var shop = (typeof e.v === "string") ? e.v : e.s, on = (typeof e.v === "string") ? !!e.v : e.v === 1;
+      if(!shop) return;
+      var kk = e.i + "" + e.w + "" + shop, cur = m[kk];
+      if(!cur || (e.t||"") > (cur.t||"")) m[kk] = {i:e.i, w:e.w, s:shop, on:on, t:e.t};
+    });
     var out = {};
-    Object.keys(m).forEach(function(i){ out[i] = {}; Object.keys(m[i]).forEach(function(w){ var v = m[i][w].v; if(typeof v === "string" && v) out[i][w] = v; }); });
+    Object.keys(m).forEach(function(kk){ var e = m[kk]; if(!e.on) return; var b = out[e.i] || (out[e.i] = {}); (b[e.w] = b[e.w] || {})[e.s] = 1; });
     return out;
   }
   function cast(key, shop){
     var who = me(); if(!who){ pending = [key, shop]; openSheet(); return; }
-    var cur = (votes()[key]||{})[who]; if(cur === shop) shop = "";
-    var e = {id: (window.LEDGER ? LEDGER.uid() : Date.now().toString(36)), k:"vote", i:key, w:who, v:shop, t:new Date().toISOString()};
+    var on = !((votes()[key]||{})[who]||{})[shop];
+    var e = {id: (window.LEDGER ? LEDGER.uid() : Date.now().toString(36)), k:"vote", i:key, w:who, s:shop, v:on?1:0, t:new Date().toISOString()};
     if(window.LEDGER){ LEDGER.add(e); return; }
     var l = localVotes(); l.push(e); try{ localStorage.setItem(VLS, JSON.stringify(l)); }catch(x){}
     render();
@@ -1930,10 +1935,10 @@ var SEED = [
     var all = votes(), who = me();
     document.querySelectorAll(".mo li[data-vm]").forEach(function(li){
       var key = li.getAttribute("data-vm"), shop = li.getAttribute("data-vo"), v = all[key] || {};
-      var n = 0; Object.keys(v).forEach(function(w){ if(v[w] === shop) n++; });
+      var n = 0; Object.keys(v).forEach(function(w){ if(v[w][shop]) n++; });
       var b = li.querySelector(".vt");
       if(!b){ b = document.createElement("button"); b.type = "button"; b.className = "vt"; b.setAttribute("aria-label", "投这家"); li.appendChild(b); }
-      var mine = v[who] === shop;
+      var mine = !!(v[who] && v[who][shop]);
       b.className = "vt" + (mine ? " on" : ""); b.innerHTML = (mine ? "已投" : "投") + (n ? "<b>" + n + "</b>" : "");
     });
     /* 每顿饭下面一行汇总 */
@@ -1941,11 +1946,11 @@ var SEED = [
     document.querySelectorAll(".mo li[data-vm]").forEach(function(li){
       var key = li.getAttribute("data-vm"); if(seen[key]) return; seen[key] = 1;
       var ul = li.parentNode, v = all[key] || {}, by = {};
-      Object.keys(v).forEach(function(w){ (by[v[w]] = by[v[w]] || []).push(w); });
+      Object.keys(v).forEach(function(w){ Object.keys(v[w]).forEach(function(sh){ (by[sh] = by[sh] || []).push(w); }); });
       var sum = ul.nextElementSibling && ul.nextElementSibling.classList.contains("vsum") ? ul.nextElementSibling : null;
       if(!sum){ sum = document.createElement("div"); sum.className = "vsum"; ul.parentNode.insertBefore(sum, ul.nextSibling); }
       var shops = Object.keys(by).sort(function(a,b){ return by[b].length - by[a].length; });
-      sum.innerHTML = (shops.length ? shops.map(function(sh){ return '<b>'+sh+'</b> '+by[sh].join("、"); }).join("　") : '大家投一家，一人一票，再点一下撤回') +
+      sum.innerHTML = (shops.length ? shops.map(function(sh){ return '<b>'+sh+'</b> '+by[sh].join("、"); }).join("　") : '想吃的都可以投，再点一下撤回') +
         '<a class="vme">'+(who ? '我是'+who : '我是谁？')+'</a>';
     });
   }
