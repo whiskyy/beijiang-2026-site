@@ -1306,7 +1306,8 @@ var TIPS = [
     }catch(e){}
     return 0;
   })();
-  var OPEN_D = TODAY_D || 1;
+  /* 刷新后保持刚才打开的那天（存 sessionStorage），否则默认开今天/第一天；"0" = 全收起 */
+  var OPEN = {}; OPEN[TODAY_D || 1] = 1; try{ var so = sessionStorage.getItem("bj_open_day"); if(so !== null){ OPEN = {}; so.split(",").forEach(function(v){ if(v) OPEN[+v] = 1; }); } }catch(e){}
   var dh = "";
 var SUN = {"9/25": {"rise": "08:00", "riseAt": "乌鲁木齐", "set": "20:04", "setAt": "乌鲁木齐", "gold": "19:26", "blue": "20:33", "lunar": "八月十五", "moon": "满月", "moonrise": "18:52", "moonset": "06:11", "illum": 97, "fest": "中秋节"}, "9/26": {"rise": "08:01", "riseAt": "乌鲁木齐", "set": "19:53", "setAt": "可可托海", "gold": "19:13", "blue": "20:24", "lunar": "八月十六", "moon": "满月", "moonrise": "19:04", "moonset": "07:11", "illum": 100, "fest": ""}, "9/27": {"rise": "07:54", "riseAt": "可可托海", "set": "20:03", "setAt": "布尔津", "gold": "19:22", "blue": "20:34", "lunar": "八月十七", "moon": "亏凸月", "moonrise": "19:33", "moonset": null, "illum": 100, "fest": ""}, "9/28": {"rise": "08:07", "riseAt": "布尔津", "set": "19:58", "setAt": "禾木", "gold": "19:17", "blue": "20:30", "lunar": "八月十八", "moon": "亏凸月", "moonrise": "19:46", "moonset": "08:36", "illum": 98, "fest": ""}, "9/29": {"rise": "08:07", "riseAt": "禾木", "set": "19:57", "setAt": "贾登峪", "gold": "19:16", "blue": "20:29", "lunar": "八月十九", "moon": "亏凸月", "moonrise": "20:05", "moonset": "09:55", "illum": 93, "fest": ""}, "9/30": {"rise": "08:09", "riseAt": "贾登峪", "set": "20:05", "setAt": "克拉玛依", "gold": "19:26", "blue": "20:35", "lunar": "八月二十", "moon": "亏凸月", "moonrise": "20:49", "moonset": "11:16", "illum": 86, "fest": ""}, "10/1": {"rise": "08:19", "riseAt": "克拉玛依", "set": "20:20", "setAt": "清水河", "gold": "19:41", "blue": "20:48", "lunar": "八月廿一", "moon": "亏凸月", "moonrise": "21:45", "moonset": "12:49", "illum": 77, "fest": ""}, "10/2": {"rise": "08:35", "riseAt": "清水河", "set": "20:06", "setAt": "那拉提", "gold": "19:28", "blue": "20:34", "lunar": "八月廿二", "moon": "下弦月", "moonrise": "22:22", "moonset": "13:50", "illum": 67, "fest": ""}, "10/3": {"rise": "08:24", "riseAt": "那拉提", "set": "20:04", "setAt": "巴音布鲁克", "gold": "19:26", "blue": "20:32", "lunar": "八月廿三", "moon": "下弦月", "moonrise": "23:22", "moonset": "15:01", "illum": 55, "fest": ""}, "10/4": {"rise": "08:24", "riseAt": "巴音布鲁克", "set": "19:48", "setAt": "乌鲁木齐", "gold": "19:09", "blue": "20:16", "lunar": "八月廿四", "moon": "残月", "moonrise": "00:15", "moonset": "15:52", "illum": 43, "fest": ""}, "10/5": {"rise": "08:12", "riseAt": "乌鲁木齐", "set": "19:46", "setAt": "乌鲁木齐", "gold": "19:07", "blue": "20:14", "lunar": "八月廿五", "moon": "残月", "moonrise": "01:34", "moonset": "16:41", "illum": 32, "fest": ""}};
 /* 天气：Open-Meteo 免 key，一次请求 13 个点、16 天；超出预报范围先给近五年同期均值 */
@@ -1415,7 +1416,7 @@ function funBlock(d){
       var flag = x.bk ? '<span class="bkflag">'+(x.bk===1?'需提前订':x.bk)+'</span>' : "";
       return '<div class="tm mono">'+(x.t||"")+'</div><div class="ct'+cls+'">'+flag+(x.nav?linkify(x.c, x.nav, "navi"):x.c)+'</div>';
     }).join("");
-    dh += '<details class="card day" id="day-'+d.d+'"'+(d.d===OPEN_D?" open":"")+'><summary>'+
+    dh += '<details class="card day" id="day-'+d.d+'"'+(OPEN[d.d]?" open":"")+'><summary>'+
       '<div class="dn" style="background:'+col+'">D'+d.d+'</div>'+
       '<div class="dti"><div class="r">'+d.r+'</div><div class="m">'+d.date+' '+d.wk+' · '+d.m+'</div></div>'+
       '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
@@ -1437,18 +1438,39 @@ function funBlock(d){
     }
     /* 只在行程分区滚到屏幕中间时露出索引 */
     try{ new IntersectionObserver(function(en){ chipsEl.classList.toggle("show", en[0].isIntersecting); }, {rootMargin:"-40% 0px -40% 0px"}).observe(document.getElementById("days")); }catch(e){ chipsEl.classList.add("show"); }
-    document.querySelectorAll("details.day").forEach(function(x){ x.addEventListener("toggle", syncChips); });
+    function rememberOpen(){ syncChips(); var ids = Array.prototype.map.call(document.querySelectorAll("details.day[open]"), function(o){ return o.id.slice(4); }); try{ sessionStorage.setItem("bj_open_day", ids.join(",")); }catch(e){} }
+    document.querySelectorAll("details.day").forEach(function(x){ x.addEventListener("toggle", rememberOpen); });
     chipsEl.addEventListener("click", function(e){
       var c = e.target.closest("a.chip"); if(!c) return; e.preventDefault();
       var id = c.getAttribute("href").slice(1);
       document.querySelectorAll("details.day").forEach(function(x){ x.open = (x.id===id); });
-      try{ history.replaceState(null, "", "#"+id); }catch(err){}
-      openHashDay();
+      var el = document.getElementById(id); if(el) el.scrollIntoView({block:"start"});
     });
     syncChips();
   }
-  function openHashDay(){ var m = /^#day-(\d+)$/.exec(location.hash); if(m){ var el = document.getElementById("day-"+m[1]); if(el){ el.open = true; el.scrollIntoView({block:"start"}); } } }
-  window.addEventListener("hashchange", openHashDay); openHashDay();
+  /* 只有「今天」按钮会带 #day-N；用完就把 hash 清掉，不然刷新时浏览器恢复位置和锚点滚动会打架（用户说"刷新后位置乱跳"） */
+  function openHashDay(){ var m = /^#day-(\d+)$/.exec(location.hash); if(m){ var el = document.getElementById("day-"+m[1]); if(el){ el.open = true; el.scrollIntoView({block:"start"}); } try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} } }
+  window.addEventListener("hashchange", openHashDay);
+  /* 刷新后回到刷新前看的位置：记住屏幕顶上那张日卡和它的偏移，而不是绝对像素（卡片内容展开状态不同，像素会漂） */
+  try{ history.scrollRestoration = "manual"; }catch(e){}
+  function saveAnchor(){
+    var days = document.querySelectorAll("details.day"), a = null;
+    for(var i = 0; i < days.length && !a; i++){ var r = days[i].getBoundingClientRect(); if(r.bottom <= 60) continue;
+      a = {id:days[i].id, idx:-1, top:Math.round(r.top)};
+      var kids = days[i].querySelectorAll(".dbody > *");
+      for(var k = 0; k < kids.length; k++){ var kr = kids[k].getBoundingClientRect(); if(kr.bottom > 60){ a.idx = k; a.top = Math.round(kr.top); break; } } }
+    /* 顺便记住每天里展开了哪些子卡片 */
+    var tours = [];
+    days.forEach(function(d){ if(!d.open) return; d.querySelectorAll(".dbody > details").forEach(function(t, j){ if(t.open) tours.push(d.id.slice(4)+":"+j); }); });
+    try{ sessionStorage.setItem("bj_anchor", a ? JSON.stringify(a) : ""); sessionStorage.setItem("bj_open_tours", tours.join(",")); }catch(e){}
+  }
+  window.addEventListener("pagehide", saveAnchor); window.addEventListener("beforeunload", saveAnchor);
+  if(location.hash){ openHashDay(); }
+  else { try{
+    (sessionStorage.getItem("bj_open_tours") || "").split(",").forEach(function(v){ var p = v.split(":"); var d = p[0] && document.getElementById("day-"+p[0]); var t = d && d.querySelectorAll(".dbody > details")[+p[1]]; if(t) t.open = true; });
+    var an = JSON.parse(sessionStorage.getItem("bj_anchor") || "null"); var ael = an && document.getElementById(an.id);
+    if(ael && an.idx >= 0) ael = ael.querySelectorAll(".dbody > *")[an.idx] || ael;
+    if(ael){ var h = document.documentElement; h.style.scrollBehavior = "auto"; window.scrollTo(0, ael.getBoundingClientRect().top + window.scrollY - an.top); h.style.scrollBehavior = ""; } }catch(e){} }
   if(TODAY_D){
     var tl = document.getElementById("todayLink"); tl.hidden = false; tl.href = "#day-"+TODAY_D; tl.textContent = "今天 D"+TODAY_D+" 的行程";
     var fb = document.createElement("a"); fb.className = "todaybtn"; fb.href = "#day-"+TODAY_D; fb.textContent = "今天 D"+TODAY_D; document.body.appendChild(fb);
