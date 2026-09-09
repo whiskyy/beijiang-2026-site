@@ -1429,7 +1429,7 @@ function funBlock(d){
       '<div class="dn" style="background:'+col+'">D'+d.d+'</div>'+
       '<div class="dti"><div class="r">'+d.r+'</div><div class="m">'+d.date+' '+d.wk+' · '+d.m+'</div></div>'+
       '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
-      '</summary><div class="dbody">'+(d.d===1 ? '<div class="minimap">'+toolRow(d.d, d.rt, d)+'</div>' : miniMap(d.d, col, d.rt, d))+
+      '</summary><div class="dbody">'+(d.d===1 || d.d===11 ? (toolRow(d.d, d.rt, d) ? '<div class="minimap">'+toolRow(d.d, d.rt, d)+'</div>' : '') : miniMap(d.d, col, d.rt, d))+
       funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div></div></details>'+
       tours.map(renderTour).join('')+
       mealBlock(d)+
