@@ -1177,17 +1177,17 @@ var TIPS = [
     function dodge(p){ var best = null, bd = 1e9; segPts.forEach(function(q){ var d = Math.hypot(q[0]-p[0], q[1]-p[1]); if(d < bd){ bd = d; best = q; } });
       if(!best || bd > 30*z) return p; var a = best[2] || "E";
       return [best[0] + (a.indexOf("E") >= 0 ? -30 : 30)*z, best[1] + (a.indexOf("N") >= 0 ? 30 : -30)*z]; }
-    var foodNames = {}, food = {}, order = [];
+    var foodNames = {}, food = {}, order = [], raw = []; /* raw = 未错开的原始位置，给视口算包围盒用 */
     (d.meals||[]).forEach(function(m){ (m.o||[]).forEach(function(o){
       var c = C[o[0]]; if(!c) return; foodNames[o[0]] = 1;
-      var p = projXY(c), key = m.t+"|"+Math.round(p[0]/(40*z))+","+Math.round(p[1]/(40*z));
+      var p = projXY(c), key = m.t+"|"+Math.round(p[0]/(40*z))+","+Math.round(p[1]/(40*z)); raw.push([p[0], p[1]]);
       if(!food[key]){ var dp = dodge(p); food[key] = {x:dp[0], y:dp[1], names:[], key:o[0], t:m.t}; order.push(key); }
       food[key].names.push(o[0]);
     }); });
     var seen = {}, sights = [];
     function addSight(key){
       if(!key || seen[key] || foodNames[key] || key === d.stayNav) return; var c = C[key]; if(!c) return;
-      var p = projXY(c); if(nearSeg(p, 26*z)) return; seen[key] = 1; sights.push({x:p[0], y:p[1], n:key});
+      var p = projXY(c); if(nearSeg(p, 26*z)) return; seen[key] = 1; sights.push({x:p[0], y:p[1], n:key}); raw.push([p[0], p[1]]);
     }
     (d.it||[]).forEach(function(x){ if(x.nav) addSight(x.nav); });
     (TOURS[dn]||[]).forEach(function(t){ (t.steps||[]).forEach(function(st){ if(st[2]) addSight(st[2]); }); });
@@ -1219,7 +1219,7 @@ var TIPS = [
       out += '<a class="mk food"'+navAttrs(f.key, "view")+'><title>'+f.names.join("、")+'</title><circle class="hit" cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="'+(34*z).toFixed(1)+'"/><circle class="dot" cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="'+(18*z).toFixed(1)+'"/><text x="'+f.x.toFixed(1)+'" y="'+f.y.toFixed(1)+'">'+f.t+'</text></a>';
     });
     var lg = '<div class="mklg">'+'<span class="z">点地图放大</span>'+(order.length?'<span class="f"><i></i>早 / 午 / 晚 是那顿饭的餐馆，点一下导航</span>':'')+(sights.length?'<span class="s"><i></i>沿途看点 '+sights.length+' 处</span>':'')+'</div>';
-    return {svg:out, legend:lg, pts:all.map(function(p){ return [p.x, p.y]; })};
+    return {svg:out, legend:lg, pts:raw};
   }
   /* 出片文案：把坐标表里能认出的地名都变成链接（长名优先，已在链接里的不重复） */
   var NAMES = null;
@@ -1246,12 +1246,13 @@ var TIPS = [
   function miniMap(dn, col, rt, d, zoomVb){
     var names = SEGS[dn] || []; var mine = MAP.routes[String(dn)], W = MAP.w, H = MAP.h;
     var others = Object.keys(MAP.routes).filter(function(k){return k!==String(dn) && k!=="alt"}).map(function(k){return '<path d="'+MAP.routes[k]+'"/>'}).join("");
-    /* 视口：套住当天的站点和吃/景标记，最多放大 2.5 倍，比例不变 */
+    /* 视口：套住当天的站点和吃/景标记，四周留 22% 空白，最多放大 6 倍（底图会软，线和标记是矢量的），比例不变 */
     var pts = names.map(function(n){ return MAP.nodes[n]; }).filter(Boolean).concat(mapMarks(dn, 1).pts), vb = [0, 0, W, H];
     if(pts.length){
       var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
       pts.forEach(function(p){ x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); });
-      var w = Math.max(x1 - x0 + 240, (y1 - y0 + 200) * W / H, W / 2.5); if(w > W) w = W; var h = w * H / W;
+      var px = Math.max(60, (x1 - x0) * 0.22), py = Math.max(50, (y1 - y0) * 0.22);
+      var w = Math.max(x1 - x0 + 2 * px, (y1 - y0 + 2 * py) * W / H, W / 6); if(w > W) w = W; var h = w * H / W;
       vb = [Math.min(Math.max((x0 + x1) / 2 - w / 2, 0), W - w), Math.min(Math.max((y0 + y1) / 2 - h / 2, 0), H - h), w, h];
     }
     if(zoomVb) vb = zoomVb;
@@ -1278,7 +1279,7 @@ var TIPS = [
     if(!box.getAttribute("data-z")){
       var svg = w.querySelector("svg"), cur = svg.viewBox.baseVal, r = w.getBoundingClientRect();
       var x = cur.x + (cx - r.left) / r.width * cur.width, y = cur.y + (cy - r.top) / r.height * cur.height;
-      var nw = cur.width / 3, nh = cur.height / 3;
+      var nw = Math.max(cur.width / 3, MAP.w / 12), nh = nw * MAP.h / MAP.w;
       vb = [Math.min(Math.max(x - nw/2, 0), MAP.w - nw), Math.min(Math.max(y - nh/2, 0), MAP.h - nh), nw, nh];
     }
     var tmp = document.createElement("div"); tmp.innerHTML = miniMap(dn, "var(--d"+Math.min(dn,10)+")", d.rt, d, vb);
