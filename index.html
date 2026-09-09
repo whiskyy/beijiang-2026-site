@@ -347,11 +347,12 @@ a.opt:active{background:var(--soft)}
 a.opt .on{color:var(--blue)}
 .opt .os{display:block;font-size:12.5px;color:var(--ink3);line-height:1.45}
 /* @@VOTE-CSS */
-.mo li[data-vm]{display:flex;align-items:stretch;gap:6px}.mo li[data-vm] .opt{flex:1 1 auto;min-width:0}
-.vt{flex:0 0 auto;align-self:center;min-width:44px;min-height:40px;padding:0 10px;border-radius:20px;border:1px solid var(--rule);background:var(--soft);color:var(--ink3);font:inherit;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.mo li[data-vm]{display:flex;align-items:flex-start;gap:8px}.mo li[data-vm] .opt{flex:1 1 auto;min-width:0}
+.vt{flex:0 0 auto;margin-top:8px;min-width:52px;height:30px;padding:0 10px;border-radius:15px;border:1.5px solid var(--rule);background:transparent;color:var(--ink3);font:inherit;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;justify-content:center;gap:3px;position:relative}
+.vt::before{content:"";position:absolute;inset:-7px}
 .vt b{font-weight:700;color:var(--ink2)}.vt.on{background:var(--green);border-color:var(--green);color:#fff}.vt.on b{color:#fff}
-.vsum{font-size:11.5px;color:var(--ink3);line-height:1.5;margin:2px 0 4px}.vsum b{color:var(--ink2);font-weight:600}
-.vsum .vme{color:var(--blue);cursor:pointer;margin-left:6px}
+.opt .vwho{display:block;font-size:11.5px;color:var(--green);line-height:1.4;margin-top:2px}
+.vfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--ink3);margin-top:6px}.vfoot .vme{color:var(--blue);cursor:pointer;margin-left:6px;min-height:32px;display:inline-flex;align-items:center}
 #vsheet{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--card);border-radius:14px 14px 0 0;box-shadow:0 -6px 30px rgba(0,0,0,.18);padding:14px 16px calc(14px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s}
 #vsheet.show{transform:none}#vsheet h4{margin:0 0 10px;font-size:14px}#vsheet .vg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 #vsheet .vg button{min-height:44px;border-radius:10px;border:1px solid var(--rule);background:var(--soft);color:var(--ink);font:inherit;font-size:14px;font-weight:600}
@@ -1934,24 +1935,21 @@ var SEED = [
   function render(){
     var all = votes(), who = me();
     document.querySelectorAll(".mo li[data-vm]").forEach(function(li){
-      var key = li.getAttribute("data-vm"), shop = li.getAttribute("data-vo"), v = all[key] || {};
-      var n = 0; Object.keys(v).forEach(function(w){ if(v[w][shop]) n++; });
+      var key = li.getAttribute("data-vm"), shop = li.getAttribute("data-vo"), v = all[key] || {}, names = [];
+      Object.keys(v).forEach(function(w){ if(v[w][shop]) names.push(w); });
       var b = li.querySelector(".vt");
       if(!b){ b = document.createElement("button"); b.type = "button"; b.className = "vt"; b.setAttribute("aria-label", "投这家"); li.appendChild(b); }
       var mine = !!(v[who] && v[who][shop]);
-      b.className = "vt" + (mine ? " on" : ""); b.innerHTML = (mine ? "已投" : "投") + (n ? "<b>" + n + "</b>" : "");
+      b.className = "vt" + (mine ? " on" : ""); b.innerHTML = (mine ? "已投" : "投") + (names.length ? "<b>" + names.length + "</b>" : "");
+      var opt = li.querySelector(".opt"), wh = opt.querySelector(".vwho");
+      if(names.length){ if(!wh){ wh = document.createElement("span"); wh.className = "vwho"; opt.appendChild(wh); } wh.textContent = names.join("、") + " 想吃"; }
+      else if(wh){ wh.remove(); }
     });
-    /* 每顿饭下面一行汇总 */
-    var seen = {};
-    document.querySelectorAll(".mo li[data-vm]").forEach(function(li){
-      var key = li.getAttribute("data-vm"); if(seen[key]) return; seen[key] = 1;
-      var ul = li.parentNode, v = all[key] || {}, by = {};
-      Object.keys(v).forEach(function(w){ Object.keys(v[w]).forEach(function(sh){ (by[sh] = by[sh] || []).push(w); }); });
-      var sum = ul.nextElementSibling && ul.nextElementSibling.classList.contains("vsum") ? ul.nextElementSibling : null;
-      if(!sum){ sum = document.createElement("div"); sum.className = "vsum"; ul.parentNode.insertBefore(sum, ul.nextSibling); }
-      var shops = Object.keys(by).sort(function(a,b){ return by[b].length - by[a].length; });
-      sum.innerHTML = (shops.length ? shops.map(function(sh){ return '<b>'+sh+'</b> '+by[sh].join("、"); }).join("　") : '想吃的都可以投，再点一下撤回') +
-        '<a class="vme">'+(who ? '我是'+who : '我是谁？')+'</a>';
+    document.querySelectorAll(".tbody.meals").forEach(function(box){
+      if(!box.querySelector("li[data-vm]")) return;
+      var f = box.querySelector(".vfoot");
+      if(!f){ f = document.createElement("div"); f.className = "vfoot"; box.appendChild(f); }
+      f.innerHTML = '<span>一人可投多家，再点一下撤回</span><a class="vme">'+(who ? '我是'+who+' · 换人' : '我是谁？')+'</a>';
     });
   }
   var sheet = document.createElement("div"); sheet.id = "vsheet";
@@ -1966,7 +1964,7 @@ var SEED = [
     if(pending){ var p = pending; pending = null; cast(p[0], p[1]); } else render(); });
   document.addEventListener("click", function(e){
     var b = e.target.closest(".vt"); if(b){ e.preventDefault(); e.stopPropagation(); var li = b.closest("li[data-vm]"); cast(li.getAttribute("data-vm"), li.getAttribute("data-vo")); return; }
-    var a = e.target.closest(".vsum .vme"); if(a){ e.preventDefault(); pending = null; openSheet(); }
+    var a = e.target.closest(".vfoot .vme"); if(a){ e.preventDefault(); pending = null; openSheet(); }
   }, true);
   window.addEventListener("ledger-sync", render);
   render();
