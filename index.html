@@ -352,12 +352,13 @@ a.opt .on{color:var(--blue)}
 .vt::before{content:"";position:absolute;inset:-8px}.vt:active{transform:scale(.94)}
 .vt b{font-weight:700;color:var(--ink2)}.vt.on{background:var(--green);border-color:var(--green);color:#fff}.vt.on b{color:#fff}
 .opt .vwho{display:block;font-size:12px;color:var(--green);line-height:1.4;margin-top:2px}
-.vfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--ink3);margin-top:6px}.vfoot .vme{color:var(--blue);cursor:pointer;margin-left:6px;min-height:32px;display:inline-flex;align-items:center}
-#vsheet{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--card);border-radius:14px 14px 0 0;box-shadow:0 -6px 30px rgba(0,0,0,.18);padding:14px 16px calc(14px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s}
-#vsheet.show{transform:none}#vsheet h4{margin:0 0 10px;font-size:14px}#vsheet .vg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-#vsheet .vg button{min-height:44px;border-radius:10px;border:1px solid var(--rule);background:var(--soft);color:var(--ink);font:inherit;font-size:14px;font-weight:600;transition:transform .1s ease-out}#vsheet .vg button:active{transform:scale(.97)}
-#vsheet .vcancel{display:block;width:100%;margin-top:10px;min-height:44px;border-radius:10px;border:0;background:transparent;color:var(--ink3);font:inherit;font-size:14px;font-weight:600}
-#vmask{position:fixed;inset:0;z-index:59;background:rgba(0,0,0,.25);display:none}#vmask.show{display:block}
+.vfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--ink3);margin-top:6px}.vfoot .vme{margin-left:6px;min-height:40px;padding:0 4px;border:0;background:transparent;color:var(--blue);font:inherit;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;-webkit-tap-highlight-color:transparent}
+.vpick{grid-column:1/-1;margin-top:8px;padding:10px 12px 12px;background:var(--soft);border-radius:10px}
+.vpick h4{margin:0 0 8px;font-size:14px;font-weight:500;color:var(--ink)}
+.vpick .vg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.vpick .vg button{min-height:44px;border-radius:10px;border:1px solid var(--rule);background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:500;transition:transform .1s ease-out}
+.vpick .vg button:active{transform:scale(.97)}
+.vpick .vcancel{display:block;width:100%;margin-top:8px;min-height:40px;border:0;background:transparent;color:var(--ink3);font:inherit;font-size:13px}
 /* @@VOTE-CSS-END */
 
 .tour.spot>summary::before{content:"景区";flex:none;font-size:11px;font-weight:700;color:var(--route);border:1px solid color-mix(in srgb,var(--route) 40%,transparent);border-radius:4px;padding:0 5px;line-height:1.5}
@@ -1317,7 +1318,7 @@ var TIPS = [
   function miniMap(dn, col, rt, stayLine){
     var names = SEGS[dn] || []; var mine = MAP.routes[String(dn)];
     var others = Object.keys(MAP.routes).filter(function(k){return k!==String(dn) && k!=="alt"}).map(function(k){return '<path d="'+MAP.routes[k]+'"/>'}).join("");
-                        var mk = mapMarks(dn);     var dots="", labs="";
+                                var mk = mapMarks(dn);     var dots="", labs="";
     names.forEach(function(n){
       var p = MAP.nodes[n]; if(!p) return;
       var a = p[2], x = p[0], y = p[1], tx = x, ty = y, anc = "start";
@@ -2002,7 +2003,7 @@ var SEED = [
     return out;
   }
   function cast(key, shop){
-    var who = me(); if(!who){ pending = [key, shop]; openSheet(); return; }
+    var who = me(); if(!who){ pending = [key, shop]; var li = document.querySelector('li[data-vm="'+key+'"]'); openPicker(li && li.closest(".tbody.meals")); return; }
     var on = !((votes()[key]||{})[who]||{})[shop];
     var e = {id: (window.LEDGER ? LEDGER.uid() : Date.now().toString(36)), k:"vote", i:key, w:who, s:shop, v:on?1:0, t:new Date().toISOString()};
     if(window.LEDGER){ LEDGER.add(e); return; }
@@ -2026,24 +2027,32 @@ var SEED = [
       if(!box.querySelector("li[data-vm]")) return;
       var f = box.querySelector(".vfoot");
       if(!f){ f = document.createElement("div"); f.className = "vfoot"; box.appendChild(f); }
-      f.innerHTML = '<span>一人可投多家，再点一下撤回</span><a class="vme">'+(who ? '我是'+who+' · 换人' : '我是谁？')+'</a>';
+      f.innerHTML = '<span>一人可投多家，再点一下撤回</span><button type="button" class="vme">'+(who ? '我是'+who+' · 换人' : '我是谁？')+'</button>';
     });
   }
-  var sheet = document.createElement("div"); sheet.id = "vsheet";
-  sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-modal", "true"); sheet.setAttribute("aria-label", "你是谁"); sheet.inert = true;
-  sheet.innerHTML = '<h4>你是谁？只选一次，这台手机记住</h4><div class="vg">'+VOTERS.map(function(n){ return '<button type="button" data-me="'+n+'">'+n+'</button>'; }).join("")+'</div><button type="button" class="vcancel">取消</button>';
-  var mask = document.createElement("div"); mask.id = "vmask";
-  document.body.appendChild(mask); document.body.appendChild(sheet);
-  var lastFocus = null;
-  function openSheet(){ lastFocus = document.activeElement; sheet.inert = false; sheet.classList.add("show"); mask.classList.add("show"); setTimeout(function(){ var b = sheet.querySelector("button"); if(b) b.focus(); }, 230); }
-  function closeSheet(){ sheet.classList.remove("show"); mask.classList.remove("show"); sheet.inert = true; if(lastFocus && lastFocus.focus) try{ lastFocus.focus(); }catch(e){} }
-  mask.addEventListener("click", function(){ pending = null; closeSheet(); });
-  sheet.addEventListener("click", function(e){ if(e.target.closest(".vcancel")){ pending = null; closeSheet(); return; } var b = e.target.closest("button[data-me]"); if(!b) return;
-    try{ localStorage.setItem(VME, b.getAttribute("data-me")); }catch(x){} closeSheet();
-    if(pending){ var p = pending; pending = null; cast(p[0], p[1]); } else render(); });
+  /* 选人：直接展开在当前这顿饭的下面，不用贴底弹层（iOS Safari 底部工具栏收起时，屏幕最下方的第一次点击会被浏览器吃掉） */
+  var pickBox = null;
+  function openPicker(box){
+    closePicker();
+    if(!box) return;
+    var el = document.createElement("div"); el.className = "vpick"; el.setAttribute("role", "group"); el.setAttribute("aria-label", "你是谁");
+    el.innerHTML = '<h4>你是谁？只选一次，这台手机记住</h4><div class="vg">'+VOTERS.map(function(n){ return '<button type="button" data-me="'+n+'">'+n+'</button>'; }).join("")+'</div><button type="button" class="vcancel">取消</button>';
+    var foot = box.querySelector(".vfoot");
+    if(foot) foot.parentNode.insertBefore(el, foot); else box.appendChild(el);
+    pickBox = el;
+    try{ el.scrollIntoView({block:"nearest"}); }catch(e){}
+  }
+  function closePicker(){ if(pickBox && pickBox.parentNode) pickBox.parentNode.removeChild(pickBox); pickBox = null; }
+  document.addEventListener("click", function(e){
+    var c = e.target.closest(".vpick .vcancel"); if(c){ pending = null; closePicker(); return; }
+    var b = e.target.closest(".vpick button[data-me]"); if(!b) return;
+    try{ localStorage.setItem(VME, b.getAttribute("data-me")); }catch(x){}
+    closePicker();
+    if(pending){ var p = pending; pending = null; cast(p[0], p[1]); } else render();
+  });
   document.addEventListener("click", function(e){
     var b = e.target.closest(".vt"); if(b){ e.preventDefault(); e.stopPropagation(); var li = b.closest("li[data-vm]"); cast(li.getAttribute("data-vm"), li.getAttribute("data-vo")); return; }
-    var a = e.target.closest(".vfoot .vme"); if(a){ e.preventDefault(); pending = null; openSheet(); }
+    var a = e.target.closest(".vfoot .vme"); if(a){ e.preventDefault(); pending = null; openPicker(a.closest(".tbody.meals")); }
   }, true);
   window.addEventListener("ledger-sync", render);
   render();
