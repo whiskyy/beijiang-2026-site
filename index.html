@@ -1178,15 +1178,17 @@ var TIPS = [
       if(!best || bd > 30*z) return p; var a = best[2] || "E";
       return [best[0] + (a.indexOf("E") >= 0 ? -30 : 30)*z, best[1] + (a.indexOf("N") >= 0 ? 30 : -30)*z]; }
     var foodNames = {}, food = {}, order = [], raw = []; /* raw = 未错开的原始位置，给视口算包围盒用 */
-    (d.meals||[]).forEach(function(m){ (m.o||[]).forEach(function(o){
-      var c = C[o[0]]; if(!c) return; foodNames[o[0]] = 1;
-      var p = projXY(c), key = m.t+"|"+Math.round(p[0]/(40*z))+","+Math.round(p[1]/(40*z)); raw.push([p[0], p[1]]);
+    /* 每餐只标首选那一家（没有首选就标第一家有坐标的），备选在列表里点 */
+    (d.meals||[]).forEach(function(m){
+      (m.o||[]).forEach(function(o){ if(C[o[0]]) foodNames[o[0]] = 1; });
+      var pk = PICK["D"+dn+"-"+m.t], o = (m.o||[]).filter(function(x){ return C[x[0]] && (!pk || x[0] === pk); })[0]; if(!o) return;
+      var p = projXY(C[o[0]]), key = m.t+"|"+Math.round(p[0]/(40*z))+","+Math.round(p[1]/(40*z)); raw.push([p[0], p[1]]);
       if(!food[key]){ var dp = dodge(p); food[key] = {x:dp[0], y:dp[1], names:[], key:o[0], t:m.t}; order.push(key); }
       food[key].names.push(o[0]);
-    }); });
+    });
     var seen = {}, sights = [];
     function addSight(key){
-      if(!key || seen[key] || foodNames[key] || key === d.stayNav) return; var c = C[key]; if(!c) return;
+      if(!key || seen[key] || foodNames[key] || key === d.stayNav || /服务区/.test(key)) return; var c = C[key]; if(!c) return;
       var p = projXY(c); if(nearSeg(p, 26*z)) return; seen[key] = 1; sights.push({x:p[0], y:p[1], n:key}); raw.push([p[0], p[1]]);
     }
     (d.it||[]).forEach(function(x){ if(x.nav) addSight(x.nav); });
@@ -1218,7 +1220,7 @@ var TIPS = [
     order.forEach(function(k){ var f = food[k];
       out += '<a class="mk food"'+navAttrs(f.key, "view")+'><title>'+f.names.join("、")+'</title><circle class="hit" cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="'+(34*z).toFixed(1)+'"/><circle class="dot" cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="'+(18*z).toFixed(1)+'"/><text x="'+f.x.toFixed(1)+'" y="'+f.y.toFixed(1)+'">'+f.t+'</text></a>';
     });
-    var lg = '<div class="mklg">'+'<span class="z">点地图放大</span>'+(order.length?'<span class="f"><i></i>早 / 午 / 晚 / 茶 是那顿的地方，点一下导航</span>':'')+(sights.length?'<span class="s"><i></i>沿途看点 '+sights.length+' 处</span>':'')+'</div>';
+    var lg = '<div class="mklg">'+'<span class="z">点地图放大</span>'+(order.length?'<span class="f"><i></i>早 / 午 / 晚 / 茶 是那顿的首选，点一下导航</span>':'')+(sights.length?'<span class="s"><i></i>沿途看点 '+sights.length+' 处</span>':'')+'</div>';
     return {svg:out, legend:lg, pts:raw};
   }
   /* 出片文案：把坐标表里能认出的地名都变成链接（长名优先，已在链接里的不重复） */
