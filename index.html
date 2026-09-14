@@ -163,8 +163,8 @@ body.hastoday .collapsebtn{bottom:calc(70px + env(safe-area-inset-bottom))}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:var(--r-s);border:1px solid var(--gold);background:var(--gold);color:var(--dntext);font-size:var(--f-s);font-weight:600;cursor:pointer;text-decoration:none}
 .btn.sec{background:transparent;color:var(--ink);border-color:var(--rule)}
 .btn[hidden]{display:none}
-.xl{position:relative;display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 11px 0 8px;border-radius:999px;border:1px solid color-mix(in srgb,var(--xhs) 40%,transparent);background:color-mix(in srgb,var(--xhs) 7%,transparent);color:var(--xhs);font-size:var(--f-xs);line-height:1;text-decoration:none;white-space:nowrap}
-.xl i{display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--xhs);color:var(--dntext);font-style:normal;font-size:var(--f-xs);line-height:14px;text-align:center}
+.xl{position:relative;display:inline-flex;align-items:center;gap:5px;min-height:36px;max-width:100%;box-sizing:border-box;padding:6px 11px 6px 8px;border-radius:999px;border:1px solid color-mix(in srgb,var(--xhs) 40%,transparent);background:color-mix(in srgb,var(--xhs) 7%,transparent);color:var(--xhs);font-size:var(--f-xs);line-height:1.25;text-decoration:none}
+.xl i{flex:none;display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--xhs);color:var(--dntext);font-style:normal;font-size:var(--f-xs);line-height:14px;text-align:center}
 .mx{margin-top:8px}
 .pl{color:var(--blue);text-decoration:none;padding:9px 3px;margin:0 -3px;border-radius:4px}.tel{color:var(--blue);text-decoration:underline dotted;text-underline-offset:3px;padding:9px 3px;margin:0 -3px;border-radius:4px}
 .pl:active{opacity:.6}
