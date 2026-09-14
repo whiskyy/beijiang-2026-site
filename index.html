@@ -1025,7 +1025,7 @@ function wxRow(d){
   var names = WXD[d.d] || [], has = names.some(function(n){ return !!wxOf(n, d.date); }), note = "";
   if(!has){
     var dt = new Date("2026/"+d.date), from = new Date(dt.getTime() - 15*864e5), now = new Date();
-    if(dt > now) note = '<span class="wxn">预报 '+(from.getMonth()+1)+'/'+from.getDate()+' 起显示，先看近五年同期</span>';
+    if(dt > now) note = '<span class="wxn">'+(now < from ? '预报 '+(from.getMonth()+1)+'/'+from.getDate()+' 起显示，先看近五年同期' : '这会儿没拿到预报，先看近五年同期')+'</span>';
   }
   return '<div class="frow wx" data-wd="'+d.d+'"><b>天气</b><span>'+names.map(function(n){ return wxSpot(n, d.date); }).join("")+note+'</span></div>';
 }
