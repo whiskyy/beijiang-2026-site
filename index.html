@@ -1714,15 +1714,18 @@ function funBlock(d){
   /* 离线缓存：仅在 http(s) 下注册 */
   if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
     navigator.serviceWorker.register("./sw.js").catch(function(){});
-    /* 没信号的地方也要能看：把地图、菜图、店铺小图一次性存进缓存 */
-    navigator.serviceWorker.ready.then(function(r){
+    /* 没信号的地方也要能看：把地图、菜图、店铺小图一次性存进缓存。
+       等页面 load 完再起，不然 60 多张小图和首屏地图抢带宽（慢 3G 实测首屏晚 4 秒） */
+    function precache(){ navigator.serviceWorker.ready.then(function(r){
       if(!r.active) return;
       var u = ["img/map-light.jpg","img/map-dark.jpg","icon-192.png?v=3"]
         .concat([].concat.apply([], Object.keys(PARK).map(function(k){ return PARK[k].map(function(p){ return "img/park/"+p.k+".jpg"; }); })))
         .concat(Object.keys(FOOD).map(function(k){ return "img/food/"+FOOD[k]+".jpg"; }))
         .concat(Object.keys(POI).map(function(k){ return "img/"+POI[k]; }));
       r.active.postMessage({precache:u});
-    });
+    }); }
+    function precacheLater(){ setTimeout(precache, 1500); }
+    if(document.readyState === "complete") precacheLater(); else window.addEventListener("load", precacheLater);
   }
 })();
 </script>
