@@ -964,9 +964,14 @@ var TIPS = [
     var out = "", placed = [];
     sights.forEach(function(p){
       out += '<a class="mk sight"'+navAttrs(p.n, "view")+'><circle class="hit" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+(34*z).toFixed(1)+'"/><circle class="dot" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+(18*z).toFixed(1)+'"/><text x="'+p.x.toFixed(1)+'" y="'+p.y.toFixed(1)+'">景</text></a>';
+      /* 标签先试右边再试左边；文字盒子压到别的圆点（吃饭点、其他看点、站点）就换边，两边都压就不标 */
       var clash = placed.some(function(q){ return Math.abs(q[1]-p.y) < 26*z && Math.abs(q[0]-p.x) < 150*z; }) || nearSeg([p.x,p.y], 60*z);
-      if(!clash){ var right = p.x < MAP.w-140*z; placed.push([p.x,p.y]);
-        out += '<text class="lb2" x="'+(right?p.x+18*z:p.x-18*z).toFixed(1)+'" y="'+(p.y+6*z).toFixed(1)+'" text-anchor="'+(right?"start":"end")+'">'+p.n+'</text>'; }
+      if(!clash){ var w = p.n.length*23*z, side = null;
+        function boxHit(x0){ var x1 = x0 + w; return all.some(function(o){ return o !== p && o.x > x0-18*z && o.x < x1+18*z && Math.abs(o.y-p.y) < 30*z; })
+          || segPts.some(function(q){ return q[0] > x0-18*z && q[0] < x1+18*z && Math.abs(q[1]-p.y) < 30*z; }); }
+        if(p.x+18*z+w < MAP.w-6*z && !boxHit(p.x+18*z)) side = "R"; else if(p.x-18*z-w > 6*z && !boxHit(p.x-18*z-w)) side = "L";
+        if(side){ placed.push([p.x,p.y]);
+          out += '<text class="lb2" x="'+(side==="R"?p.x+18*z:p.x-18*z).toFixed(1)+'" y="'+(p.y+6*z).toFixed(1)+'" text-anchor="'+(side==="R"?"start":"end")+'">'+p.n+'</text>'; } }
     });
     order.forEach(function(k){ var f = food[k];
       out += '<a class="mk food"'+navAttrs(f.key, "view")+'><title>'+f.names.join("、")+'</title><circle class="hit" cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="'+(34*z).toFixed(1)+'"/><circle class="dot" cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="'+(18*z).toFixed(1)+'"/><text x="'+f.x.toFixed(1)+'" y="'+f.y.toFixed(1)+'">'+f.t+'</text></a>';
@@ -1183,6 +1188,7 @@ function wxPaint(){
     var row = document.querySelector('.frow.wx[data-wd="'+d.d+'"]'); if(row) row.outerHTML = wxRow(d);
     var sm = document.querySelector('#day-'+d.d+' details.tour.sun>summary'); if(sm && SUN[d.date]) sm.innerHTML = sunSum(d)+CHEV;
   });
+  if(typeof restoreAnchor === "function") restoreAnchor();
 }
 function wxLoad(){
   var c = null; try{ c = JSON.parse(localStorage.getItem(WX_LS) || "null"); }catch(e){}
@@ -1490,12 +1496,16 @@ function funBlock(d){
     try{ sessionStorage.setItem("bj_anchor", a ? JSON.stringify(a) : ""); sessionStorage.setItem("bj_open_tours", tours.join(",")); }catch(e){}
   }
   window.addEventListener("pagehide", saveAnchor); window.addEventListener("beforeunload", saveAnchor);
-  if(location.hash){ openHashDay(); }
-  else { try{
-    (sessionStorage.getItem("bj_open_tours") || "").split(",").forEach(function(v){ var p = v.split(":"); var d = p[0] && document.getElementById("day-"+p[0]); var t = d && d.querySelectorAll(".dbody > details")[+p[1]]; if(t) t.open = true; });
+  /* 回位分几步：这段脚本一跑完先回一次；后面几段脚本（投票按钮、记账）往 DOM 里插东西，DOMContentLoaded 再回一次；天气画完可能让日出那行换行，也再回一次。4 秒后不再动，免得把用户自己滚到的位置拉回去 */
+  function restoreAnchor(){ if(location.hash || performance.now() > 4000) return; try{
     var an = JSON.parse(sessionStorage.getItem("bj_anchor") || "null"); var ael = an && document.getElementById(an.id);
     if(ael && an.idx >= 0) ael = ael.querySelectorAll(".dbody > *")[an.idx] || ael;
     if(ael){ var h = document.documentElement; h.style.scrollBehavior = "auto"; window.scrollTo(0, ael.getBoundingClientRect().top + window.scrollY - an.top); h.style.scrollBehavior = ""; } }catch(e){} }
+  if(location.hash){ openHashDay(); }
+  else { try{
+    (sessionStorage.getItem("bj_open_tours") || "").split(",").forEach(function(v){ var p = v.split(":"); var d = p[0] && document.getElementById("day-"+p[0]); var t = d && d.querySelectorAll(".dbody > details")[+p[1]]; if(t) t.open = true; });
+    }catch(e){}
+    restoreAnchor(); document.addEventListener("DOMContentLoaded", restoreAnchor); }
   if(TODAY_D){
     var tl = document.getElementById("todayLink"); tl.hidden = false; tl.href = "#day-"+TODAY_D; tl.textContent = "今天 D"+TODAY_D+" 的行程";
     var fb = document.createElement("a"); fb.className = "todaybtn"; fb.href = "#day-"+TODAY_D; fb.textContent = "今天 D"+TODAY_D; document.body.appendChild(fb);
@@ -1535,7 +1545,6 @@ function funBlock(d){
     });
     sync();
   })();
-
 
   /* 待办：点一下打勾。勾选状态走记账的共享通道（k:"todo"），全车人都看得到；没有云端就存本机 */
   var TODO_LS = "bj_todo_v1";
