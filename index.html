@@ -166,7 +166,7 @@ body.hastoday .collapsebtn{bottom:calc(70px + env(safe-area-inset-bottom))}
 .xl{position:relative;display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 11px 0 8px;border-radius:999px;border:1px solid color-mix(in srgb,var(--xhs) 40%,transparent);background:color-mix(in srgb,var(--xhs) 7%,transparent);color:var(--xhs);font-size:var(--f-xs);line-height:1;text-decoration:none;white-space:nowrap}
 .xl i{display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--xhs);color:var(--dntext);font-style:normal;font-size:var(--f-xs);line-height:14px;text-align:center}
 .mx{margin-top:8px}
-.pl{color:var(--blue);text-decoration:none;padding:9px 3px;margin:0 -3px;border-radius:4px}
+.pl{color:var(--blue);text-decoration:none;padding:9px 3px;margin:0 -3px;border-radius:4px}.tel{color:var(--blue);text-decoration:underline dotted;text-underline-offset:3px;padding:9px 3px;margin:0 -3px;border-radius:4px}
 .pl:active{opacity:.6}
 .xl::before{content:"";position:absolute;inset:-4px;border-radius:inherit}
 .pl svg{width:.9em;height:.9em;fill:currentColor;vertical-align:-.1em;margin-right:1px}
@@ -1730,6 +1730,26 @@ function funBlock(d){
   function fadeBars(){ [].slice.call(document.querySelectorAll(".fbar")).forEach(function(b){ b.classList.toggle("more", b.scrollWidth - b.clientWidth - b.scrollLeft > 4); }); }
   document.addEventListener("scroll", function(e){ if(e.target && e.target.classList && e.target.classList.contains("fbar")) fadeBars(); }, true);
   window.addEventListener("resize", fadeBars); window.addEventListener("load", fadeBars);
+  /* 电话号码变成可点拨号：11 位手机、0xxx-xxxxxxx 座机、95511。前后有数字的不算（图片署名里的长串数字） */
+  function telify(root){
+    var re = /(^|[^\d])(1[3-9]\d{9}|0\d{2,3}-\d{7,8}|95511)(?!\d)/g, list = [], n;
+    var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function(t){
+      re.lastIndex = 0; if(!re.test(t.nodeValue)) return NodeFilter.FILTER_REJECT;
+      var p = t.parentElement; if(!p || p.closest(".tel,button,input,textarea,script,style,svg,#acct")) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT; } });
+    while(n = tw.nextNode()) list.push(n);
+    /* 餐馆卡片整块是个 a.opt（点了开高德），里面不能再套 a，用 span 代替，点击时拦下来拨号 */
+    list.forEach(function(t){ var frag = document.createDocumentFragment(), str = t.nodeValue, last = 0, m, inA = !!t.parentElement.closest("a"); re.lastIndex = 0;
+      while((m = re.exec(str))){ var at = m.index + m[1].length; frag.appendChild(document.createTextNode(str.slice(last, at)));
+        var num = m[2].replace(/-/g, ""), el = document.createElement(inA ? "span" : "a"); el.className = "tel"; el.textContent = m[2];
+        if(inA){ el.setAttribute("role", "link"); el.setAttribute("tabindex", "0"); el.setAttribute("data-tel", num); } else el.href = "tel:" + num;
+        frag.appendChild(el); last = at + m[2].length; }
+      frag.appendChild(document.createTextNode(str.slice(last))); t.parentNode.replaceChild(frag, t); });
+  }
+  telify(document.body); document.addEventListener("DOMContentLoaded", function(){ telify(document.body); });
+  document.addEventListener("click", function(e){ var t = e.target.closest && e.target.closest(".tel[data-tel]"); if(!t) return;
+    e.preventDefault(); e.stopPropagation(); location.href = "tel:" + t.getAttribute("data-tel"); }, true);
+  document.addEventListener("keydown", function(e){ var t = e.target.closest && e.target.closest(".tel[data-tel]"); if(t && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); e.stopPropagation(); location.href = "tel:" + t.getAttribute("data-tel"); } }, true);
   try{ var mo = new MutationObserver(fadeBars); [].slice.call(document.querySelectorAll(".fbar")).forEach(function(b){ mo.observe(b, {childList:true}); }); }catch(e){}
 })();
 </script>
