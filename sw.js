@@ -1,5 +1,5 @@
 // 离线缓存：首次打开后即可断网使用
-const CACHE = 'beijiang-v230';
+const CACHE = 'beijiang-v231';
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])).then(() => self.skipWaiting()));
 });
