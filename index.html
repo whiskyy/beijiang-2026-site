@@ -118,9 +118,9 @@ header .sub{font-size:var(--f-m);color:var(--ink2)}
 .fl,.flh{display:grid;grid-template-columns:44px 1fr;gap:0 15px}
 .fl .flt{font-size:var(--f-xs);color:var(--ink3);padding-top:4px;text-align:right;font-variant-numeric:tabular-nums}
 .fl .flc{font-size:var(--f-m);line-height:1.62;color:var(--ink2);padding:1px 0 16px 15px;border-left:2px solid var(--rule);position:relative}
-.fl .flc::before{content:"";position:absolute;left:-3px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--rule)}
+.fl .flc::before{content:"";position:absolute;left:-5px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--rule)}
 .fl .flc.li{padding-bottom:7px}
-.fl .flc.li::before{left:-1.5px;top:11px;width:5px;height:5px;background:var(--ink3);opacity:.5}
+.fl .flc.li::before{left:-3px;top:12px;width:4px;height:4px;background:var(--ink3);opacity:.35}
 .fl:has(.li)+.fl:not(:has(.li)) .flc{padding-top:9px}
 .fl .flc.hot::before{background:var(--gold)}
 .fl .flc.bk::before{background:var(--red);box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 18%,transparent)}
@@ -128,7 +128,7 @@ header .sub{font-size:var(--f-m);color:var(--ink2)}
 .fl .flc i{display:block;margin-top:6px;font-style:normal;color:var(--ink3)}
 .flsec{scroll-margin-top:58px}
 .flh .flc{padding:20px 0 8px 15px;border-left:2px solid var(--rule);position:relative;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.flh .flc::before{content:"";position:absolute;left:-5px;top:24px;width:12px;height:12px;border-radius:3px;background:var(--gold)}
+.flh .flc::before{content:"";position:absolute;left:-7px;top:24px;width:12px;height:12px;border-radius:3px;background:var(--gold)}
 .flsec.road .flh .flc::before{background:var(--ink3)}
 .flsec.alt .flh .flc::before{background:var(--blue)}
 .flh i{flex:none;align-self:center;font-style:normal;font-size:var(--f-xs);font-weight:400;color:var(--ink3)}
