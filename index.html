@@ -105,6 +105,13 @@ header .sub{font-size:var(--f-m);color:var(--ink2)}
 .todaybtn:active,.now .today:active,.btn:active,.xl:active{filter:brightness(.88)}
 .collapsebtn{position:fixed;right:calc(14px + env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom));z-index:20;min-height:44px;display:inline-flex;align-items:center;gap:5px;padding:0 15px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink2);font-size:var(--f-s);font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.14)}
 .collapsebtn:active{filter:brightness(.94)}
+.tsec{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--rule);scroll-margin-top:58px}
+.tsec .tstep:first-of-type{border-top:0}
+.tsh{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;font-size:var(--f-l);font-weight:600;color:var(--ink);padding:0 0 4px}
+.tsh i{flex:none;align-self:center;font-style:normal;font-size:var(--f-xs);font-weight:400;color:var(--ink2);background:var(--soft);border-radius:4px;padding:1px 6px;line-height:1.5}
+.tsh span{margin-left:auto;font-size:var(--f-xs);font-weight:400;color:var(--ink3);text-align:right}
+.tbody.nopad{padding:0;border-top:0}
+.tl+.tsec{margin-top:14px}
 .jump{margin-left:7px;vertical-align:1px;display:inline-flex;align-items:center;gap:1px;min-height:22px;padding:0 6px 0 7px;border-radius:999px;border:1px solid var(--rule);background:var(--soft);color:var(--ink3);font-size:var(--f-xs);font-family:inherit;line-height:1;cursor:pointer;white-space:nowrap}
 .jump:active{filter:brightness(.93)}
 .pmsec{margin:2px 0 10px}
@@ -1089,7 +1096,7 @@ function funBlock(d){
     '<div class="frow"><b>光线</b><span>'+(s.riseAt===s.setAt?'':'日出按'+s.riseAt+'、日落按'+s.setAt+'算；')+'黄金时刻 '+s.gold+' 起，蓝调到 '+s.blue+'</span></div>'+
     '</div></details>';
 }
-  function renderTour(t, dn, ti){
+  function renderTour(t, dn, ti, flat){
     var cls = /^沿途/.test(t.n) ? "tour road" : "tour spot";
     var st = t.steps.map(function(x){
       var txt = x[2] ? linkify(x[1], x[2], "navi") : x[1];
@@ -1103,6 +1110,9 @@ function funBlock(d){
       notes += '<div class="tnote"><span class="k">出片</span><span>'+picList(t.pic)+'<div class="mx">'+xhsLink(t.xhs||(t.n.split(' ')[0]+' 机位'))+'</div></span></div>';
     }
     var pm = (dn!=null) ? parkFor(dn, t.n) : "";
+    var kind = /^沿途/.test(t.n) ? "沿途" : "景区";
+    if(flat) return '<section class="tsec" id="d'+dn+'t'+ti+'"><div class="tsh"><i>'+kind+'</i>'+t.n.replace(/^沿途停车 · /,"")+
+      (t.sub?'<span>'+t.sub+'</span>':'')+'</div>'+pm+st+notes+'</section>';
     return '<details class="'+cls+'"'+(dn!=null?' id="d'+dn+'t'+ti+'"':'')+'><summary>'+t.n.replace(/^沿途停车 · /,"")+'<span class="tsub">'+(t.sub||"")+'</span>'+
       '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></summary>'+
       '<div class="tbody">'+pm+st+notes+'</div></details>';
@@ -1190,15 +1200,17 @@ function funBlock(d){
   /* 地图并进它所属的那张景区卡；认不到卡的才单独成块 */
   function parkFor(dn, cardName){ return (PARK[dn]||[]).filter(function(p){ return p.card===cardName; }).map(function(p){ return oneParkMap(p, 1); }).join(''); }
   function parkMap(d){ return (PARK[d.d]||[]).filter(function(p){ return !(TOURS[d.d]||[]).some(function(t){ return t.n===p.card; }); }).map(function(p){ return oneParkMap(p); }).join(''); }
-  function planBlock(d){
+  function planBlock(d, flat){
     var p = d.plan; if(!p) return "";
     var opts = p.o.map(function(o){
       var has = !!C[o[0]];
       var inner = '<span class="on">'+(has?PIN:'')+o[0]+'</span><span class="os">'+o[1]+'</span>';
       return '<li data-vm="D'+d.d+'-'+(p.k||'去哪')+'" data-vo="'+o[0]+'">'+(has ? '<a class="pl opt"'+navAttrs(o[0],"view")+'>'+inner+'</a>' : '<div class="opt">'+inner+'</div>')+(o[2]?'<div class="mx">'+xhsLink(o[2])+'</div>':'')+'</li>';
     }).join('');
-    return '<details class="tour pick" id="d'+d.d+'plan"><summary>'+(p.t||'去哪')+'<span class="tsub">'+(p.sub||'')+'</span>'+CHEV+'</summary><div class="tbody meals" data-hint="投你想去的那条，再点一次取消">'+
-      (p.n?'<div class="mnote">'+p.n+'</div>':'')+'<div class="meal noimg"><div class="mt"><ul class="mo">'+opts+'</ul></div></div></details>';
+    var body = '<div class="tbody meals nopad" data-hint="投你想去的那条，再点一次取消">'+
+      (p.n?'<div class="mnote">'+p.n+'</div>':'')+'<div class="meal noimg"><div class="mt"><ul class="mo">'+opts+'</ul></div></div></div>';
+    if(flat) return '<section class="tsec" id="d'+d.d+'plan"><div class="tsh"><i>二选一</i>'+(p.t||'去哪')+(p.sub?'<span>'+(p.sub||'')+'</span>':'')+'</div>'+body+'</section>';
+    return '<details class="tour pick" id="d'+d.d+'plan"><summary>'+(p.t||'去哪')+'<span class="tsub">'+(p.sub||'')+'</span>'+CHEV+'</summary>'+body+'</details>';
   }
   DAYS.forEach(function(d){
     var col = "var(--d"+Math.min(d.d,10)+")";
@@ -1238,10 +1250,11 @@ function funBlock(d){
       '<div class="dti"><div class="r">'+d.r+'</div><div class="m">'+d.date+' '+d.wk+' · '+d.m+'</div></div>'+
       '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
       '</summary><div class="dbody">'+(d.d===1 || d.d===11 ? (toolRow(d.d, d.rt, d) ? '<div class="minimap">'+toolRow(d.d, d.rt, d)+'</div>' : '') : miniMap(d.d, col, d.rt, d))+
-      funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div></div></details>'+
-      tours.map(function(t, ti){ return renderTour(t, d.d, ti); }).join('')+
-      parkMap(d)+
-      planBlock(d)+
+      funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div>'+
+        tours.map(function(t, ti){ return renderTour(t, d.d, ti, 1); }).join('')+
+        parkMap(d)+
+        planBlock(d, 1)+
+      '</div></details>'+
       mealBlock(d)+
       '</div></details>';
   });
