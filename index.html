@@ -178,7 +178,7 @@ a.wake{color:var(--blue);text-decoration:none;padding:9px 2px;margin:-9px -2px;b
 /* ---- 路线图 ---- */
 .mapbox{padding:8px 8px 2px}
 .mapbox .cap{font-size:var(--f-xs);color:var(--ink3);padding:8px 6px 8px}
-.minimap .mapwrap{cursor:pointer}
+.minimap .mapwrap{cursor:pointer;touch-action:pan-y}
 .minimap[data-z] .mapwrap{touch-action:none;cursor:grab}
 .mapwrap{position:relative;width:100%;aspect-ratio:900/825;background:var(--mapimg) center/100% 100% no-repeat;border-radius:var(--r-s);overflow:hidden}
 .mapwrap svg{position:absolute;inset:0;width:100%;height:100%;display:block;font-family:inherit}
@@ -198,8 +198,6 @@ a.wake{color:var(--blue);text-decoration:none;padding:9px 2px;margin:-9px -2px;b
 .mk circle.dot{stroke:var(--card);stroke-width:calc(3px*var(--z,1))}.mk.food circle.dot{fill:var(--gold)}.mk.sight circle.dot{fill:var(--green)}
 .mk:active circle{opacity:.75}
 .mklg{display:flex;gap:14px;flex-wrap:wrap;font-size:var(--f-xs);color:var(--ink3);padding:2px 4px 0}
-.mklg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px}
-.mklg .f i{background:var(--gold)}.mklg .s i{background:var(--green)}
 
 /* ---- 分组列表（待办等） ---- */
 .rows .row{display:grid;grid-template-columns:52px 1fr auto;gap:2px 12px;padding:14px 16px;border-top:1px solid var(--rule);align-items:start}
@@ -970,7 +968,7 @@ var TIPS = [
     order.forEach(function(k){ var f = food[k];
       out += '<a class="mk food"'+navAttrs(f.key, "view")+'><title>'+f.names.join("、")+'</title><circle class="hit" cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="'+(34*z).toFixed(1)+'"/><circle class="dot" cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="'+(18*z).toFixed(1)+'"/><text x="'+f.x.toFixed(1)+'" y="'+f.y.toFixed(1)+'">'+f.t+'</text></a>';
     });
-    var lg = '<div class="mklg">'+'<span class="z">点地图放大</span>'+(order.length?'<span class="f"><i></i>早 / 午 / 晚 / 茶 是那顿的首选，点一下导航</span>':'')+(sights.length?'<span class="s"><i></i>沿途看点 '+sights.length+' 处</span>':'')+'</div>';
+    var lg = '<div class="mklg"><span class="z">点一下放大，两指缩放</span></div>';
     return {svg:out, legend:lg, pts:raw};
   }
   /* 出片文案：把坐标表里能认出的地名都变成链接（长名优先，已在链接里的不重复） */
@@ -1031,40 +1029,64 @@ var TIPS = [
     return '<div class="minimap" data-dn="'+dn+'"'+(zoomVb?' data-z="1"':'')+(bare?' data-bare="1"':'')+'><div class="mapwrap" '+bg+'><svg viewBox="'+vb.map(function(v){ return v.toFixed(1); }).join(' ')+'" role="img" aria-label="第'+dn+'天路段">'+
       '<g class="dim">'+others+'</g>'+
       (mine ? '<g class="cas"><path d="'+mine+'"/></g><path d="'+mine+'" fill="none" stroke="'+col+'" stroke-width="'+(6.5*z).toFixed(1)+'" stroke-linejoin="round" stroke-linecap="round"/>' : '')+
-      spurPaths(dn, z) + mk.svg + dots + labs + '</svg></div>' + (zoomVb ? mk.legend.replace('点地图放大', '放大了，拖动可以移动，再点一下还原') : mk.legend) + (bare ? '' : toolRow(dn, rt, d)) + '</div>';
+      spurPaths(dn, z) + mk.svg + dots + labs + '</svg></div>' + (zoomVb ? mk.legend.replace('点一下放大，两指缩放', '拖动移动，两指缩放，点一下还原') : mk.legend) + (bare ? '' : toolRow(dn, rt, d)) + '</div>';
   }
   /* 点小地图：以点的位置为中心再放大 3 倍（底图会糊一点，线和标记是矢量的）；再点一下还原。
      触屏直接听 touchend（iOS 对 svg 不一定合成 click），鼠标走 click */
-  function mapZoomAt(w, cx, cy){
+  function mapVb(w){ var v = w.querySelector("svg").viewBox.baseVal; return [v.x, v.y, v.width, v.height]; }
+  function mapClamp(v, lo, hi){ return Math.min(Math.max(v, lo), hi); }
+  function mapApply(w, vb){
+    var z = vb[2] / MAP.w;
+    w.querySelector("svg").setAttribute("viewBox", vb.map(function(n){ return n.toFixed(1); }).join(" "));
+    w.style.setProperty("--z", z.toFixed(3));
+    w.style.backgroundSize = (100/z).toFixed(1)+"% "+(100/z).toFixed(1)+"%";
+    w.style.backgroundPosition = (vb[2] < MAP.w ? vb[0]/(MAP.w-vb[2])*100 : 0).toFixed(2)+"% "+(vb[3] < MAP.h ? vb[1]/(MAP.h-vb[3])*100 : 0).toFixed(2)+"%";
+  }
+  function mapRender(w, vb){
     var box = w.parentNode, dn = +box.getAttribute("data-dn"), d = DAYS[dn-1]; if(!d) return;
-    var vb = null;
-    if(!box.getAttribute("data-z")){
-      var svg = w.querySelector("svg"), cur = svg.viewBox.baseVal, r = w.getBoundingClientRect();
-      var x = cur.x + (cx - r.left) / r.width * cur.width, y = cur.y + (cy - r.top) / r.height * cur.height;
-      var nw = Math.max(cur.width / 3, MAP.w / 12), nh = nw * MAP.h / MAP.w;
-      vb = [Math.min(Math.max(x - nw/2, 0), MAP.w - nw), Math.min(Math.max(y - nh/2, 0), MAP.h - nh), nw, nh];
-    }
     var tmp = document.createElement("div"); tmp.innerHTML = miniMap(dn, "var(--d"+Math.min(dn,10)+")", d.rt, d, vb, box.getAttribute("data-bare") ? 1 : 0);
     box.parentNode.replaceChild(tmp.firstChild, box);
   }
+  function mapZoomAt(w, cx, cy){
+    var box = w.parentNode, vb = null;
+    if(!box.getAttribute("data-z")){
+      var cur = mapVb(w), r = w.getBoundingClientRect();
+      var x = cur[0] + (cx - r.left) / r.width * cur[2], y = cur[1] + (cy - r.top) / r.height * cur[3];
+      var nw = Math.max(cur[2] / 3, MAP.w / 12), nh = nw * MAP.h / MAP.w;
+      vb = [mapClamp(x - nw/2, 0, MAP.w - nw), mapClamp(y - nh/2, 0, MAP.h - nh), nw, nh];
+    }
+    mapRender(w, vb);
+  }
   function mapWrapOf(t){ var w = t && t.closest && t.closest(".minimap .mapwrap"); return (w && !t.closest("a")) ? w : null; }
   function mapPan(w, dxPx, dyPx){
-    var svg = w.querySelector("svg"), v = svg.viewBox.baseVal, r = w.getBoundingClientRect();
-    var x = v.x - dxPx / r.width * v.width, y = v.y - dyPx / r.height * v.height;
-    x = Math.min(Math.max(x, 0), MAP.w - v.width); y = Math.min(Math.max(y, 0), MAP.h - v.height);
-    svg.setAttribute("viewBox", x.toFixed(1)+" "+y.toFixed(1)+" "+v.width.toFixed(1)+" "+v.height.toFixed(1));
-    var z = v.width / MAP.w;
-    w.style.backgroundPosition = (v.width < MAP.w ? x/(MAP.w - v.width)*100 : 0).toFixed(2)+"% "+(v.height < MAP.h ? y/(MAP.h - v.height)*100 : 0).toFixed(2)+"%";
-    return [x, y];
+    var v = mapVb(w), r = w.getBoundingClientRect();
+    mapApply(w, [mapClamp(v[0] - dxPx / r.width * v[2], 0, MAP.w - v[2]),
+                 mapClamp(v[1] - dyPx / r.height * v[3], 0, MAP.h - v[3]), v[2], v[3]]);
   }
-  var mapTouch = null, mapLast = null, mapMoved = 0;
+  function mapTouchDist(t){ return Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY); }
+  var mapTouch = null, mapLast = null, mapMoved = 0, mapPinch = null;
   document.addEventListener("touchstart", function(e){
-    var w = mapWrapOf(e.target);
-    mapTouch = w ? [e.touches[0].clientX, e.touches[0].clientY] : null;
-    mapLast = mapTouch; mapMoved = 0;
+    var w = mapWrapOf(e.target); if(!w){ mapTouch = mapLast = mapPinch = null; return; }
+    if(e.touches.length === 2){
+      var t = e.touches, r = w.getBoundingClientRect();
+      mapPinch = {w:w, d0:mapTouchDist(t), vb0:mapVb(w),
+        fx:((t[0].clientX + t[1].clientX)/2 - r.left) / r.width,
+        fy:((t[0].clientY + t[1].clientY)/2 - r.top) / r.height};
+      mapTouch = mapLast = null; return;
+    }
+    mapTouch = [e.touches[0].clientX, e.touches[0].clientY]; mapLast = mapTouch; mapMoved = 0;
   }, {passive:true});
   document.addEventListener("touchmove", function(e){
-    var w = mapWrapOf(e.target); if(!w || !mapTouch || e.touches.length !== 1) return;
+    var w = mapWrapOf(e.target); if(!w) return;
+    if(mapPinch && e.touches.length === 2){
+      e.preventDefault();
+      var p = mapPinch, k = p.d0 / Math.max(mapTouchDist(e.touches), 1);
+      var nw = mapClamp(p.vb0[2] * k, MAP.w / 12, MAP.w), nh = nw * MAP.h / MAP.w;
+      var ax = p.vb0[0] + p.fx * p.vb0[2], ay = p.vb0[1] + p.fy * p.vb0[3];
+      mapApply(p.w, [mapClamp(ax - p.fx * nw, 0, MAP.w - nw), mapClamp(ay - p.fy * nh, 0, MAP.h - nh), nw, nh]);
+      return;
+    }
+    if(!mapTouch || e.touches.length !== 1) return;
     var t = e.touches[0];
     mapMoved = Math.max(mapMoved, Math.hypot(t.clientX - mapTouch[0], t.clientY - mapTouch[1]));
     if(!w.parentNode.getAttribute("data-z")) return;   /* 没放大就别抢页面的滚动 */
@@ -1073,6 +1095,11 @@ var TIPS = [
     mapLast = [t.clientX, t.clientY];
   }, {passive:false});
   document.addEventListener("touchend", function(e){
+    if(mapPinch && e.touches.length < 2){
+      var vb = mapVb(mapPinch.w);
+      mapRender(mapPinch.w, vb[2] >= MAP.w - 1 ? null : vb);
+      mapPinch = null; mapTouch = mapLast = null; e.preventDefault(); return;
+    }
     var w = mapWrapOf(e.target); if(!w || !mapTouch) return;
     var t = e.changedTouches[0], moved = Math.max(mapMoved, Math.hypot(t.clientX - mapTouch[0], t.clientY - mapTouch[1]));
     mapTouch = mapLast = null;
