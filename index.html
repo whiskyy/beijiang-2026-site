@@ -115,6 +115,29 @@ header .sub{font-size:var(--f-m);color:var(--ink2)}
 .mapwrap .spur{fill:none;stroke:var(--ink2);stroke-linejoin:round;stroke-linecap:round;opacity:.5}
 .mapwrap .spur.lead{stroke:var(--route);stroke-dasharray:none;opacity:1}
 .mapwrap .spur.dim{opacity:.22}
+/* ---- 一天一条时间轴 ---- */
+.flow{margin-top:12px}
+.fl,.flh{display:grid;grid-template-columns:44px 1fr;gap:0 15px}
+.fl .flt{font-size:var(--f-xs);color:var(--ink3);padding-top:4px;text-align:right;font-variant-numeric:tabular-nums}
+.fl .flc{font-size:var(--f-m);padding:0 0 15px 15px;border-left:2px solid var(--rule);position:relative}
+.fl .flc::before{content:"";position:absolute;left:-5px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--rule)}
+.fl .flc.hot::before{background:var(--gold)}
+.fl .flc.bk::before{background:var(--red);box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 18%,transparent)}
+.fl .flc b,.flnote b{color:var(--ink);font-weight:600}
+.flsec{scroll-margin-top:58px}
+.flh .flc{padding:15px 0 11px 15px;border-left:2px solid var(--rule);position:relative;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.flh .flc::before{content:"";position:absolute;left:-7px;top:17px;width:12px;height:12px;border-radius:3px;background:var(--gold)}
+.flsec.road .flh .flc::before{background:var(--ink3)}
+.flsec.alt .flh .flc::before{background:var(--blue)}
+.flh i{flex:none;align-self:center;font-style:normal;font-size:var(--f-xs);font-weight:400;color:var(--ink2);background:var(--soft);border-radius:4px;padding:1px 6px;line-height:1.5}
+.flh b{font-size:var(--f-l);font-weight:600;color:var(--ink)}
+.flh span{margin-left:auto;font-size:var(--f-xs);font-weight:400;color:var(--ink3);text-align:right}
+.flow .pmsec{margin:0 0 14px 59px}
+.flow .pmsec .pmh{display:none}
+.flow .pmsec .mnote{margin:0 0 8px}
+.flnotes{margin:-4px 0 16px 59px}
+.flnote{display:grid;grid-template-columns:38px 1fr;gap:0 9px;font-size:var(--f-s);color:var(--ink2);margin-top:9px}
+.flnote .k{color:var(--ink3);font-size:var(--f-xs);padding-top:2px}
 .jump{margin-left:7px;vertical-align:1px;display:inline-flex;align-items:center;gap:1px;min-height:22px;padding:0 6px 0 7px;border-radius:999px;border:1px solid var(--rule);background:var(--soft);color:var(--ink3);font-size:var(--f-xs);font-family:inherit;line-height:1;cursor:pointer;white-space:nowrap}
 .jump:active{filter:brightness(.93)}
 .pmsec{margin:2px 0 10px}
@@ -696,7 +719,6 @@ var TOURS = {
  6:[{n:"沿途停车 · 贾登峪→克拉玛依", sub:"440 km · 戈壁为主", steps:[
    ["","贾登峪到布尔津走昨天的盘山路，早上顺光，冲乎尔河谷观景台可以再停一次"],
    ["","布尔津到乌尔禾 200 km 戈壁，没什么可停，和什托洛盖加油","和什托洛盖"],
-   ["","过乌尔禾往南 15 km 是<b>胡杨部落</b>，收费的景区不进，对面河谷里的野生胡杨林免费，车能开下去","胡杨部落"],
    ],
    skip:"", cost:"", tip:""},
   {n:"胡杨林 + 野生雅丹", sub:"都免费 · 16:35 胡杨 · 20:02 日落", steps:[
@@ -1218,6 +1240,102 @@ function funBlock(d){
   /* 地图并进它所属的那张景区卡；认不到卡的才单独成块 */
   function parkFor(dn, cardName){ return (PARK[dn]||[]).filter(function(p){ return p.card===cardName; }).map(function(p){ return oneParkMap(p, 1); }).join(''); }
   function parkMap(d){ return (PARK[d.d]||[]).filter(function(p){ return !(TOURS[d.d]||[]).some(function(t){ return t.n===p.card; }); }).map(function(p){ return oneParkMap(p); }).join(''); }
+/* 一天一条时间轴：d.it 是骨架，景区卡的步骤补更细的时刻，沿途卡填两段之间的路，
+     卡片的地图和注释挂在它自己那一段里。不再是几个块拼在一起。 */
+  function fmin(t){ var m=/^(\d{1,2}):(\d{2})$/.exec(t||""); return m ? +m[1]*60 + +m[2] : null; }
+  function dayFlow(d){
+    var dn = d.d, tours = TOURS[dn] || [];
+    var cards = tours.map(function(t, ti){
+      var sub = (t.sub || "").match(/\d{1,2}:\d{2}/g) || [];
+      var sts = t.steps.map(function(x){ return fmin(x[0]); }).filter(function(v){ return v != null; })
+        .concat(sub.map(fmin));
+      var a = sts.length ? Math.min.apply(null, sts) : null;
+      var b = sts.length ? Math.max.apply(null, sts) : null;
+      return {c:t, ti:ti, a:a, b:b, road:/^沿途/.test(t.n), alt:/备选|备用/.test(t.n), used:false};
+    });
+    /* 沿途卡没有时刻：让它占住前一段结束到后一段开始之间那段路 */
+    var timed = cards.filter(function(x){ return !x.road && !x.alt && x.a != null; }).sort(function(p,q){ return p.a-q.a; });
+    cards.forEach(function(x, i){
+      if(!x.road || x.a != null) return;
+      var next = null, prev = null;
+      for(var j=i+1;j<cards.length;j++) if(cards[j].a != null && !cards[j].alt){ next = cards[j]; break; }
+      for(var k=i-1;k>=0;k--) if(cards[k].b != null && !cards[k].alt){ prev = cards[k]; break; }
+      x.a = prev ? prev.b + 1 : -1e5; x.b = next ? next.a - 1 : 1e5;
+    });
+    /* 行：先放 d.it，再把卡片里 d.it 没有的时刻插进去 */
+    var rows = [], last = null;
+    (d.it || []).forEach(function(x, i){
+      var v = fmin(x.t);
+      if(v == null) v = (last == null ? -1e4 : last) + 0.01 * (i + 1);
+      else last = v;
+      rows.push({k:v, t:x.t, it:x});
+    });
+    cards.forEach(function(x){
+      if(x.alt) return;
+      x.c.steps.forEach(function(st){
+        var v = fmin(st[0]); if(v == null) return;
+        var hit = null;
+        for(var i=0;i<rows.length;i++) if(rows[i].k === v){ hit = rows[i]; break; }
+        if(hit){ if(!hit.step) hit.step = st; }
+        else rows.push({k:v, t:st[0], step:st});
+      });
+    });
+    rows.sort(function(p, q){ return p.k - q.k; });
+    /* 每行归到哪一段 */
+    rows.forEach(function(r){
+      var own = null;
+      cards.forEach(function(x){ if(!x.alt && x.a != null && r.k >= x.a && r.k <= x.b && (!own || (!x.road && own.road))) own = x; });
+      r.own = own; if(own) own.used = true;
+    });
+    function noteRows(t){
+      var out = "";
+      if(t.skip) out += '<div class="flnote"><span class="k">不去</span><span>'+t.skip+'</span></div>';
+      if(t.cost) out += '<div class="flnote"><span class="k">费用</span><span>'+t.cost+'</span></div>';
+      if(t.tip)  out += '<div class="flnote"><span class="k">提示</span><span>'+t.tip+'</span></div>';
+      if(t.pic)  out += '<div class="flnote"><span class="k">出片</span><span>'+picList(t.pic)+'<div class="mx">'+xhsLink(t.xhs||(t.n.split(" ")[0]+" 机位"))+'</div></span></div>';
+      return out ? '<div class="flnotes">'+out+'</div>' : "";
+    }
+    function rowHtml(r){
+      var it = r.it, st = r.step, cls = "", flag = "", body = "";
+      if(it){
+        cls = it.bk ? " bk" : (it.hot ? " hot" : "");
+        flag = it.bk ? '<span class="bkflag">'+(it.bk===1?'需提前订':it.bk)+'</span>' : "";
+        body = it.nav ? linkify(it.c, it.nav, "navi") : it.c;
+        /* 同一时刻卡片写得更细就用卡片那句 */
+        if(st && strip0(st[1]).length > strip0(it.c).length + 6) body = st[2] ? linkify(st[1], st[2], "navi") : st[1];
+      } else {
+        body = st[2] ? linkify(st[1], st[2], "navi") : st[1];
+      }
+      return '<div class="fl"><div class="flt mono">'+(r.t||"")+'</div><div class="flc'+cls+'">'+flag+body+'</div></div>';
+    }
+    function strip0(x){ return String(x).replace(/<[^>]+>/g, ""); }
+    var out = "", cur = null;
+    rows.forEach(function(r){
+      if(r.own !== cur){
+        if(cur) out += noteRows(cur.c) + '</div>';
+        cur = r.own;
+        if(cur){
+          var kind = cur.road ? "沿途" : "景区";
+          out += '<div class="flsec'+(cur.road?" road":"")+'" id="d'+dn+'t'+cur.ti+'">'+
+            '<div class="flh"><div class="flt"></div><div class="flc"><i>'+kind+'</i><b>'+cur.c.n.replace(/^沿途停车 · /,"")+'</b>'+
+            (cur.c.sub?'<span>'+cur.c.sub+'</span>':'')+'</div></div>'+ parkFor(dn, cur.c.n)+
+            cur.c.steps.filter(function(st){ return fmin(st[0]) == null; }).map(function(st){
+              return '<div class="fl"><div class="flt"></div><div class="flc">'+(st[2]?linkify(st[1],st[2],"navi"):st[1])+'</div></div>';
+            }).join("");
+        }
+      }
+      out += rowHtml(r);
+    });
+    if(cur) out += noteRows(cur.c) + '</div>';
+    /* 没能落进时间轴的卡（备选/备用）和投票块接在后面 */
+    cards.forEach(function(x){
+      if(x.alt || !x.used) out += '<div class="flsec alt" id="d'+dn+'t'+x.ti+'"><div class="flh"><div class="flt"></div><div class="flc"><i>'+(x.alt?"备选":(x.road?"沿途":"景区"))+'</i><b>'+x.c.n.replace(/^沿途停车 · /,"")+'</b>'+(x.c.sub?'<span>'+x.c.sub+'</span>':'')+'</div></div>'+
+        parkFor(dn, x.c.n) + x.c.steps.map(function(st){
+          return '<div class="fl"><div class="flt mono">'+(st[0]||"")+'</div><div class="flc">'+(st[2]?linkify(st[1],st[2],"navi"):st[1])+'</div></div>';
+        }).join("") + noteRows(x.c) + '</div>';
+    });
+    return '<div class="flow">'+out+'</div>' + planBlock(d, 1);
+  }
   function planBlock(d, flat){
     var p = d.plan; if(!p) return "";
     var opts = p.o.map(function(o){
@@ -1235,44 +1353,12 @@ function funBlock(d){
     var tt = d.it.map(function(x){return x.t}).filter(function(t){return /^\d/.test(t)});
     var times = tt.length ? tt[0]+' – '+tt[tt.length-1] : '';
     var tours = TOURS[d.d]||[];
-    /* 总览里每一行挂个跳转标签：能对上哪张景区卡就跳哪张，吃饭的跳吃什么 */
-    var mealNames = {}; (d.meals||[]).forEach(function(m){ m.o.forEach(function(o){ mealNames[o[0]] = 1; }); });
-    function mins(t){ var m=/^(\d{1,2}):(\d{2})$/.exec(t||""); return m ? +m[1]*60 + +m[2] : null; }
-    var cardIdx = tours.map(function(t, ti){
-      var navs = {}; t.steps.forEach(function(st){ if(st[2]) navs[st[2]] = 1; });
-      var rg = /(\d{1,2}:\d{2})[–-](\d{1,2}:\d{2})/.exec(t.sub || "");
-      var sts = t.steps.map(function(st){ return mins(st[0]); }).filter(function(v){ return v!=null; });
-      return {id:"d"+d.d+"t"+ti, navs:navs, head:t.n.split(" · ")[0],
-        short:t.n.replace(/^沿途停车 · /,"沿途 ").split(" · ").pop(),
-        a: rg ? mins(rg[1]) : (sts.length?Math.min.apply(null,sts):null),
-        b: rg ? mins(rg[2]) : (sts.length?Math.max.apply(null,sts):null)};
-    });
-    function jumpFor(x){
-      var tx = String(x.c).replace(/<[^>]+>/g, ""), v = mins(x.t);
-      if(/早饭|午饭|晚饭|早餐|夜宵|早午饭|吃碗|吃个|吃饭|晚饭|吃午饭/.test(tx))
-        return (d.meals && d.meals.length) ? {id:"d"+d.d+"meals", t:"吃什么"} : null;
-      if(v != null) for(var i=0;i<cardIdx.length;i++){ var c=cardIdx[i]; if(c.a!=null && v>=c.a && v<=c.b) return {id:c.id, t:c.short}; }
-      for(var j=0;j<cardIdx.length;j++) if(x.nav && cardIdx[j].navs[x.nav]) return {id:cardIdx[j].id, t:cardIdx[j].short};
-      for(var k=0;k<cardIdx.length;k++){ var h=cardIdx[k].head; if(h && h.length>1 && tx.indexOf(h)>=0) return {id:cardIdx[k].id, t:cardIdx[k].short}; }
-      return (x.nav && mealNames[x.nav] && d.meals && d.meals.length) ? {id:"d"+d.d+"meals", t:"吃什么"} : null;
-    }
-    var items = d.it.map(function(x){
-      var cls = x.bk ? " bk" : (x.hot ? " hot" : "");
-      var flag = x.bk ? '<span class="bkflag">'+(x.bk===1?'需提前订':x.bk)+'</span>' : "";
-      var g = jumpFor(x);
-      var jump = g ? '<button type="button" class="jump" data-go="'+g.id+'">'+g.t+'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>' : "";
-      return '<div class="tm mono">'+(x.t||"")+'</div><div class="ct'+cls+'">'+flag+(x.nav?linkify(x.c, x.nav, "navi"):x.c)+jump+'</div>';
-    }).join("");
     dh += '<details class="card day" id="day-'+d.d+'"'+(OPEN[d.d]?" open":"")+'><summary>'+
       '<div class="dn" style="background:'+col+'">D'+d.d+'</div>'+
       '<div class="dti"><div class="r">'+d.r+'</div><div class="m">'+d.date+' '+d.wk+' · '+d.m+'</div></div>'+
       '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
       '</summary><div class="dbody">'+(d.d===1 || d.d===11 ? (toolRow(d.d, d.rt, d) ? '<div class="minimap">'+toolRow(d.d, d.rt, d)+'</div>' : '') : miniMap(d.d, col, d.rt, d))+
-      funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody"><div class="tl">'+items+'</div>'+
-        tours.map(function(t, ti){ return renderTour(t, d.d, ti, 1); }).join('')+
-        parkMap(d)+
-        planBlock(d, 1)+
-      '</div></details>'+
+      funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody">'+dayFlow(d)+'</div></details>'+
       mealBlock(d)+
       '</div></details>';
   });
