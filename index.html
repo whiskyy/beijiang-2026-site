@@ -1402,7 +1402,7 @@ function funBlock(d){
       return '<div class="mb"><span class="mbk">'+kind+'</span>'+
         (C[name] ? '<a class="pl mbn"'+navAttrs(name, "view")+'>'+PIN+name+'</a>' : '<span class="mbn">'+name+'</span>')+
         (m.tag ? '<span class="mbs alt"> · '+m.tag+'</span>' : '')+
-        (booked ? '<span class="mbs"> · 已订</span>' :
+        (booked ? '<span class="mbs"> · 已订</span>'+(more > 0 ? '<span class="mbs alt"> · </span><button type="button" class="jump mbv" data-go="d'+dn+'meals">还有 '+more+' 家备选</button>' : '') :
           more > 0 ? '<span class="mbs alt"> · </span><button type="button" class="jump mbv" data-go="d'+dn+'meals">备选 '+more+' 家待投票</button>' : '')+
         '</div>';
     }
