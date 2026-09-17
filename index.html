@@ -1965,7 +1965,9 @@ var SEED = [
     queue.push({id:uid(), del:id, t:new Date().toISOString(), by:me}); save(LSQ, queue); render(); sync();
   });
   $("afCopy").addEventListener("click", function(){
-    var list = all(), c = compute(list), lines = ["北疆账本 " + today(), "公摊合计 " + fm0(c.total) + "；出发前的三人分，路上的四人分", ""];
+    var list = all(), c = compute(list), lines = ["北疆账本 " + today(), "公摊合计 " + fm0(c.total) + "；出发前的三人分，路上的四人分"];
+    if(syncEl.textContent !== "已同步") lines.push("注意：云端还没同步完，这份数字可能不全，同步好再发一次");
+    lines.push("");
     PEOPLE.forEach(function(p){ if(c.paid[p] || c.owe[p]) lines.push(p + "：垫付 " + fm0(c.paid[p]||0) + "，应摊 " + fm0(c.owe[p]||0) + "，结余 " + fm0((c.paid[p]||0)-(c.owe[p]||0))); });
     var bal = {}; PEOPLE.forEach(function(p){ bal[p] = (c.paid[p]||0)-(c.owe[p]||0); });
     var s = settle(bal); if(s.length) lines.push("", "结清：" + s.map(function(x){ return x.replace(/<\/?b>/g,""); }).join("；"));
