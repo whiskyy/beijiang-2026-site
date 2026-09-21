@@ -18,7 +18,7 @@
 <style>
 /* ================================================================
    北疆十日 · 样式表（2026-09-09 重构版）
-   规则：字号 13/15/20/24；字重 400/600；文字色 ink/ink2/ink3 + 蓝链接/红警示/绿完成。
+   规则：字号 13/14/16/20/24，成段备注 15；字重 400/600；文字色 ink/ink2/ink3 + 蓝链接/红警示/绿完成。
    样式只在这里维护，补丁脚本不碰 CSS。
    ================================================================ */
 :root{
@@ -28,12 +28,12 @@
   --d6:#6B4E8C; --d7:#9E3E70; --d8:#B03A38; --d9:#B1621F; --d10:#7A6A3A; --dntext:#FFFFFF;
   --route:#1F5B85; --xhs:#C8102E; --halo:rgba(252,250,245,.9); --dim:rgba(255,255,255,.8); --mapimg:url(img/map-light.webp); --pmapf:none;
   --wash1:rgba(200,137,43,.10); --wash2:rgba(31,91,133,.07); --contour-img:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420' fill='none' stroke='%231E1B17' stroke-opacity='.075' stroke-width='1'><path d='M-20 60c60-30 120 10 180-10s110-50 170-20 90 60 110 60'/><path d='M-20 110c70-20 130 20 200 0s100-40 160-10 80 50 100 50'/><path d='M-20 170c80-40 150 30 230 10s90-60 150-30 70 40 80 40'/><path d='M-20 240c60-10 110 40 180 30s120-70 200-40 80 40 80 40'/><path d='M-20 300c90-50 160 20 240 0s90-30 140-10 60 40 60 40'/><path d='M-20 360c70 0 120 30 190 20s130-60 210-30 50 30 50 30'/><path d='M60 420c40-40 90-60 150-50s110 40 170 20'/></svg>");
-  --f-xs:13px; --f-s:13px; --f-m:15px; --f-l:15px; --f-xl:20px; --f-h1:24px;
+  --f-xs:13px; --f-s:14px; --f-n:15px; --f-m:16px; --f-l:16px; --f-xl:20px; --f-h1:24px;
   --lh:1.6; --r:12px; --r-s:8px;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#141310; --card:#1C1B17; --soft:#22201A; --ink:#ECE6DA; --ink2:#A59C8C; --ink3:#928876;
+    --bg:#141310; --card:#1C1B17; --soft:#22201A; --ink:#ECE6DA; --ink2:#B7AE9E; --ink3:#9A907F;
     --rule:#2C2A23; --gold:#E0A94A; --green:#79B39B; --red:#E08A72; --blue:#79A8CC;
     --d1:#E3A94E; --d2:#AFC155; --d3:#5FA684; --d4:#4E97A0; --d5:#6A8FC4;
     --d6:#9B7CC0; --d7:#CE6E9C; --d8:#DE6A64; --d9:#E39346; --d10:#A99457; --dntext:#141310;
@@ -100,6 +100,8 @@ header .sub{font-size:var(--f-m);color:var(--ink2)}
 .todaybtn:active,.now .today:active,.btn:active,.xl:active{filter:brightness(.88)}
 .collapsebtn{position:fixed;right:calc(14px + env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom));z-index:20;min-height:44px;display:inline-flex;align-items:center;gap:5px;padding:0 15px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink2);font-size:var(--f-s);font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.14)}
 .collapsebtn:active{filter:brightness(.94)}
+.collapsebtn,.todaybtn{transition:transform .2s ease-out,opacity .2s}
+.fabaway{transform:translateY(90px);opacity:0;pointer-events:none}
 .tsec{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--rule);scroll-margin-top:58px}
 .tsh{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;font-size:var(--f-l);font-weight:600;color:var(--ink);padding:0 0 4px}
 .tsh i{flex:none;align-self:center;font-style:normal;font-size:var(--f-xs);font-weight:400;color:var(--ink3);line-height:1.5}
@@ -112,26 +114,30 @@ header .sub{font-size:var(--f-m);color:var(--ink2)}
 .flow{margin-top:12px}
 .fl,.flh{display:grid;grid-template-columns:44px 1fr;gap:0 15px}
 .fl .flt{font-size:var(--f-xs);color:var(--ink3);padding-top:4px;text-align:right;font-variant-numeric:tabular-nums}
-.fl .flc{font-size:var(--f-m);line-height:1.62;color:var(--ink2);padding:1px 0 16px 15px;border-left:2px solid var(--rule);position:relative}
-.fl .flc::before{content:"";position:absolute;left:-5px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--rule)}
+.fl .flc{font-size:var(--f-m);line-height:1.62;color:var(--ink);padding:1px 0 16px 15px;border-left:2px solid var(--rule);position:relative}
+.fl .flc::before{content:"";position:absolute;left:-5px;top:calc(.81em - 3px);width:8px;height:8px;border-radius:50%;background:var(--rule)}
 .fl.li .flc{padding-bottom:7px}
-.fl.li .flc::before{left:-3px;top:12px;width:4px;height:4px;background:var(--ink3);opacity:.35}
+.fl.li .flc::before{left:-3px;top:calc(.81em - 1px);width:4px;height:4px;background:var(--ink3);opacity:.35}
 .fl.li:has(+ .fl:not(.li)) .flc,.fl.li:last-child .flc{padding-bottom:15px}
 .fl .flc.hot::before{background:var(--gold)}
 .fl .flc.bk::before{background:var(--red);box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 18%,transparent)}
-.fl .flc b,.tkt td b,.flnote b,.mn b,.row .c b,dl.tips dd b,.os b,.mnote b,.play b,.a2hs b,.prelist .pr span>b:not(:first-child){color:var(--ink);font-weight:400}
-.fl .flc i{display:block;margin-top:6px;font-style:normal;color:var(--ink3)}
+.tkt td b,.flnote b,.mn b,.row .c b,dl.tips dd b,.os b,.mnote b,.play b,.a2hs b,.prelist .pr .prb b{color:var(--ink);font-weight:400}
+.fl .flc b{font-weight:600}
+.fl .flc b .pl,.fl .flc .pl b{font-weight:400}
+.fl .flc i{display:block;margin-top:6px;font-style:normal;font-size:var(--f-n);line-height:1.6;color:var(--ink2)}
+.fl .flc i b{color:var(--ink);font-weight:400}
+.sn{display:block}.sn+.sn{margin-top:5px}
 .flsec{scroll-margin-top:58px}
 .flh .flc{padding:20px 0 8px 15px;border-left:2px solid var(--rule);position:relative;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.flh .flc::before{content:"";position:absolute;left:-7px;top:24px;width:12px;height:12px;border-radius:3px;background:var(--gold)}
+.flh .flc::before{content:"";position:absolute;left:-7px;top:calc(14px + .65em);width:12px;height:12px;border-radius:3px;background:var(--gold)}
 .flsec.road .flh .flc::before{background:var(--ink3)}
 .flsec.alt .flh .flc::before{background:var(--blue)}
 .flh i{flex:none;align-self:center;font-style:normal;font-size:var(--f-xs);font-weight:400;color:var(--ink3)}
 .flh b{font-size:var(--f-l);font-weight:600;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
 .flh span{flex:0 0 100%;font-size:var(--f-xs);font-weight:400;color:var(--ink3);line-height:1.5;margin-top:1px}
 .flow .pmsec{margin:0 0 0 59px;padding:0 0 14px 15px;border-left:2px solid var(--rule)}
-.flow .pmsec .mnote{margin:0 0 8px;line-height:1.7}
-.flnote{display:grid;grid-template-columns:44px 1fr;gap:0 15px;font-size:var(--f-s);line-height:1.7;color:var(--ink3);margin-top:0}
+.flow .pmsec .mnote{margin:0 0 8px;font-size:var(--f-n);line-height:1.6;color:var(--ink2)}
+.flnote{display:grid;grid-template-columns:44px 1fr;gap:0 15px;font-size:var(--f-n);line-height:1.6;color:var(--ink2);margin-top:0}
 .flnote>span:last-child{border-left:2px solid var(--rule);padding:0 0 14px 15px}
 .flnote .k{text-align:right;color:var(--ink3);font-size:var(--f-xs);padding-top:4px}
 .mb{margin-top:6px;font-size:var(--f-m);line-height:1.62}
@@ -212,11 +218,12 @@ td:last-child,th:last-child{padding-right:0}
 .prelist{border:1px solid color-mix(in srgb,var(--red) 30%,transparent);border-radius:var(--r-s);padding:10px 12px 4px;margin-bottom:14px}
 .prelist .ph{font-size:var(--f-xs);color:var(--red);margin-bottom:6px}
 .prelist .ph em{font-style:normal;color:var(--ink3)}
-.prelist .pr{display:grid;grid-template-columns:74px 1fr;gap:10px;font-size:var(--f-s);padding:6px 0;border-top:1px solid var(--rule)}
+.prelist .pr{display:grid;grid-template-columns:74px 1fr;gap:10px;font-size:var(--f-n);line-height:1.6;padding:8px 0;border-top:1px solid var(--rule)}
+.prelist .pr .pt{display:block;color:var(--ink);font-weight:600}.prelist .pr .prb{display:block;margin-top:2px}
 .prelist .pr>b{color:var(--red);font-weight:400;padding-top:1px}
-.prelist .pr span{color:var(--ink2)}.prelist .pr span b{color:var(--ink)}
+.prelist .pr span{color:var(--ink2)}
 .prelist .pr[data-todo]{cursor:pointer;-webkit-user-select:none;user-select:none}
-.prelist .pr.done span,.prelist .pr.done span b,.todo .row.done .c,.todo .row.done .dt,.todo .row.done .c b{color:var(--ink3)}
+.prelist .pr.done span,.prelist .pr.done span b,.prelist .pr.done .pt,.todo .row.done .c,.todo .row.done .dt,.todo .row.done .c b{color:var(--ink3)}
 .prelist .pr.done span,.todo .row.done .c{text-decoration:line-through;text-decoration-color:var(--rule)}
 .prelist .pr.done>b{color:var(--green)}.prelist .pr.done>b::after{content:" ✓"}
 .tkt .tot{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:10px 0 0;font-size:var(--f-m);border-top:2px solid var(--rule)}
@@ -257,7 +264,7 @@ dl.tips dd{margin:0 0 16px;font-size:var(--f-m);color:var(--ink2)}
 .tools a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;padding:6px 4px;border-radius:var(--r-s);background:var(--card);border:1px solid var(--rule);text-decoration:none;color:var(--ink);text-align:center}
 .tools a svg{width:18px;height:18px;color:var(--blue)}.tools a.stay2 svg{fill:var(--blue)}
 .tools a .ic{width:18px;height:18px;border-radius:5px;background:#C20C0C;color:#fff;display:grid;place-items:center;font-size:var(--f-xs);font-weight:600}
-.tools a b{font-size:var(--f-xs);font-weight:400;color:var(--ink2);line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tools a b{font-size:var(--f-xs);font-weight:400;color:var(--ink2);line-height:1.3;max-width:100%;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow-wrap:anywhere}
 
 /* 时间线 */
 .bkflag{display:block;width:max-content;max-width:100%;font-size:var(--f-xs);color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);padding:1px 6px;border-radius:4px;margin:2px 0 4px}
@@ -300,6 +307,7 @@ dl.tips dd{margin:0 0 16px;font-size:var(--f-m);color:var(--ink2)}
 .opt .on{display:block;font-size:var(--f-m);line-height:1.5}
 a.opt .on{color:var(--blue)}
 .opt .os{display:block;font-size:var(--f-s);color:var(--ink2)}
+.tsec .opt .os{font-size:var(--f-n);line-height:1.6}
 .opt .st{display:block;font-size:var(--f-s);color:var(--ink)}
 .opt .oy{display:block;font-size:var(--f-xs);color:var(--ink3);margin-top:2px}
 .opt .pi{float:right;width:60px;height:60px;border-radius:var(--r-s);object-fit:cover;margin:2px 0 6px 12px;background:var(--soft)}
@@ -332,7 +340,7 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 .a2hs>b{display:block;color:var(--ink);font-size:var(--f-m);margin-bottom:4px}
 .a2hs p{margin:0}.a2hs .btn{margin:8px 0 0}
 
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.chev,.toast,.pl,.tour>summary,.day>summary,.vt,.fcard,.seg .pet{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.collapsebtn,.todaybtn,.chev,.toast,.pl,.tour>summary,.day>summary,.vt,.fcard,.seg .pet{transition:none}}
 
 /* ==== 趣味：天气/光线/月亮 + 路上玩 ==== */
 .gsheet{position:fixed;inset:0;z-index:97;display:none;align-items:flex-end;background:rgba(0,0,0,.45)}
@@ -418,6 +426,64 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 .fcard .fk{font-size:var(--f-xs);color:var(--gold);letter-spacing:.06em;margin-bottom:8px}
 .fcard .fq{font-size:var(--f-l);line-height:1.6}
 .fcard .fa{font-size:var(--f-xs);color:var(--ink3);margin-top:6px;text-align:right}
+/* ==== 手机阅读（≤520px）====
+   病根是左右分栏把正文挤成一行 13–14 个字。手机上一律改成上下叠：
+   时间并进正文第一行，日期/标签放到正文上面，正文用满卡片宽度。 */
+@media (max-width:520px){
+  .wrap{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+  .dbody{padding:12px 12px 16px}
+  /* 总览卡收着是一张卡，展开后去掉边框，时间线用满整张日卡的宽度 */
+  .tour.plan[open]{border-color:transparent;border-radius:0;background:transparent;margin:8px -1px 2px}
+  .tour.plan[open]>summary{padding:8px 2px}
+  .tour.plan[open]>.tbody{padding:6px 0 8px}
+  .tbody.meals{padding:0 12px 12px}
+  .tsec .meal.noimg{grid-template-columns:1fr;grid-template-areas:"n" "x" "o"}
+  /* 时间线 */
+  .flow{margin-top:8px;margin-left:5px}
+  .flow .fl,.flow .flh,.flow .flnote{display:block;position:relative;border-left:2px solid var(--rule);padding-left:15px}
+  .flow .fl{font-size:var(--f-m);line-height:1.62}
+  .fl .flt{float:left;height:1.5em;margin-right:9px;padding:1px 0 0;text-align:left;font-size:inherit;line-height:inherit;font-weight:600;color:var(--ink)}
+  .fl .flt:empty,.flh .flt{display:none}
+  .fl .flc,.flh .flc{border-left:0;padding-left:0}
+  .fl .flc::before{left:-20px}
+  .fl.li .flc::before{left:-18px}
+  .flh .flc::before{left:-22px}
+  .bkflag{overflow:hidden}
+  .flow .pmsec{margin-left:0;padding-left:15px}
+  .flnote>span:last-child{display:block;border-left:0;padding:0 0 14px}
+  .flnote .k{display:block;text-align:left;padding:0 0 1px;font-weight:600;color:var(--ink2)}
+  /* 待办：日期叠到正文上面 */
+  .rows .row{grid-template-columns:1fr 26px}
+  .rows .row .dt{grid-column:1;grid-row:1;padding-top:0}
+  .rows .row .c{grid-column:1;grid-row:2}
+  .rows .row .ck{grid-column:2;grid-row:1 / span 2;align-self:center}
+  /* 要提前抢的：日期叠到标题上面 */
+  .prelist .pr{display:block;padding:10px 0 12px}
+  .prelist .pr>b{display:block;padding:0 0 1px;font-size:var(--f-xs)}
+  .prelist .pr .pt{font-size:var(--f-m)}
+  /* 门票表：一行拆成「景区 + 人均 / 门票 / 说明」三层 */
+  .tkt table,.tkt tbody,.tkt td{display:block}
+  .tkt thead{display:none}
+  .tkt tr{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:12px 0;border-bottom:1px solid var(--rule)}
+  .tkt td{padding:0;border:0}
+  .tkt td:nth-child(1){grid-column:1;grid-row:1;font-size:var(--f-m)}
+  .tkt td:nth-child(4){grid-column:2;grid-row:1;font-size:var(--f-m);color:var(--ink)}
+  .tkt td:nth-child(4)::before{content:"人均 ";font-size:var(--f-xs);color:var(--ink3)}
+  .tkt td:nth-child(2){grid-column:1 / -1;grid-row:2;text-align:left}
+  .tkt td:nth-child(2)::before{content:"门票 ";color:var(--ink3)}
+  .tkt td:nth-child(3){grid-column:1 / -1;grid-row:3;font-size:var(--f-n);line-height:1.6}
+  /* 作息表：一天一块，起床 / 出发 / 到达各占一行 */
+  .sched table,.sched tbody,.sched tr,.sched td{display:block}
+  .sched thead{display:none}
+  .sched tr{padding:9px 0 10px;border-bottom:1px solid var(--rule)}
+  .sched td,.sched td:first-child,.sched td:nth-child(3){position:relative;width:auto;padding:0 0 0 44px;border:0;font-size:var(--f-n);line-height:1.55;white-space:normal}
+  .sched td:first-child{padding:0 0 2px;font-size:var(--f-m);font-weight:600}
+  .sched td:last-child{white-space:normal}
+  .sched td:nth-child(n+2)::before{position:absolute;left:0;top:0;font-size:var(--f-xs);line-height:calc(var(--f-n)*1.55);color:var(--ink3)}
+  .sched td:nth-child(2)::before{content:"起床"}
+  .sched td:nth-child(3)::before{content:"出发"}
+  .sched td:nth-child(4)::before{content:"到达"}
+}
 </style>
 </head>
 <body>
@@ -541,6 +607,29 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
 <script>
 "use strict";
 function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+/* 成段的备注按句号拆成一行一句，手机上不会叠成一堵灰字墙。只在标签外面的句号处拆，<b>、链接里面的不动 */
+function sents(html){
+  html = String(html); if(html.indexOf("。") < 0) return html;
+  var parts = [""], depth = 0, pd = 0;
+  html.replace(/<[^>]+>|[^<]+/g, function(tok){
+    if(tok.charAt(0) === "<"){
+      if(tok.charAt(1) === "/") depth--;
+      else if(!/\/>$/.test(tok) && !/^<(br|img|hr|input)\b/i.test(tok)) depth++;
+      parts[parts.length-1] += tok;
+    } else if(depth > 0) parts[parts.length-1] += tok;
+    else for(var i = 0; i < tok.length; i++){
+      /* 括号、引号里面的句号不拆，免得右括号自己掉到下一行 */
+      var ch = tok.charAt(i);
+      if("（(「『".indexOf(ch) >= 0) pd++; else if("）)」』".indexOf(ch) >= 0) pd = Math.max(0, pd-1);
+      if(ch === "。" && pd === 0) parts.push(""); else parts[parts.length-1] += ch;
+    }
+    return tok;
+  });
+  /* 拆开以后每句自己占一行，句子两头原来的 <br> 就多余了 */
+  parts = parts.map(function(p){ return p.replace(/^(\s*<br\s*\/?>)+|(<br\s*\/?>\s*)+$/gi, ""); }).filter(function(p){ return p.replace(/<[^>]+>/g, "").trim(); });
+  return parts.length < 2 ? html : parts.map(function(p){ return '<span class="sn">'+p+'</span>'; }).join("");
+}
+function splitNote(html){ return String(html).replace(/<i>([\s\S]*?)<\/i>/g, function(_, inner){ return "<i>"+sents(inner)+"</i>"; }); }
 /* ===== 高德深链 =====
    坐标为 GCJ-02，2026-09 经高德官方 POI 检索逐个核对。页面不含任何 API Key。 */
 var C = {"果子沟观景台":[81.163375,44.474775],"强王快餐":[89.52537,46.99027],"美丽峰":[87.4166,48.56475],"贾登峪游客直通车服务中心":[87.1537,48.50219],"白给也餐厅":[87.1278,48.11991],"贾登峪老猎人餐厅":[87.14841,48.49291],"马量鸡肉面":[87.63199,43.81101],"海上魔鬼城观景台":[87.48913,46.9857],"玲家小院":[85.62495,44.34083],"米热大妈破包子":[87.61049,43.90013],"万财野蘑菇专卖":[84.02031,43.32369],"胡杨部落":[85.54247,46.00673],"纪氏部落影视城":[85.77334,46.0028],"援疆桥":[87.43916,48.58065],"阿凡提楼":[87.619,43.7809],"金泉商城":[87.62077,43.7846],"阿娜尔汗的下午茶":[81.31194,43.93333],"沙煮咖啡 sefye coffee":[81.30757,43.93534],"黎光街25号咖啡馆":[81.31023,43.93363],"神钟山":[89.97536,47.29856],"卧龙湾":[87.05418,48.62154],"啊臻味道米粉西河坝前街店":[87.61076,43.79339],"温馨家园客栈":[87.43268,48.57096],"疯长咖啡":[87.44019,48.57494],"茶芭蕾桥头店":[87.43143,48.5709],"晓红特色肉饼幸福里店":[82.89644,44.59768],"奔跑的肉饼子锦福路店":[82.89142,44.59651],"阿俊牛肉拉面饺子馆":[84.01412,43.32464],"乔尔玛服务区":[84.3829,43.65374],"日落观景台":[87.44693,48.5769],"禾木沐野咖啡酒吧":[87.43993,48.57299],"禾木桥":[87.43068,48.57197],"禾木百年老屋":[87.44808,48.57282],"泰加林廊道":[87.0273,48.71441],"喀纳斯蝴蝶餐厅":[87.03565,48.69544],"泰加餐厅":[87.03907,48.70053],"巴音布鲁克天鹅湖风景区北门":[84.13414,43.01255],"园丁缸子肉烤肉店":[87.62123,43.78511],"勇哥小厨":[87.14813,48.49318],"伊沐晨包子":[87.61072,43.90018],"赛里木湖松树头观景台":[81.14203,44.50482],"金花紫卉":[81.08392,44.52889],"西海草原":[80.99198,44.57933],"十里长堤停靠站":[81.27192,44.66241],"赛里木湖点将台":[81.07019,44.68824],"天牧台观景台":[83.99188,43.23509],"独库碧玉湖停车点":[84.42406,43.744],"雪冠天山服务中心":[84.4133,43.7364],"可可托海白桦林":[89.88322,47.22135],"碧玺湾":[89.88717,47.21867],"伊犁老城文化旅游区":[81.33249,43.90199],"丝路有约":[87.6214,43.79462],"小吴风味餐厅":[89.82518,47.21543],"吾苏曼江饭馆":[89.79499,47.20985],"金冠牧疆鱼羊宴":[86.87475,47.70454],"黑走马冷水活鱼大盘土鸡":[86.86155,47.70194],"鑫喀禾过油肉拌面店":[87.13131,48.50595],"林萍哨子面烧烤康城店":[84.92064,45.57581],"光头强椒麻鸡泽福店":[84.87469,45.57351],"麦尔疆西域美食主题餐厅":[80.75454,44.19121],"老伊犁碎肉王":[80.74282,44.19346],"欣万佳米粉馆":[80.74193,44.187],"原始抓饭江苏路店":[81.31905,43.93023],"阿列克桑德拉面包房":[81.31024,43.93245],"醉满疆特色新疆菜":[84.01172,43.32473],"那拉提旅游风景区游客中心":[84.02977,43.31986],"辣风芹新疆炒米粉那拉提店":[84.01367,43.32485],"骏原椒麻鸡":[84.15126,43.02877],"牛宫馆丸子汤巴音酒店店":[84.15328,43.02955],"大十字玲玲米粉友好三中店":[87.59515,43.8266],"天山国际机场":[87.48109,43.91701],"国际大巴扎":[87.61798,43.78001],"乌市桔子酒店":[87.61567,43.79693],"乌市全季友好明园":[87.58779,43.8162],"火烧山":[89.03209,44.89653],"伊雷木湖观景台":[89.75334,47.21868],"冲乎尔镇":[87.13147,48.11643],"海流滩隧道":[87.01359,48.18895],"和什托洛盖":[86.00719,46.52028],"神仙湾":[87.04085,48.65899],"月亮湾":[87.04576,48.64099],"观鱼台":[86.98965,48.71804],"点将台":[81.07019,44.68824],"克勒涌珠":[81.02196,44.56124],"松树头":[81.14201,44.50483],"新源县":[83.233,43.4348],"巩乃斯河谷":[83.98373,43.32548],"天界台":[84.02041,43.26756],"游牧人家":[83.94191,43.20922],"拉尔墩达坂":[84.3491,43.16477],"巴音布鲁克湿地草原":[84.26554,43.05012],"玉希莫勒盖达坂":[84.44825,43.4731],"哈希勒根隧道":[84.42111,43.73267],"独山子":[84.82929,44.38586],"那拉提入口":[84.36787,43.35515],"可可苏里":[89.76482,47.02887],"雾海野奢民宿":[89.78054,47.20403],"可可托海景区":[89.88421,47.22208],"泰悦假日酒店":[86.86047,47.70576],"禾木门票站":[87.52834,48.57146],"禾木無也民宿":[87.43394,48.56568],"禾木观景台":[87.42857,48.57735],"贾登峪服务中心":[87.13312,48.50706],"喀纳斯生态度假酒店":[87.15351,48.49484],"喀纳斯换乘中心":[87.03085,48.69333],"世界魔鬼城":[85.7332,46.13515],"克拉玛依亚朵":[84.90971,45.56452],"精河县":[82.89071,44.5992],"赛里木湖新东门":[81.38651,44.61604],"丽呈花盛酒店":[80.74542,44.18994],"六星街":[81.30967,43.93243],"伊犁老城文化旅游区第3停车场":[81.33613,43.90403],"文旅那拉提度假酒店":[84.03234,43.3188],"那拉提风景区":[84.02977,43.31986],"丽呈酒店巴音布鲁克":[84.14741,43.02574],"九曲十八弯观景台":[84.42771,42.76573],"乔尔玛烈士陵园":[84.3584,43.65204],"五彩湾服务区":[88.83541,44.7519],"北屯市":[87.80564,47.3622],"布尔津":[86.87948,47.69752],"奎屯服务区":[85.11674,44.36347],"四十九丸子汤友好店":[87.58987,43.8227],"恰库尔图老奇台拌面王":[89.54238,46.33175],"库拉西拌面王":[89.82435,47.21699],"印府冷水鱼":[86.86563,47.70083],"桃源风味餐厅":[87.43149,48.57129],"疆禾餐厅":[87.43661,48.5722],"麦尔疆碎肉拌面小锅抓饭":[80.74874,44.18988],"双公羊烤全羊民街店":[87.61799,43.7853],"三号院餐吧":[89.8088,47.21001],"域无疆餐厅":[89.81411,47.21748],"仙境又一味火锅店":[87.44499,48.57733],"雪乡巴朗":[87.4373,48.57145],"霍城县清水河青之口餐厅":[80.74689,44.18366],"鑫辉烧烤幸福路店":[80.74666,44.18727],"阿娜尔家新疆菜那拉提店":[84.01648,43.32384],"天福缘农家客栈":[83.99282,43.32955],"吉家牦牛骨头汤":[84.14952,43.02808],"可可托海镇青年路 4 号":[89.825855,47.214969],"布尔津五彩滩东路 269 号":[86.881819,47.703104],"贾登峪游客直通车服务中心西北":[87.153325,48.502875],"克拉玛依胜利路 32-4-1 号":[84.91795,45.569833],"那拉提幸福路路口":[84.012527,43.325142],"巴音布鲁克镇中心":[84.148196,43.02805],"乌鲁木齐站":[87.528997,43.840272]};
@@ -875,12 +964,12 @@ var TIPS = [
       var ok = r[5]===2 || doneTk[r[0]];
       var tag = ok ? '<span class="d ok">已订</span>' : (r[5] ? '<span class="d pre">提前</span>' : '');
       return '<tr><td><b>'+r[0]+'</b><span class="d">'+r[4]+'</span>'+tag+'</td><td class="n">'+r[1]+'</td>'+
-        '<td class="g">'+r[2]+'</td><td class="n">'+r[3]+'</td></tr>';
+        '<td class="g">'+sents(r[2])+'</td><td class="n">'+r[3]+'</td></tr>';
     }).join("");
     var left = t.pre.filter(function(r){ var n = tkOf(r[1]); return !(n && doneTk[n]); }).length;
     document.getElementById("tktBox").innerHTML =
       '<div class="prelist"><div class="ph">要提前抢的，独库没约到走不了'+(left ? '<em> · 还剩 '+left+' 项，买到了点一下</em>' : '<em> · 都搞定了</em>')+'</div>'+
-        t.pre.map(function(r){ var n = tkOf(r[1]), k = n ? tkKey[n] : ""; return '<div class="pr'+(n && doneTk[n] ? ' done' : '')+'"'+(k ? ' data-todo="'+k+'" role="checkbox" aria-checked="'+(doneTk[n]?'true':'false')+'"' : '')+'><b class="mono">'+r[0]+'</b><span><b>'+r[1]+'</b><br>'+r[2]+'</span></div>'}).join("")+
+        t.pre.map(function(r){ var n = tkOf(r[1]), k = n ? tkKey[n] : ""; return '<div class="pr'+(n && doneTk[n] ? ' done' : '')+'"'+(k ? ' data-todo="'+k+'" role="checkbox" aria-checked="'+(doneTk[n]?'true':'false')+'"' : '')+'><b class="mono">'+r[0]+'</b><span><b class="pt">'+r[1]+'</b><span class="prb">'+sents(r[2])+'</span></span></div>'}).join("")+
       '</div>'+
       '<table><thead><tr><th>景区</th><th class="n">门票</th><th>区间车 / 自驾票</th><th class="n">人均</th></tr></thead>'+
       '<tbody>'+rows+'</tbody></table>'+
@@ -1335,9 +1424,9 @@ function funBlock(d){
     });
     function noteRows(t){
       var out = "";
-      if(t.skip) out += '<div class="flnote"><span class="k">不去</span><span>'+t.skip+'</span></div>';
-      if(t.cost) out += '<div class="flnote"><span class="k">费用</span><span>'+t.cost+'</span></div>';
-      if(t.tip)  out += '<div class="flnote"><span class="k">提示</span><span>'+t.tip+'</span></div>';
+      if(t.skip) out += '<div class="flnote"><span class="k">不去</span><span>'+sents(t.skip)+'</span></div>';
+      if(t.cost) out += '<div class="flnote"><span class="k">费用</span><span>'+sents(t.cost)+'</span></div>';
+      if(t.tip)  out += '<div class="flnote"><span class="k">提示</span><span>'+sents(t.tip)+'</span></div>';
       if(t.pic)  out += '<div class="flnote"><span class="k">出片</span><span>'+picList(t.pic)+'<div class="mx">'+xhsLink(t.xhs||(t.n.split(" ")[0]+" 机位"))+'</div></span></div>';
       return out ? '<div class="flnotes">'+out+'</div>' : "";
     }
@@ -1368,7 +1457,7 @@ function funBlock(d){
         body = st[2] ? linkify(st[1], st[2], "navi", st[2] === mname) : st[1];
       }
       if(!strip0(body).trim()) cls += " mo";
-      return '<div class="fl'+(r.t ? '' : ' li')+'"><div class="flt mono">'+(r.t||"")+'</div><div class="flc'+cls+'">'+flag+body+mb+'</div></div>';
+      return '<div class="fl'+(r.t ? '' : ' li')+'"><div class="flt mono">'+(r.t||"")+'</div><div class="flc'+cls+'">'+flag+splitNote(body)+mb+'</div></div>';
     }
     function strip0(x){ return String(x).replace(/<[^>]+>/g, ""); }
     var out = "", cur = null, loose = "";
@@ -1384,7 +1473,7 @@ function funBlock(d){
             (cur.c.sub?'<span>'+cur.c.sub+'</span>':'')+'</div></div>'+ parkFor(dn, cur.c.n);
           /* 没时刻的步骤：这一段本来就有时刻行的话，它们是补充，排在后面 */
           loose = cur.c.steps.filter(function(st){ return fmin(st[0]) == null && !st.__used; }).map(function(st){
-            return '<div class="fl li"><div class="flt"></div><div class="flc">'+(st[2]?linkify(st[1],st[2],"navi"):st[1])+'</div></div>';
+            return '<div class="fl li"><div class="flt"></div><div class="flc">'+splitNote(st[2]?linkify(st[1],st[2],"navi"):st[1])+'</div></div>';
           }).join("");
 
         }
@@ -1398,7 +1487,7 @@ function funBlock(d){
     cards.forEach(function(x){
       if(x.alt || !x.used) out += '<div class="flsec alt" id="d'+dn+'t'+x.ti+'"><div class="flh"><div class="flt"></div><div class="flc"><i>'+(x.alt?"备选":(x.road?"沿途":"景区"))+'</i><b>'+x.c.n.replace(/^沿途停车 · /,"").replace(/（备选）$|^备用：/,"")+'</b>'+(x.c.sub?'<span>'+x.c.sub+'</span>':'')+'</div></div>'+
         parkFor(dn, x.c.n) + x.c.steps.map(function(st){
-          return '<div class="fl"><div class="flt mono">'+(st[0]||"")+'</div><div class="flc">'+(st[2]?linkify(st[1],st[2],"navi"):st[1])+'</div></div>';
+          return '<div class="fl"><div class="flt mono">'+(st[0]||"")+'</div><div class="flc">'+splitNote(st[2]?linkify(st[1],st[2],"navi"):st[1])+'</div></div>';
         }).join("") + noteRows(x.c) + '</div>';
     });
     return '<div class="flow">'+out+'</div>' + planBlock(d);
@@ -1407,7 +1496,7 @@ function funBlock(d){
     var p = d.plan; if(!p) return "";
     var opts = p.o.map(function(o){
       var has = !!C[o[0]];
-      var inner = '<span class="on">'+(has?PIN:'')+o[0]+'</span><span class="os">'+o[1]+'</span>';
+      var inner = '<span class="on">'+(has?PIN:'')+o[0]+'</span><span class="os">'+sents(o[1])+'</span>';
       return '<li data-vm="D'+d.d+'-'+(p.k||'去哪')+'" data-vo="'+o[0]+'">'+(has ? '<a class="pl opt"'+navAttrs(o[0],"view")+'>'+inner+'</a>' : '<div class="opt">'+inner+'</div>')+(o[2]?'<div class="mx">'+xhsLink(o[2])+'</div>':'')+'</li>';
     }).join('');
     var body = '<div class="tbody meals nopad" data-hint="投你想去的那条，再点一次取消" data-want="想去">'+
@@ -1498,6 +1587,22 @@ function funBlock(d){
       window.scrollTo(0, Math.max(0, y));
     });
     sync();
+  })();
+
+  /* 往下读的时候两个悬浮按钮让开，往回滚一点再出来，免得一直压着右下角的字 */
+  (function(){
+    /* iOS 到底回弹时 scrollY 会越界，先钳到页面范围里，不然按钮会跟着回弹一闪一闪 */
+    function pos(){ var max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight); return Math.min(max, Math.max(0, window.scrollY)); }
+    var last = pos(), away = false;
+    window.addEventListener("scroll", function(){
+      var y = pos(), d = y - last;
+      if(Math.abs(d) < 8) return;
+      last = y;
+      var hide = d > 0 && y > 200;
+      if(hide === away) return;
+      away = hide;
+      [].forEach.call(document.querySelectorAll(".collapsebtn,.todaybtn"), function(el){ el.classList.toggle("fabaway", away); });
+    }, {passive:true});
   })();
 
   /* 待办：点一下打勾。勾选状态走记账的共享通道（k:"todo"），全车人都看得到；没有云端就存本机 */
