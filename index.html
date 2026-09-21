@@ -113,33 +113,47 @@ header .sub{font-size:var(--f-m);color:var(--ink2)}
 /* ---- 一天一条时间轴 ---- */
 .flow{margin-top:12px}
 .fl,.flh{display:grid;grid-template-columns:44px 1fr;gap:0 15px}
-.fl .flt{font-size:var(--f-xs);color:var(--ink3);padding-top:4px;text-align:right;font-variant-numeric:tabular-nums}
-.fl .flc{font-size:var(--f-m);line-height:1.62;color:var(--ink);padding:1px 0 16px 15px;border-left:2px solid var(--rule);position:relative}
+.fl .flt{font-size:var(--f-xs);font-weight:600;color:var(--gold);padding-top:4px;text-align:right;font-variant-numeric:tabular-nums}
+.fl .flc{font-size:var(--f-m);font-weight:600;line-height:1.62;color:var(--ink);padding:1px 0 20px 15px;border-left:2px solid var(--rule);position:relative}
 .fl .flc::before{content:"";position:absolute;left:-5px;top:calc(.81em - 3px);width:8px;height:8px;border-radius:50%;background:var(--rule)}
-.fl.li .flc{padding-bottom:7px}
+.fl.li .flc{font-weight:400;padding-bottom:7px}
 .fl.li .flc::before{left:-3px;top:calc(.81em - 1px);width:4px;height:4px;background:var(--ink3);opacity:.35}
 .fl.li:has(+ .fl:not(.li)) .flc,.fl.li:last-child .flc{padding-bottom:15px}
 .fl .flc.hot::before{background:var(--gold)}
 .fl .flc.bk::before{background:var(--red);box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 18%,transparent)}
 .tkt td b,.flnote b,.mn b,.row .c b,dl.tips dd b,.os b,.mnote b,.play b,.a2hs b,.prelist .pr .prb b{color:var(--ink);font-weight:400}
-.fl .flc b{font-weight:600}
-.fl .flc b .pl,.fl .flc .pl b{font-weight:400}
-.fl .flc i{display:block;margin-top:6px;font-style:normal;font-size:var(--f-n);line-height:1.6;color:var(--ink2)}
+/* 主句是标题（600），备注是细节（400）；主句里的链接跟着主句的字重 */
+.fl .flc .pl,.fl .flc b{font-weight:inherit}
+.fl .flc .mb,.fl .flc .bkflag{font-weight:400}
+.fl .flc i{display:block;margin-top:4px;font-style:normal;font-size:var(--f-n);font-weight:400;line-height:1.6;color:var(--ink2)}
 .fl .flc i b{color:var(--ink);font-weight:400}
-.sn{display:block}.sn+.sn{margin-top:5px}
+.sn{display:block}.sn+.sn{margin-top:3px}
 .flsec{scroll-margin-top:58px}
-.flh .flc{padding:20px 0 8px 15px;border-left:2px solid var(--rule);position:relative;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.flh .flc::before{content:"";position:absolute;left:-7px;top:calc(14px + .65em);width:12px;height:12px;border-radius:3px;background:var(--gold)}
+.flh{margin-top:22px}.flow>.flsec:first-child>.flh{margin-top:0}
+.flh .flc{padding:2px 0 8px 15px;border-left:2px solid transparent;position:relative;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.flh .flc::before{content:"";position:absolute;left:-7px;top:calc(.73em - 4px);z-index:1;width:12px;height:12px;border-radius:3px;background:var(--gold)}
+.flh .flc::after{content:"";position:absolute;left:-2px;top:14px;bottom:0;width:2px;background:var(--rule)}
 .flsec.road .flh .flc::before{background:var(--ink3)}
 .flsec.alt .flh .flc::before{background:var(--blue)}
 .flh i{flex:none;align-self:center;font-style:normal;font-size:var(--f-xs);font-weight:400;color:var(--ink3)}
-.flh b{font-size:var(--f-l);font-weight:600;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+.flh b{font-size:18px;font-weight:600;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
 .flh span{flex:0 0 100%;font-size:var(--f-xs);font-weight:400;color:var(--ink3);line-height:1.5;margin-top:1px}
-.flow .pmsec{margin:0 0 0 59px;padding:0 0 14px 15px;border-left:2px solid var(--rule)}
+/* 折叠块：景区地图、出片机位默认收着，日程读起来是连着的 */
+.fold>summary{display:flex;align-items:center;gap:6px;min-height:40px;cursor:pointer;font-size:var(--f-s);color:var(--ink2);-webkit-user-select:none;user-select:none}
+.fold>summary:active{opacity:.6}
+.fold>summary .chev{width:13px;height:13px}
+.fold>summary em{font-style:normal;color:var(--ink3)}
+.flow .fold{margin-left:59px;padding:0 0 6px 15px;border-left:2px solid var(--rule)}
+.flow .fold .foldb{padding:0 0 12px;font-size:var(--f-n);line-height:1.6;color:var(--ink2)}
+.flow .pmsec{margin:0;padding:0 0 10px}
 .flow .pmsec .mnote{margin:0 0 8px;font-size:var(--f-n);line-height:1.6;color:var(--ink2)}
-.flnote{display:grid;grid-template-columns:44px 1fr;gap:0 15px;font-size:var(--f-n);line-height:1.6;color:var(--ink2);margin-top:0}
-.flnote>span:last-child{border-left:2px solid var(--rule);padding:0 0 14px 15px}
-.flnote .k{text-align:right;color:var(--ink3);font-size:var(--f-xs);padding-top:4px}
+/* 一段景区的「不去 / 费用 / 提示 / 出片」收在一个浅底框里：是参考资料，和上下的日程行分得开，眼睛可以整块跳过 */
+.flnotes{margin:0 0 0 59px;padding:0 0 20px 15px;border-left:2px solid var(--rule)}
+.nbox{background:var(--soft);border-radius:var(--r-s);padding:10px 12px 2px}
+.flnote{font-size:var(--f-n);line-height:1.6;color:var(--ink2);margin:0 0 8px}
+.flnote .k{margin-right:8px;font-size:var(--f-xs);font-weight:600;color:var(--ink)}
+.flnote>span:last-child>.sn:first-child{display:inline}
+.nbox .fold{margin:0 0 6px;padding:0;border:0}.nbox .fold>summary{min-height:36px}.nbox .fold .foldb{padding-bottom:6px}
 .mb{margin-top:6px;font-size:var(--f-m);line-height:1.62}
 .fl .flc.mo .mb{margin-top:0}
 .mbk{color:var(--ink3)}
@@ -199,6 +213,7 @@ a.wake{color:var(--blue);text-decoration:none;padding:9px 2px;margin:-9px -2px;b
 .rows .row{display:grid;grid-template-columns:78px 1fr 26px;gap:2px 12px;padding:14px 16px;border-top:1px solid var(--rule);align-items:start;cursor:pointer;-webkit-user-select:none;user-select:none}
 .rows .row:first-child{border-top:none}
 .row .dt{font-size:var(--f-xs);color:var(--ink3);padding-top:3px;line-height:1.4}
+.todo .row .c{color:var(--ink2)}.todo .row .c b:first-child{color:var(--ink);font-weight:600}
 
 /* ---- 表格：门票 / 作息 / 费用 ---- */
 .tkt{padding:16px}.cost{padding:14px 16px 16px}.sched{padding:0 16px 8px;margin-bottom:12px}
@@ -218,14 +233,21 @@ td:last-child,th:last-child{padding-right:0}
 .prelist{border:1px solid color-mix(in srgb,var(--red) 30%,transparent);border-radius:var(--r-s);padding:10px 12px 4px;margin-bottom:14px}
 .prelist .ph{font-size:var(--f-xs);color:var(--red);margin-bottom:6px}
 .prelist .ph em{font-style:normal;color:var(--ink3)}
-.prelist .pr{display:grid;grid-template-columns:74px 1fr;gap:10px;font-size:var(--f-n);line-height:1.6;padding:8px 0;border-top:1px solid var(--rule)}
-.prelist .pr .pt{display:block;color:var(--ink);font-weight:600}.prelist .pr .prb{display:block;margin-top:2px}
-.prelist .pr>b{color:var(--red);font-weight:400;padding-top:1px}
-.prelist .pr span{color:var(--ink2)}
-.prelist .pr[data-todo]{cursor:pointer;-webkit-user-select:none;user-select:none}
-.prelist .pr.done span,.prelist .pr.done span b,.prelist .pr.done .pt,.todo .row.done .c,.todo .row.done .dt,.todo .row.done .c b{color:var(--ink3)}
-.prelist .pr.done span,.todo .row.done .c{text-decoration:line-through;text-decoration-color:var(--rule)}
-.prelist .pr.done>b{color:var(--green)}.prelist .pr.done>b::after{content:" ✓"}
+.prelist .pr{font-size:var(--f-n);line-height:1.6;border-top:1px solid var(--rule)}
+.prelist .pr>summary{display:block;cursor:pointer;-webkit-user-select:none;user-select:none}
+.prelist .pr .prs{display:grid;grid-template-columns:74px 1fr 28px 16px;gap:0 10px;align-items:center;min-height:48px;padding:6px 0}
+.prelist .pr>summary:active{background:var(--soft)}
+.prelist .pr .chev{transition:transform .2s}.prelist .pr[open] .prs>.chev{transform:rotate(90deg)}
+.prelist .pr .prs>b{color:var(--red);font-weight:400;font-size:var(--f-xs)}
+.prelist .pr .pt{color:var(--ink);font-size:var(--f-m);font-weight:600;line-height:1.4}
+.prelist .pr .prb{padding:0 0 12px 84px;color:var(--ink2)}
+.prelist .ck{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--ink3);justify-self:end;position:relative;transition:background .15s,border-color .15s}
+.prelist .ck::before{content:"";position:absolute;inset:-11px}
+.prelist .pr.done .ck{background:var(--green);border-color:var(--green)}
+.prelist .pr.done .ck::after{content:"";position:absolute;left:7px;top:3px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.prelist .pr.done .prb,.prelist .pr.done .prb b,.prelist .pr.done .pt,.todo .row.done .c,.todo .row.done .dt,.todo .row.done .c b{color:var(--ink3)}
+.prelist .pr.done .pt,.todo .row.done .c{text-decoration:line-through;text-decoration-color:var(--rule)}
+.prelist .pr.done .prs>b{color:var(--green)}
 .tkt .tot{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:10px 0 0;font-size:var(--f-m);border-top:2px solid var(--rule)}
 .tkt .tot b{text-align:right;font-variant-numeric:tabular-nums}
 .tkt .note{font-size:var(--f-s);color:var(--ink2);margin:10px 0 0}
@@ -440,27 +462,29 @@ footer{margin:34px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-si
   .tsec .meal.noimg{grid-template-columns:1fr;grid-template-areas:"n" "x" "o"}
   /* 时间线 */
   .flow{margin-top:8px;margin-left:5px}
-  .flow .fl,.flow .flh,.flow .flnote{display:block;position:relative;border-left:2px solid var(--rule);padding-left:15px}
+  .flow .fl,.flow .flh{display:block;position:relative;border-left:2px solid var(--rule);padding-left:15px}
+  .flow .flh{border-left-color:transparent}
+  .flow .flh::after{content:"";position:absolute;left:-2px;top:14px;bottom:0;width:2px;background:var(--rule)}
+  .flh .flc::after{content:none}
+  .flnotes{margin-left:0}
   .flow .fl{font-size:var(--f-m);line-height:1.62}
-  .fl .flt{float:left;height:1.5em;margin-right:9px;padding:1px 0 0;text-align:left;font-size:inherit;line-height:inherit;font-weight:600;color:var(--ink)}
+  .fl .flt{float:left;height:1.5em;margin-right:9px;padding:1px 0 0;text-align:left;font-size:inherit;line-height:inherit;font-weight:600}
   .fl .flt:empty,.flh .flt{display:none}
   .fl .flc,.flh .flc{border-left:0;padding-left:0}
   .fl .flc::before{left:-20px}
   .fl.li .flc::before{left:-18px}
   .flh .flc::before{left:-22px}
   .bkflag{overflow:hidden}
-  .flow .pmsec{margin-left:0;padding-left:15px}
-  .flnote>span:last-child{display:block;border-left:0;padding:0 0 14px}
-  .flnote .k{display:block;text-align:left;padding:0 0 1px;font-weight:600;color:var(--ink2)}
+  .flow .fold{margin-left:0}
   /* 待办：日期叠到正文上面 */
   .rows .row{grid-template-columns:1fr 26px}
   .rows .row .dt{grid-column:1;grid-row:1;padding-top:0}
   .rows .row .c{grid-column:1;grid-row:2}
   .rows .row .ck{grid-column:2;grid-row:1 / span 2;align-self:center}
   /* 要提前抢的：日期叠到标题上面 */
-  .prelist .pr{display:block;padding:10px 0 12px}
-  .prelist .pr>b{display:block;padding:0 0 1px;font-size:var(--f-xs)}
-  .prelist .pr .pt{font-size:var(--f-m)}
+  .prelist .pr .prs{grid-template-columns:1fr 28px 16px;grid-template-areas:"d k c" "t k c";padding:8px 0}
+  .prelist .pr .prs>b{grid-area:d}.prelist .pr .pt{grid-area:t}.prelist .pr .prs>span:not(.pt){grid-area:k}.prelist .pr .prs>.chev{grid-area:c}
+  .prelist .pr .prb{padding-left:0}
   /* 门票表：一行拆成「景区 + 人均 / 门票 / 说明」三层 */
   .tkt table,.tkt tbody,.tkt td{display:block}
   .tkt thead{display:none}
@@ -678,7 +702,10 @@ function linkify(html, k, mode, soft){
     if(html.indexOf(b)>=0) return html.replace(b, "<b>"+navLink(k,t,mode)+"</b>");
     if(html.indexOf(t)>=0) return html.replace(t, navLink(k,t,mode));
   }
-  return soft ? html : html+" "+navLink(k,"",mode);
+  /* 句子里找不到地名就挂一个只有图标的链接：挂在主句末尾，别落到备注后面自己占一行 */
+  if(soft) return html;
+  var at = html.indexOf("<i>");
+  return at >= 0 ? html.slice(0, at)+" "+navLink(k,"",mode)+html.slice(at) : html+" "+navLink(k,"",mode);
 }
 
 /* 小红书搜索：手机上网页版搜索不存在（页面不见了），只能唤起 App；桌面走网页版 */
@@ -880,9 +907,9 @@ var TICKETS = {
     ["禾木骑马 · 美丽峰","260","马队售票处统一价：小美丽峰 220、大美丽峰 260、美丽峰小村庄 320","220–320","D4"]
   ],
   pre:[
-    ["9/28 10:00","赛里木湖自驾票 + 门票","「赛里木湖旅游」小程序，提前 3 天能约，出票只在 10:00–20:00。一辆车一张订单，先选日期和进园时段（选 15:00–18:00），再填车型车牌，车上的人的门票一起买；车牌约完改不了。没约到可以到新游客中心的窗口问余票；单日满 11000 辆就不放自驾车了，只能门票 70 + 区间车 60，区间车顺时针单向，末班当天看小程序"],
-    ["9/27 20:00","那拉提门票 + 自驾票","「智游那拉提」小程序。去之前第 6 天的 20:00 放 500 张，全国都能抢；让选入园时段就选 8 点档，8 点到 20 点都能进。一张订单里是车上所有人的门票加这辆车的自驾票，下单要传行驶证主页和副页、司机驾驶证、每个人的身份证人像面和大头自拍（证件照、半身照过不了），付款前刷脸；有优待证的先按全价买，到窗口再退差价。没抢到：10/3 早上 07:40 放当天票 2000 张，分 8、12、14、16 点四档进园。线上没开或抢不到，08:30 到游客中心 3 楼现场买，去年国庆现场不限量，驾驶证要看原件。司机要满 3 年驾龄，不用是车主。再不行改买索道单程联票"],
     ["9/27 00:00","独库北段 10/4 通行名额","「游新疆一码游」小程序，只填手机号、车牌和车型，免费。00:00 放号。出发前先打开看日期列表排到哪天：排到「今天 + 7」，10/4 就是 9/27 零点放；只排到「今天 + 6」，就是 9/28 零点放。两辆车同一入口同一时段，车牌约完改不了；约的时段开始前能在「我的 → 自驾预约记录」里取消重约，一天最多取消 3 次。网上说 9/1 起北段不用预约是谣言，游新疆 9/4 辟过谣"],
+    ["9/27 20:00","那拉提门票 + 自驾票","「智游那拉提」小程序。去之前第 6 天的 20:00 放 500 张，全国都能抢；让选入园时段就选 8 点档，8 点到 20 点都能进。一张订单里是车上所有人的门票加这辆车的自驾票，下单要传行驶证主页和副页、司机驾驶证、每个人的身份证人像面和大头自拍（证件照、半身照过不了），付款前刷脸；有优待证的先按全价买，到窗口再退差价。没抢到：10/3 早上 07:40 放当天票 2000 张，分 8、12、14、16 点四档进园。线上没开或抢不到，08:30 到游客中心 3 楼现场买，去年国庆现场不限量，驾驶证要看原件。司机要满 3 年驾龄，不用是车主。再不行改买索道单程联票"],
+    ["9/28 10:00","赛里木湖自驾票 + 门票","「赛里木湖旅游」小程序，提前 3 天能约，出票只在 10:00–20:00。一辆车一张订单，先选日期和进园时段（选 15:00–18:00），再填车型车牌，车上的人的门票一起买；车牌约完改不了。没约到可以到新游客中心的窗口问余票；单日满 11000 辆就不放自驾车了，只能门票 70 + 区间车 60，区间车顺时针单向，末班当天看小程序"],
     ["9/30 08:00","巴音布鲁克自驾票，或门票 + 区间车","「巴音布鲁克旅游」小程序 08:00 放票，自驾票按车买（5 座 100、7 座 150），车上的人的门票在同一张订单里，要传开车人的驾驶证、登记车牌；半夜下单常提交不了，白天再试。大门窗口也能买。官方 9/14 起执行的秋季通知里还写着能自驾进园。小程序里没有自驾票就买门票 + 区间车 127/人"]
   ],
   total:"约 840",
@@ -930,14 +957,14 @@ var EVENTS = [
 ];
 
 var TODOS = [
-  {k:"news", w:"9/20 起", c:"<b>每天看公告</b>：「新疆交警」「新疆路网」的独库路况；「巴音布鲁克景区」「喀纳斯景区」公众号有没有临时闭园、封路"},
-  {k:"fund", w:"一路上", c:"<b>谁付谁记账</b>：都记进「记账」，回来后按结余一次结清"},
   {k:"ids", w:"出发前", c:"<b>证件</b>：7 人身份证原件；开车的带驾驶证；两辆车各压一张额度 2 万以上的信用卡"},
-  {k:"kanas2", tk:"喀纳斯", w:"9/29 前", c:"<b>买喀纳斯第二次进园的车票</b>：两种买法见「费用与门票」喀纳斯那一行"},
-  {k:"sailimu", tk:"赛里木湖", w:"9/28 10:00", c:"<b>抢赛里木湖 10/1 自驾票 + 门票</b>：「赛里木湖旅游」小程序，两辆车各下一张订单，时段选 15:00–18:00，车型和车牌填对"},
-  {k:"nalati", tk:"那拉提", w:"9/27 20:00", c:"<b>抢那拉提 10/3 门票 + 自驾票</b>：「智游那拉提」小程序，只约 GL8 一辆，7 个人都填进订单。要传 GL8 行驶证、司机驾驶证、7 个人的身份证人像面和大头自拍，9/27 白天传好"},
+  {k:"news", w:"9/20 起", c:"<b>每天看公告</b>：「新疆交警」「新疆路网」的独库路况；「巴音布鲁克景区」「喀纳斯景区」公众号有没有临时闭园、封路"},
   {k:"duku", tk:"独库", w:"9/27 00:00", hot:1, c:"<b>抢独库北段 10/4 名额</b>：「游新疆一码游」小程序，入口那拉提，首选 10:00–12:00 档，没有再抢 12:00–14:00。两辆车各由车上一个人约，填手机号和车牌，车型选小型客车"},
-  {k:"bayin", tk:"巴音布鲁克", w:"9/30 08:00", c:"<b>抢巴音布鲁克 10/3 自驾票</b>：「巴音布鲁克旅游」小程序，按车买，两辆车各一张，要传开车人的驾驶证，<b>车牌要填对</b>"}
+  {k:"nalati", tk:"那拉提", w:"9/27 20:00", c:"<b>抢那拉提 10/3 门票 + 自驾票</b>：「智游那拉提」小程序，只约 GL8 一辆，7 个人都填进订单。要传 GL8 行驶证、司机驾驶证、7 个人的身份证人像面和大头自拍，9/27 白天传好"},
+  {k:"sailimu", tk:"赛里木湖", w:"9/28 10:00", c:"<b>抢赛里木湖 10/1 自驾票 + 门票</b>：「赛里木湖旅游」小程序，两辆车各下一张订单，时段选 15:00–18:00，车型和车牌填对"},
+  {k:"kanas2", tk:"喀纳斯", w:"9/29 前", c:"<b>买喀纳斯第二次进园的车票</b>：两种买法见「费用与门票」喀纳斯那一行"},
+  {k:"bayin", tk:"巴音布鲁克", w:"9/30 08:00", c:"<b>抢巴音布鲁克 10/3 自驾票</b>：「巴音布鲁克旅游」小程序，按车买，两辆车各一张，要传开车人的驾驶证，<b>车牌要填对</b>"},
+  {k:"fund", w:"一路上", c:"<b>谁付谁记账</b>：都记进「记账」，回来后按结余一次结清"}
 ];
 
 var TIPS = [
@@ -967,16 +994,26 @@ var TIPS = [
         '<td class="g">'+sents(r[2])+'</td><td class="n">'+r[3]+'</td></tr>';
     }).join("");
     var left = t.pre.filter(function(r){ var n = tkOf(r[1]); return !(n && doneTk[n]); }).length;
+    /* 每次账本同步都会重画这一块：先记下哪几条是点开的，画完照原样打开 */
+    var openPk = {}; [].forEach.call(document.querySelectorAll("#tktBox details.pr[open]"), function(x){ openPk[x.getAttribute("data-pk")] = 1; });
+    var fa = document.activeElement, focusKey = fa && fa.closest && fa.closest("#tktBox") && fa.getAttribute("data-todo");
+    var PCHEV = '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>';
     document.getElementById("tktBox").innerHTML =
-      '<div class="prelist"><div class="ph">要提前抢的，独库没约到走不了'+(left ? '<em> · 还剩 '+left+' 项，买到了点一下</em>' : '<em> · 都搞定了</em>')+'</div>'+
-        t.pre.map(function(r){ var n = tkOf(r[1]), k = n ? tkKey[n] : ""; return '<div class="pr'+(n && doneTk[n] ? ' done' : '')+'"'+(k ? ' data-todo="'+k+'" role="checkbox" aria-checked="'+(doneTk[n]?'true':'false')+'"' : '')+'><b class="mono">'+r[0]+'</b><span><b class="pt">'+r[1]+'</b><span class="prb">'+sents(r[2])+'</span></span></div>'}).join("")+
+      '<div class="prelist"><div class="ph">要提前抢的，独库没约到走不了'+(left ? '<em> · 还剩 '+left+' 项，点开看怎么抢，买到了点右边的圈</em>' : '<em> · 都搞定了</em>')+'</div>'+
+        t.pre.map(function(r){ var n = tkOf(r[1]), k = n ? tkKey[n] : "", dn = !!(n && doneTk[n]);
+          return '<details class="pr'+(dn ? ' done' : '')+'" data-pk="'+r[0]+'"'+(openPk[r[0]] ? ' open' : '')+'><summary><div class="prs"><b class="mono">'+r[0]+'</b><span class="pt">'+r[1]+'</span>'+
+            (k ? '<span class="ck" data-todo="'+k+'" role="checkbox" aria-checked="'+dn+'" aria-label="'+r[1]+'：买到了" tabindex="0"></span>' : '<span></span>')+PCHEV+'</div></summary>'+
+            '<div class="prb">'+sents(r[2])+'</div></details>'; }).join("")+
       '</div>'+
       '<table><thead><tr><th>景区</th><th class="n">门票</th><th>区间车 / 自驾票</th><th class="n">人均</th></tr></thead>'+
       '<tbody>'+rows+'</tbody></table>'+
       '<div class="tot"><span>每人合计</span><b>'+t.total+'</b></div>'+
-      '<div class="note">'+t.note+'</div>';
+      '<div class="note">'+sents(t.note)+'</div>';
+    if(focusKey){ var fe = document.querySelector('#tktBox [data-todo="'+focusKey+'"]'); if(fe) try{ fe.focus({preventScroll:true}); }catch(e){} }
   }
-  document.getElementById("tktBox").addEventListener("click", function(e){ var r = e.target.closest("[data-todo]"); if(!r || e.target.closest("a")) return; todoToggle(r.getAttribute("data-todo")); });
+  /* 点圈 = 买到了（不展开）；点这一行别处 = 展开看规则，交给 <details> 自己处理 */
+  document.getElementById("tktBox").addEventListener("click", function(e){ var r = e.target.closest("[data-todo]"); if(!r || e.target.closest("a")) return; e.preventDefault(); todoToggle(r.getAttribute("data-todo")); });
+  document.getElementById("tktBox").addEventListener("keydown", function(e){ if(e.key !== "Enter" && e.key !== " ") return; var r = e.target.closest("[data-todo]"); if(!r) return; e.preventDefault(); todoToggle(r.getAttribute("data-todo")); });
 
 /* @@MAPMARK */
   var PROJ = {k:0.444110, bx:-21000.946, by:-9961.278};
@@ -1226,8 +1263,8 @@ var TIPS = [
     }catch(e){}
     return 0;
   })();
-  /* 刷新后保持刚才打开的那天（存 sessionStorage），否则默认开今天/第一天；"0" = 全收起 */
-  var OPEN = {}; OPEN[TODAY_D || 1] = 1; try{ var so = sessionStorage.getItem("bj_open_day"); if(so !== null){ OPEN = {}; so.split(",").forEach(function(v){ if(v) OPEN[+v] = 1; }); } }catch(e){}
+  /* 刷新后保持刚才打开的那天（存 sessionStorage），否则行程期间默认开今天，出发前和回来后一张都不开（全天总览现在默认展开，开着第一天会把后面十张日卡挤到两屏以外） */
+  var OPEN = {}; if(TODAY_D) OPEN[TODAY_D] = 1; try{ var so = sessionStorage.getItem("bj_open_day"); if(so !== null){ OPEN = {}; so.split(",").forEach(function(v){ if(v) OPEN[+v] = 1; }); } }catch(e){}
   var dh = "";
 var SUN = {"9/25": {"rise": "08:00", "riseAt": "乌鲁木齐", "set": "20:04", "setAt": "乌鲁木齐", "gold": "19:26", "blue": "20:33", "moon": "满月"}, "9/26": {"rise": "08:01", "riseAt": "乌鲁木齐", "set": "19:53", "setAt": "可可托海", "gold": "19:13", "blue": "20:24", "moon": "满月"}, "9/27": {"rise": "07:54", "riseAt": "可可托海", "set": "20:03", "setAt": "布尔津", "gold": "19:22", "blue": "20:34", "moon": "亏凸月"}, "9/28": {"rise": "08:07", "riseAt": "布尔津", "set": "19:58", "setAt": "禾木", "gold": "19:17", "blue": "20:30", "moon": "亏凸月"}, "9/29": {"rise": "08:07", "riseAt": "禾木", "set": "19:57", "setAt": "贾登峪", "gold": "19:16", "blue": "20:29", "moon": "亏凸月"}, "9/30": {"rise": "08:09", "riseAt": "贾登峪", "set": "20:02", "setAt": "乌尔禾", "gold": "19:23", "blue": "20:32", "moon": "亏凸月"}, "10/1": {"rise": "08:19", "riseAt": "克拉玛依", "set": "20:18", "setAt": "赛里木湖", "gold": "19:40", "blue": "20:47", "moon": "亏凸月"}, "10/2": {"rise": "08:35", "riseAt": "清水河", "set": "20:06", "setAt": "那拉提", "gold": "19:28", "blue": "20:34", "moon": "下弦月"}, "10/3": {"rise": "08:24", "riseAt": "那拉提", "set": "20:04", "setAt": "巴音布鲁克", "gold": "19:26", "blue": "20:32", "moon": "下弦月"}, "10/4": {"rise": "08:24", "riseAt": "巴音布鲁克", "set": "19:48", "setAt": "乌鲁木齐", "gold": "19:09", "blue": "20:16", "moon": "残月"}, "10/5": {"rise": "08:12", "riseAt": "乌鲁木齐", "set": "19:46", "setAt": "乌鲁木齐", "gold": "19:07", "blue": "20:14", "moon": "残月"}};
 /* 天气：Open-Meteo 免 key，一次请求 13 个点、16 天；超出预报范围先给近五年同期均值 */
@@ -1422,13 +1459,17 @@ function funBlock(d){
       cards.forEach(function(x){ if(!x.alt && x.a != null && r.k >= x.a && r.k <= x.b && (!own || (!x.road && own.road))) own = x; });
       r.own = own; if(own) own.used = true;
     });
+    function parkFold(dn, name){ var h = parkFor(dn, name); return h ? '<details class="fold"><summary>景区地图'+CHEV+'</summary>'+h+'</details>' : ""; }
     function noteRows(t){
       var out = "";
       if(t.skip) out += '<div class="flnote"><span class="k">不去</span><span>'+sents(t.skip)+'</span></div>';
       if(t.cost) out += '<div class="flnote"><span class="k">费用</span><span>'+sents(t.cost)+'</span></div>';
       if(t.tip)  out += '<div class="flnote"><span class="k">提示</span><span>'+sents(t.tip)+'</span></div>';
-      if(t.pic)  out += '<div class="flnote"><span class="k">出片</span><span>'+picList(t.pic)+'<div class="mx">'+xhsLink(t.xhs||(t.n.split(" ")[0]+" 机位"))+'</div></span></div>';
-      return out ? '<div class="flnotes">'+out+'</div>' : "";
+      if(t.pic){
+        var np = String(t.pic).split(/；/).filter(function(x){ return x.trim(); }).length;
+        out += '<details class="fold"><summary>出片机位'+(np > 1 ? '<em>· '+np+' 处</em>' : '')+CHEV+'</summary><div class="foldb">'+picList(t.pic)+'<div class="mx">'+xhsLink(t.xhs||(t.n.split(" ")[0]+" 机位"))+'</div></div></details>';
+      }
+      return out ? '<div class="flnotes"><div class="nbox">'+out+'</div></div>' : "";
     }
     function mealBar(m){
       var name = PICK["D"+dn+"-"+m.t] || (m.o[0] || [])[0];
@@ -1470,7 +1511,7 @@ function funBlock(d){
           var kind = cur.road ? "沿途" : "景区";
           out += '<div class="flsec'+(cur.road?" road":"")+'" id="d'+dn+'t'+cur.ti+'">'+
             '<div class="flh"><div class="flt"></div><div class="flc"><i>'+kind+'</i><b>'+cur.c.n.replace(/^沿途停车 · /,"")+'</b>'+
-            (cur.c.sub?'<span>'+cur.c.sub+'</span>':'')+'</div></div>'+ parkFor(dn, cur.c.n);
+            (cur.c.sub?'<span>'+cur.c.sub+'</span>':'')+'</div></div>'+ parkFold(dn, cur.c.n);
           /* 没时刻的步骤：这一段本来就有时刻行的话，它们是补充，排在后面 */
           loose = cur.c.steps.filter(function(st){ return fmin(st[0]) == null && !st.__used; }).map(function(st){
             return '<div class="fl li"><div class="flt"></div><div class="flc">'+splitNote(st[2]?linkify(st[1],st[2],"navi"):st[1])+'</div></div>';
@@ -1486,7 +1527,7 @@ function funBlock(d){
     /* 没能落进时间轴的卡（备选/备用）和投票块接在后面 */
     cards.forEach(function(x){
       if(x.alt || !x.used) out += '<div class="flsec alt" id="d'+dn+'t'+x.ti+'"><div class="flh"><div class="flt"></div><div class="flc"><i>'+(x.alt?"备选":(x.road?"沿途":"景区"))+'</i><b>'+x.c.n.replace(/^沿途停车 · /,"").replace(/（备选）$|^备用：/,"")+'</b>'+(x.c.sub?'<span>'+x.c.sub+'</span>':'')+'</div></div>'+
-        parkFor(dn, x.c.n) + x.c.steps.map(function(st){
+        parkFold(dn, x.c.n) + x.c.steps.map(function(st){
           return '<div class="fl"><div class="flt mono">'+(st[0]||"")+'</div><div class="flc">'+splitNote(st[2]?linkify(st[1],st[2],"navi"):st[1])+'</div></div>';
         }).join("") + noteRows(x.c) + '</div>';
     });
@@ -1514,7 +1555,7 @@ function funBlock(d){
       '<div class="dti"><div class="r">'+d.r+'</div><div class="m">'+d.date+' '+d.wk+' · '+d.m+'</div></div>'+
       '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>'+
       '</summary><div class="dbody">'+(d.d===1 || d.d===11 ? (toolRow(d.d, d.rt, d) ? '<div class="minimap">'+toolRow(d.d, d.rt, d)+'</div>' : '') : miniMap(d.d, col, d.rt, d))+
-      funBlock(d)+'<details class="tour plan"'+(d.d===TODAY_D?' open':'')+'><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody">'+dayFlow(d)+'</div></details>'+
+      funBlock(d)+'<details class="tour plan" open><summary>全天总览<span class="tsub">'+times+'</span>'+CHEV+'</summary><div class="tbody">'+dayFlow(d)+'</div></details>'+
       mealBlock(d)+
       '</div></details>';
   });
@@ -1536,7 +1577,10 @@ function funBlock(d){
     /* 顺便记住每天里展开了哪些子卡片 */
     var tours = [];
     days.forEach(function(d){ if(!d.open) return; d.querySelectorAll(".dbody > details").forEach(function(t, j){ if(t.open) tours.push(d.id.slice(4)+":"+j); }); });
-    try{ sessionStorage.setItem("bj_anchor", a ? JSON.stringify(a) : ""); sessionStorage.setItem("bj_open_tours", tours.join(",")); }catch(e){}
+    /* 总览默认是开的，所以要记的是「手动收起了哪几天的」；折叠块（景区地图、出片机位）默认是关的，记「点开了哪几个」。不记的话刷新后内容高度变了，回位会落到别的字上 */
+    var shut = [], folds = [];
+    days.forEach(function(d){ var p = d.querySelector(".dbody > .tour.plan"); if(p && !p.open) shut.push(d.id.slice(4)); d.querySelectorAll(".fold").forEach(function(f, j){ if(f.open) folds.push(d.id.slice(4)+":"+j); }); });
+    try{ sessionStorage.setItem("bj_anchor", a ? JSON.stringify(a) : ""); sessionStorage.setItem("bj_open_tours", tours.join(",")); sessionStorage.setItem("bj_shut_plans", shut.join(",")); sessionStorage.setItem("bj_open_folds", folds.join(",")); }catch(e){}
   }
   window.addEventListener("pagehide", saveAnchor); window.addEventListener("beforeunload", saveAnchor);
   /* 回位分几步：这段脚本一跑完先回一次；后面几段脚本（投票按钮、记账）往 DOM 里插东西，DOMContentLoaded 再回一次；天气画完可能让日出那行换行，也再回一次。4 秒后不再动，免得把用户自己滚到的位置拉回去 */
@@ -1547,6 +1591,8 @@ function funBlock(d){
   if(location.hash){ openHashDay(); }
   else { try{
     (sessionStorage.getItem("bj_open_tours") || "").split(",").forEach(function(v){ var p = v.split(":"); var d = p[0] && document.getElementById("day-"+p[0]); var t = d && d.querySelectorAll(".dbody > details")[+p[1]]; if(t) t.open = true; });
+    (sessionStorage.getItem("bj_shut_plans") || "").split(",").forEach(function(v){ var d = v && document.getElementById("day-"+v); var t = d && d.querySelector(".dbody > .tour.plan"); if(t) t.open = false; });
+    (sessionStorage.getItem("bj_open_folds") || "").split(",").forEach(function(v){ var p = v.split(":"); var d = p[0] && document.getElementById("day-"+p[0]); var t = d && d.querySelectorAll(".fold")[+p[1]]; if(t) t.open = true; });
     }catch(e){}
     restoreAnchor(); document.addEventListener("DOMContentLoaded", restoreAnchor); }
   if(TODAY_D){
@@ -1573,7 +1619,8 @@ function funBlock(d){
     b.setAttribute("aria-label", "收起所有展开的内容");
     b.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 14l5-5 5 5"/></svg>收起';
     document.body.appendChild(b);
-    function sync(){ b.hidden = !document.querySelector("details[open]"); }
+    /* 「全天总览」默认就是开着的，不算「展开了东西」，收起时也不去关它 */
+    function sync(){ b.hidden = !document.querySelector("details[open]:not(.plan)"); }
     document.addEventListener("toggle", sync, true);
     b.addEventListener("click", function(){
       /* 收完页面会塌一大截，先记住视口顶上是哪一天，收完滚回去，免得人不知道自己在哪 */
@@ -1581,7 +1628,7 @@ function funBlock(d){
       document.querySelectorAll("details.card.day").forEach(function(d){
         if(d.getBoundingClientRect().top <= 80) keep = d;
       });
-      document.querySelectorAll("details[open]").forEach(function(d){ d.open = false; });
+      document.querySelectorAll("details[open]:not(.plan)").forEach(function(d){ d.open = false; });
       sync();
       var y = keep ? keep.getBoundingClientRect().top + window.scrollY - 60 : 0;
       window.scrollTo(0, Math.max(0, y));
@@ -1628,7 +1675,7 @@ function funBlock(d){
     var m = todoDone(), n = 0;
     document.getElementById("todos").innerHTML = TODOS.map(function(t){
       var on = !!m[t.k]; if(on) n++;
-      return '<div class="row'+(on?' done':'')+'" data-todo="'+t.k+'" role="checkbox" aria-checked="'+on+'" tabindex="0"><div class="dt'+(t.hot?' hot':'')+'">'+t.w+'</div><div class="c">'+t.c+'</div><span class="ck" aria-hidden="true"></span></div>';
+      return '<div class="row'+(on?' done':'')+'" data-todo="'+t.k+'" role="checkbox" aria-checked="'+on+'" tabindex="0"><div class="dt'+(t.hot?' hot':'')+'">'+t.w+'</div><div class="c">'+sents(t.c)+'</div><span class="ck" aria-hidden="true"></span></div>';
     }).join("");
     document.getElementById("todoCnt").textContent = n ? n+" / "+TODOS.length+" 已完成" : "点一下打勾，大家都看得到";
     renderTickets(m);
@@ -1641,7 +1688,7 @@ function funBlock(d){
 
   /* 贴士 */
   document.getElementById("tipList").innerHTML = TIPS.map(function(t){
-    return '<dt>'+t[0]+'</dt><dd>'+t[1]+'</dd>';
+    return '<dt>'+t[0]+'</dt><dd>'+sents(t[1]).replace(/。$/, "")+'</dd>';
   }).join("");
 
   /* 页脚：加到桌面的说明按设备只给一条 */
