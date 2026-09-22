@@ -378,7 +378,7 @@ footer{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--rule);font-si
 .a2hs>b{display:block;color:var(--ink);font-size:var(--f-m);line-height:var(--lh);margin-bottom:4px}
 .a2hs p{margin:0}.a2hs .btn{margin:8px 0 0}
 
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fabs,.chev,.toast,.pl,.tour>summary,.day>summary,.vt,.fcard,.seg .pet{transition:none}}
+@media (prefers-reduced-motion:reduce){.wcpanel{animation:none}.wcpanel .wstat.live .dot{animation:none}.wcpanel .warr svg{transition:none}html{scroll-behavior:auto}.fabs,.chev,.toast,.pl,.tour>summary,.day>summary,.vt,.fcard,.seg .pet{transition:none}}
 
 /* ==== 趣味：天气/光线/月亮 + 路上玩 ==== */
 .gsheet{position:fixed;inset:0;z-index:97;display:none;align-items:flex-end;background:rgba(0,0,0,.45)}
@@ -541,43 +541,72 @@ footer{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--rule);font-si
   .sched td:nth-child(4)::before{content:"到达"}
 }
 /* ---- 厕所：右下角工具按钮 + 弹层 ---- */
-.wcmask{position:fixed;inset:0;z-index:19;background:rgba(0,0,0,.18)}
+.wcmask{position:fixed;inset:0;z-index:19;background:rgba(0,0,0,.22);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 .wcpanel{position:fixed;z-index:20;left:calc(12px + env(safe-area-inset-left));right:calc(12px + env(safe-area-inset-right));
-  bottom:calc(72px + env(safe-area-inset-bottom));max-width:420px;margin-left:auto;max-height:min(72vh,600px);
+  bottom:calc(72px + env(safe-area-inset-bottom));max-width:420px;margin-left:auto;max-height:min(74vh,620px);
   display:flex;flex-direction:column;background:var(--card);border:1px solid var(--rule);
-  border-radius:var(--r-l);box-shadow:0 10px 34px rgba(0,0,0,.22);overflow:hidden}
-.wcpanel .wch{display:flex;align-items:center;gap:8px;padding:4px 4px 4px 16px;border-bottom:1px solid var(--rule)}
-.wcpanel .wch b{font-size:var(--f-h3);line-height:var(--lh-h3)}
-.wcpanel .wcx{margin-left:auto;width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  border-radius:var(--r-l);box-shadow:0 16px 44px rgba(0,0,0,.26);overflow:hidden;
+  animation:wcin .22s cubic-bezier(.2,.8,.3,1)}
+@keyframes wcin{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.wcpanel .wch{display:flex;align-items:baseline;gap:8px;padding:14px 4px 12px 16px;border-bottom:1px solid var(--rule)}
+.wcpanel .wch b{font-size:var(--f-h3);line-height:var(--lh-h3);letter-spacing:var(--tr-h3)}
+.wcpanel .wch .n{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3)}
+.wcpanel .wcx{margin-left:auto;align-self:center;width:44px;height:44px;display:flex;align-items:center;justify-content:center;
   border:0;background:none;color:var(--ink3);cursor:pointer;font:inherit}
 .wcpanel .wcx:active{color:var(--ink)}
-.wcpanel .wcb{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px 16px}
-.wcpanel .wlead{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:0 0 12px}
-.wcpanel .wtail{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--rule)}
-.wcpanel .wbtn{display:block;width:100%;min-height:44px;font:inherit;font-size:var(--f-m);line-height:var(--lh);
-  color:var(--ink);background:var(--soft);border:1px solid var(--rule);border-radius:var(--r-s);cursor:pointer}
-.wcpanel .wbtn:active{background:var(--rule)}
-.wcpanel .wbtn[disabled]{color:var(--ink3)}
-.wcpanel .wmsg{font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink3);margin:12px 0 0}
-.wcpanel .whd{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:16px 0 4px}
-.wcpanel .wrow{display:grid;grid-template-columns:56px 1fr;gap:0 8px;align-items:baseline;
-  padding:10px 0;border-top:1px solid var(--rule);text-decoration:none;color:inherit}
+.wcpanel .wcb{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px 16px}
+
+/* 顶上的状态条：定位中／误差／重新定位 */
+.wcpanel .wstat{display:flex;align-items:center;gap:8px;min-height:44px;font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3)}
+.wcpanel .wstat .dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.wcpanel .wstat.live .dot{animation:wcpulse 1.6s ease-in-out infinite}
+@keyframes wcpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.wcpanel .wstat button{margin-left:auto;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--rule);
+  background:var(--card);color:var(--ink2);font:inherit;font-size:var(--f-xs);line-height:var(--lh-xs);cursor:pointer}
+.wcpanel .wstat button:active{background:var(--soft)}
+
+/* 分组小标题 */
+.wcpanel .whd{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:12px 0 0;letter-spacing:.06em}
+
+/* 一行：左边方向箭头，右边距离/名字/备注三层 */
+.wcpanel .wrow{display:grid;grid-template-columns:24px 1fr;gap:0 8px;padding:10px 0;
+  border-top:1px solid var(--rule);text-decoration:none;color:inherit}
+.wcpanel .whd + .wrow{border-top:0}
 .wcpanel .wrow:active{background:var(--soft)}
-.wcpanel .wkm{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--gold);font-variant-numeric:tabular-nums}
+.wcpanel .warr{grid-row:1/span 3;align-self:start;margin-top:3px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--ink3)}
+.wcpanel .warr svg{width:16px;height:16px;transition:transform .35s ease-out}
+.wcpanel .wkm{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--gold);font-variant-numeric:tabular-nums;font-weight:600}
+.wcpanel .wkm em{font-style:normal;font-weight:400;color:var(--ink3)}
 .wcpanel .wnm{font-size:var(--f-m);line-height:var(--lh);font-weight:600}
-.wcpanel .wst{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--gold);margin-left:6px;letter-spacing:.04em}
-.wcpanel .wst.no{color:var(--red)}
-.wcpanel .wmore{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:10px 0 4px}
-.wcpanel .wno{grid-column:2;font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2)}
-.wcpanel .wday>summary{display:flex;align-items:baseline;gap:8px;min-height:44px;padding:0;cursor:pointer;
-  font-size:var(--f-m);line-height:var(--lh);-webkit-user-select:none;user-select:none;list-style:none}
+.wcpanel .wno{font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2);margin-top:2px}
+.wcpanel .wst{margin-left:6px;font-size:var(--f-xs);line-height:1;letter-spacing:.06em;white-space:nowrap}
+.wcpanel .wst i{font-style:normal;color:var(--gold)}
+.wcpanel .wst i.o{color:var(--rule)}
+.wcpanel .wno b{font-weight:600}
+
+/* 脚下这一段没有厕所：单独一块警示 */
+.wcpanel .wwarn{margin:12px 0 0;padding:12px;border-radius:var(--r-s);background:var(--soft);border-left:3px solid var(--red)}
+.wcpanel .wwarn .t{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--red);letter-spacing:.06em}
+.wcpanel .wwarn .m{font-size:var(--f-m);line-height:var(--lh);font-weight:600;margin-top:4px}
+.wcpanel .wwarn .d{font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2);margin-top:2px}
+
+.wcpanel .wmsg{font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink3);margin:12px 0 0}
+.wcpanel .wlead{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:0}
+.wcpanel .wfoot{margin-top:16px;padding-top:12px;border-top:1px solid var(--rule)}
+
+/* 按天看全部 */
+.wcpanel .wall{margin-top:12px;border-top:1px solid var(--rule)}
+.wcpanel .wall>summary{display:flex;align-items:center;gap:6px;min-height:44px;cursor:pointer;list-style:none;
+  font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2);-webkit-user-select:none;user-select:none}
+.wcpanel .wall>summary::-webkit-details-marker{display:none}
+.wcpanel .wday>summary{display:flex;align-items:baseline;gap:8px;min-height:44px;cursor:pointer;list-style:none;
+  font-size:var(--f-m);line-height:var(--lh);-webkit-user-select:none;user-select:none}
 .wcpanel .wday>summary::-webkit-details-marker{display:none}
-.wcpanel .wday>summary:active{background:var(--soft)}
 .wcpanel .wday>summary .n{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3)}
 .wcpanel .wday{border-top:1px solid var(--rule)}
 .wcpanel .wday .wrow{grid-template-columns:1fr}
-.wcpanel .wday .wno{grid-column:1}
 .wcpanel .wday .wrow:first-of-type{border-top:0}
+.wcpanel .wmore{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:10px 0 4px}
 
 </style>
 </head>
@@ -1800,50 +1829,10 @@ function funBlock(d){
     }, {passive:true});
   })();
 
-  /* ---- 厕所：右下角按钮点开一个弹层，不单占一个栏目 ---- */
-  (function(){
-    var panel, mask, btn;
-    btn = document.createElement("button");
-    btn.type = "button"; btn.className = "collapsebtn";
-    btn.setAttribute("aria-label", "找附近的厕所"); btn.setAttribute("aria-expanded", "false");
-    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>厕所';
-    fabs().appendChild(btn);
-    function build(){
-      if(panel) return;
-      mask = document.createElement("div"); mask.className = "wcmask"; mask.hidden = true;
-      panel = document.createElement("div"); panel.className = "wcpanel"; panel.hidden = true;
-      panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "附近的厕所");
-      panel.innerHTML = '<div class="wch"><b>厕所</b><button type="button" class="wcx" aria-label="关掉">' +
-        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
-        '<div class="wcb">' +
-        '<p class="wlead">★ 越多越干净：五星很干净、三星能上、一星应急。每条都是小红书上有人写过的，地图上有、没人写过的没往里放。酒店、订好的餐厅、加油站也没列——进去就能上。</p>' +
-        '<button type="button" class="wbtn" id="wcBtn">用定位找最近的</button><div id="wcNear"></div><div id="wcAll"></div>' +
-        '<p class="wlead wtail">路上遇到加油站就进去一趟，比路边旱厕好很多，新疆很多路段动辄上百公里没有停靠点。大多厕所没纸没洗手液，自己带；有的公厕收现金，备点零钱。独库沿途那些停车区的旱厕能躲就躲。</p>' +
-        '</div>';
-      document.body.appendChild(mask); document.body.appendChild(panel);
-      panel.querySelector(".wcx").addEventListener("click", close);
-      mask.addEventListener("click", close);
-      document.getElementById("wcBtn").addEventListener("click", wcLocate);
-      wcRenderAll();
-    }
-    function open(){
-      build(); mask.hidden = false; panel.hidden = false;
-      document.body.classList.add("wcopen"); btn.setAttribute("aria-expanded", "true");
-      var f = document.getElementById("fabs"); if(f) f.classList.remove("fabaway");
-      /* 点开就直接定位，急的时候少一次点击 */
-      if(!panel.dataset.located){ panel.dataset.located = "1"; wcLocate(); }
-    }
-    function close(){
-      if(!panel) return;
-      mask.hidden = true; panel.hidden = true;
-      document.body.classList.remove("wcopen"); btn.setAttribute("aria-expanded", "false");
-    }
-    btn.addEventListener("click", function(){ (panel && !panel.hidden) ? close() : open(); });
-    document.addEventListener("keydown", function(e){ if(e.key === "Escape") close(); });
-  })();
-
-  /* ---- 厕所：GPS 找最近的 ----
-     手机定位给的是 WGS-84，页面上所有坐标是高德的 GCJ-02，新疆差 300–600 米，不换算会排错顺序 */
+  /* ================= 厕所 =================
+     右下角一个工具按钮，点开是弹层，不占导航条也不占分区。
+     开着的时候用 watchPosition 持续更新，关掉就停，免得一直吃电。
+     手机定位给的是 WGS-84，页面上所有坐标是高德的 GCJ-02，新疆差 300–600 米，不换算排序会错。 */
   function wgs2gcj(lng, lat){
     var a = 6378245.0, ee = 0.00669342162296594323;
     if(lng < 72.004 || lng > 137.8347 || lat < 0.8293 || lat > 55.8271) return [lng, lat];
@@ -1871,17 +1860,38 @@ function funBlock(d){
     var h = Math.sin(dla/2)*Math.sin(dla/2) + Math.cos(la1)*Math.cos(la2)*Math.sin(dlo/2)*Math.sin(dlo/2);
     return 2*R*Math.asin(Math.sqrt(h));
   }
+  /* 从我这儿看过去的方位角。车在动、拿得到朝向时换成「正前/右前/…」，比东南西北好使 */
+  function wcBearing(from, to){
+    var r = Math.PI/180, la1 = from[1]*r, la2 = to[1]*r, dl = (to[0]-from[0])*r;
+    var y = Math.sin(dl)*Math.cos(la2);
+    var x = Math.cos(la1)*Math.sin(la2) - Math.sin(la1)*Math.cos(la2)*Math.cos(dl);
+    return (Math.atan2(y, x)*180/Math.PI + 360) % 360;
+  }
+  var WC_REL = ["正前","右前","右手边","右后","正后","左后","左手边","左前"];
+  var WC_ABS = ["正北","东北","正东","东南","正南","西南","正西","西北"];
   function wcDist(km){ return km < 1 ? Math.round(km*1000)+" m" : (km < 10 ? km.toFixed(1) : Math.round(km))+" km"; }
-  function wcRow(w, km){
-    var star = w[4] > 0 ? '<span class="wst">'+Array(w[4]+1).join("★")+'</span>'
-             : (w[4] === -1 ? '<span class="wst no">这儿没有</span>' : '');
-    var left = km == null ? "" : wcDist(km);
+  function wcStars(n){
+    var out = "";
+    for(var i = 1; i <= 5; i++) out += '<i'+(i <= n ? '' : ' class="o"')+'>★</i>';
+    return '<span class="wst">'+out+'</span>';
+  }
+  var WC_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  /* p 有值就是定位过的行：带方向箭头和距离；没有就是按天列的行 */
+  function wcRow(w, p){
     var nav = wcNav(w[1], w[2], w[3]);
-    return '<a class="wrow pl"'+nav+'>'+(km==null?'':'<span class="wkm">'+left+'</span>')+
-      '<span><span class="wnm">'+esc(w[1])+'</span>'+star+'</span>'+
+    var head = "";
+    if(p){
+      var brg = wcBearing(p.me, [w[2], w[3]]);
+      var rel = p.head == null ? null : (brg - p.head + 360) % 360;
+      var word = rel == null ? WC_ABS[Math.round(brg/45) % 8] : WC_REL[Math.round(rel/45) % 8];
+      head = '<span class="warr" style="transform:rotate('+Math.round(rel == null ? brg : rel)+'deg)">'+WC_ARROW+'</span>'+
+        '<span class="wkm">'+wcDist(p.km)+' <em>· '+word+'</em></span>';
+    }
+    return '<a class="wrow pl"'+nav+'>'+head+
+      '<span class="wnm">'+esc(w[1])+(w[4] > 0 ? wcStars(w[4]) : '')+'</span>'+
       (w[5] ? '<span class="wno">'+esc(w[5])+'</span>' : '')+'</a>';
   }
-  /* 和 navAttrs 一个路数：手机上只唤起高德 App，唤不起就 toast；C 里没有这些点，所以直接拿坐标拼 */
+  /* 和 navAttrs 一个路数：手机上只唤起高德 App，唤不起就 toast；C 里没有这些点，直接拿坐标拼 */
   function wcNav(nm, lng, lat){
     var web = "https://uri.amap.com/marker?position="+lng+","+lat+"&name="+encodeURIComponent(nm)+"&coordinate=gaode&src=beijiang&callnative=1";
     var host = IS_IOS ? "iosamap://" : IS_AND ? "androidamap://" : "";
@@ -1892,36 +1902,96 @@ function funBlock(d){
     var byDay = {};
     DAYS.forEach(function(d){ byDay[d.d] = []; });
     WC.forEach(function(w){ (byDay[w[0]] = byDay[w[0]] || []).push(w); });
-    var order = DAYS.map(function(d){ return d.d; });
-    var today = TODAY_D;
-    document.getElementById("wcAll").innerHTML = order.map(function(dn){
-      var d = DAYS.filter(function(x){ return x.d === dn; })[0] || {};
-      return '<details class="wday"'+(dn === today ? " open" : "")+'><summary><b>D'+dn+'</b>'+
+    document.getElementById("wcAll").innerHTML = DAYS.map(function(d){
+      var list = byDay[d.d] || [];
+      return '<details class="wday"'+(d.d === TODAY_D ? " open" : "")+'><summary><b>D'+d.d+'</b>'+
         '<span class="n">'+esc(d.r || "")+'</span>'+CHEV+'</summary>'+
-        (byDay[dn].length ? byDay[dn].map(function(w){ return wcRow(w, null); }).join("")
+        (list.length ? list.map(function(w){ return wcRow(w, null); }).join("")
           : '<p class="wmore">这一天沿线没查到有人写过。服务区、加油站、镇上的店进去就能上</p>')+
         '</details>';
     }).join("");
   }
-  function wcLocate(){
-    var btn = document.getElementById("wcBtn"), box = document.getElementById("wcNear");
-    if(!navigator.geolocation){ box.innerHTML = '<p class="wmsg">这个浏览器不给定位，下面按天列着全部。</p>'; return; }
-    btn.disabled = true; btn.textContent = "定位中…";
-    navigator.geolocation.getCurrentPosition(function(p){
-      btn.disabled = false; btn.textContent = "重新定位";
-      var me = wgs2gcj(p.coords.longitude, p.coords.latitude);
-      var list = WC.map(function(w){ return {w:w, km:wcKm(me, [w[2], w[3]])}; }).sort(function(a, b){ return a.km - b.km; });
-      var warn = list.filter(function(x){ return x.w[4] === -1 && x.km < 6; });
-      var near = list.filter(function(x){ return x.w[4] !== -1; }).slice(0, 8);
-      box.innerHTML = (warn.length ? '<p class="whd">你脚下这一段</p>'+warn.map(function(x){ return wcRow(x.w, x.km); }).join("") : "")+
-        '<p class="whd">离你最近的（定位误差 ±'+Math.round(p.coords.accuracy)+' 米）</p>'+
-        near.map(function(x){ return wcRow(x.w, x.km); }).join("");
-    }, function(err){
-      btn.disabled = false; btn.textContent = "再试一次";
-      box.innerHTML = '<p class="wmsg">'+(err.code === 1 ? "定位被拒了，到系统设置里给浏览器打开定位再试。" :
-        "没拿到定位，到空旷的地方再试。") + '下面按天列着全部。</p>';
-    }, {enableHighAccuracy:true, timeout:15000, maximumAge:60000});
+  /* 按远近分三组：脚边的、路上的、远的。只有有东西的组才出小标题 */
+  function wcRenderNear(pos){
+    var me = wgs2gcj(pos.coords.longitude, pos.coords.latitude);
+    var head = (pos.coords.speed != null && pos.coords.speed > 1.5 &&
+                pos.coords.heading != null && !isNaN(pos.coords.heading)) ? pos.coords.heading : null;
+    var list = WC.map(function(w){ return {w:w, km:wcKm(me, [w[2], w[3]])}; }).sort(function(a, b){ return a.km - b.km; });
+    var warn = list.filter(function(x){ return x.w[4] === -1 && x.km < 6; })[0];
+    var ok = list.filter(function(x){ return x.w[4] !== -1; });
+    var out = "";
+    if(warn) out += '<div class="wwarn"><div class="t">你脚下这一段</div><div class="m">'+esc(warn.w[1])+'</div>'+
+      '<div class="d">'+esc(warn.w[5])+'</div></div>';
+    [["就在附近", 0, 1.5, 4], ["路上", 1.5, 40, 6], ["再远一点", 40, 1e9, 3]].forEach(function(g){
+      var part = ok.filter(function(x){ return x.km >= g[1] && x.km < g[2]; }).slice(0, g[3]);
+      if(!part.length) return;
+      out += '<p class="whd">'+g[0]+'</p>'+part.map(function(x){
+        return wcRow(x.w, {me:me, km:x.km, head:head});
+      }).join("");
+    });
+    document.getElementById("wcNear").innerHTML = out;
+    var st = document.getElementById("wcStat");
+    st.className = "wstat live";
+    st.innerHTML = '<span class="dot"></span><span>正在跟着你更新 · 定位误差 ±'+Math.round(pos.coords.accuracy)+' 米'+
+      (head == null ? '' : ' · 方向按车头算')+'</span>';
   }
+  var WC_WATCH = null;
+  function wcStart(){
+    var st = document.getElementById("wcStat");
+    if(!navigator.geolocation){
+      st.className = "wstat"; st.innerHTML = '<span>这个浏览器不给定位，下面按天列着全部</span>'; return;
+    }
+    st.className = "wstat live"; st.innerHTML = '<span class="dot"></span><span>正在定位…</span>';
+    if(WC_WATCH != null) navigator.geolocation.clearWatch(WC_WATCH);
+    WC_WATCH = navigator.geolocation.watchPosition(wcRenderNear, function(err){
+      st.className = "wstat";
+      st.innerHTML = '<span>'+(err.code === 1 ? "定位被拒了，到系统设置里给浏览器打开定位" : "没拿到定位，到空旷的地方再试")+
+        '</span><button type="button" id="wcRetry">再试一次</button>';
+      var r = document.getElementById("wcRetry"); if(r) r.addEventListener("click", wcStart);
+    }, {enableHighAccuracy:true, timeout:20000, maximumAge:15000});
+  }
+  function wcStop(){ if(WC_WATCH != null){ navigator.geolocation.clearWatch(WC_WATCH); WC_WATCH = null; } }
+
+  (function(){
+    var panel, mask, btn;
+    btn = document.createElement("button");
+    btn.type = "button"; btn.className = "collapsebtn";
+    btn.setAttribute("aria-label", "找附近的厕所"); btn.setAttribute("aria-expanded", "false");
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>厕所';
+    fabs().appendChild(btn);
+    function build(){
+      if(panel) return;
+      mask = document.createElement("div"); mask.className = "wcmask"; mask.hidden = true;
+      panel = document.createElement("div"); panel.className = "wcpanel"; panel.hidden = true;
+      panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "附近的厕所");
+      panel.innerHTML =
+        '<div class="wch"><b>厕所</b><span class="n">'+WC.length+' 处 · 都是小红书上有人写过的</span>' +
+        '<button type="button" class="wcx" aria-label="关掉"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
+        '<div class="wcb"><div class="wstat" id="wcStat"></div><div id="wcNear"></div>' +
+        '<details class="wall"><summary>按天看全部'+CHEV+'</summary><div id="wcAll"></div></details>' +
+        '<div class="wfoot"><p class="wlead">★ 五星很干净、三星能上、一星应急。地图上有、没人写过的没往里放；酒店、订好的餐厅、加油站也没列，进去就能上。</p>' +
+        '<p class="wlead" style="margin-top:8px">路过加油站就进去一趟，比路边旱厕好很多，新疆很多路段动辄上百公里没有停靠点。大多厕所没纸没洗手液，自己带。</p></div></div>';
+      document.body.appendChild(mask); document.body.appendChild(panel);
+      panel.querySelector(".wcx").addEventListener("click", close);
+      mask.addEventListener("click", close);
+      wcRenderAll();
+    }
+    function open(){
+      build(); mask.hidden = false; panel.hidden = false;
+      document.body.classList.add("wcopen"); btn.setAttribute("aria-expanded", "true");
+      var f = document.getElementById("fabs"); if(f) f.classList.remove("fabaway");
+      wcStart();
+    }
+    function close(){
+      if(!panel) return;
+      mask.hidden = true; panel.hidden = true; wcStop();
+      document.body.classList.remove("wcopen"); btn.setAttribute("aria-expanded", "false");
+    }
+    btn.addEventListener("click", function(){ (panel && !panel.hidden) ? close() : open(); });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape") close(); });
+    /* 页面切到后台就停掉定位 */
+    document.addEventListener("visibilitychange", function(){ if(document.hidden) wcStop(); else if(panel && !panel.hidden) wcStart(); });
+  })();
 
   /* 待办：点一下打勾。勾选状态走记账的共享通道（k:"todo"），全车人都看得到；没有云端就存本机 */
   var TODO_LS = "bj_todo_v1";
