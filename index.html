@@ -566,7 +566,8 @@ footer{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--rule);font-si
 .wcpanel .wstat button:active{background:var(--soft)}
 
 /* 分组小标题 */
-.wcpanel .whd{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:12px 0 0;letter-spacing:.06em}
+.wcpanel .whd{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:14px 0 0;letter-spacing:.06em}
+.wcpanel .wcb>#wcNear>.whd:first-child{margin-top:12px}
 
 /* 一行：左边方向箭头，右边距离/名字/备注三层 */
 .wcpanel .wrow{display:grid;grid-template-columns:24px 1fr;gap:0 8px;padding:10px 0;
@@ -1929,20 +1930,19 @@ function funBlock(d){
     });
     document.getElementById("wcNear").innerHTML = out;
     var st = document.getElementById("wcStat");
-    st.className = "wstat live";
-    st.innerHTML = '<span class="dot"></span><span>正在跟着你更新 · 定位误差 ±'+Math.round(pos.coords.accuracy)+' 米'+
-      (head == null ? '' : ' · 方向按车头算')+'</span>';
+    st.className = "wstat"; st.hidden = true; st.innerHTML = "";
   }
   var WC_WATCH = null;
   function wcStart(){
     var st = document.getElementById("wcStat");
+    st.hidden = false;
     if(!navigator.geolocation){
       st.className = "wstat"; st.innerHTML = '<span>这个浏览器不给定位，下面按天列着全部</span>'; return;
     }
-    st.className = "wstat live"; st.innerHTML = '<span class="dot"></span><span>正在定位…</span>';
+    st.className = "wstat live"; st.innerHTML = '<span class="dot"></span><span>定位中…</span>';
     if(WC_WATCH != null) navigator.geolocation.clearWatch(WC_WATCH);
     WC_WATCH = navigator.geolocation.watchPosition(wcRenderNear, function(err){
-      st.className = "wstat";
+      st.className = "wstat"; st.hidden = false;
       st.innerHTML = '<span>'+(err.code === 1 ? "定位被拒了，到系统设置里给浏览器打开定位" : "没拿到定位，到空旷的地方再试")+
         '</span><button type="button" id="wcRetry">再试一次</button>';
       var r = document.getElementById("wcRetry"); if(r) r.addEventListener("click", wcStart);
@@ -1954,16 +1954,16 @@ function funBlock(d){
     var panel, mask, btn;
     btn = document.createElement("button");
     btn.type = "button"; btn.className = "collapsebtn";
-    btn.setAttribute("aria-label", "找附近的厕所"); btn.setAttribute("aria-expanded", "false");
-    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>厕所';
+    btn.setAttribute("aria-label", "找附近的卫生间"); btn.setAttribute("aria-expanded", "false");
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>卫生间';
     fabs().appendChild(btn);
     function build(){
       if(panel) return;
       mask = document.createElement("div"); mask.className = "wcmask"; mask.hidden = true;
       panel = document.createElement("div"); panel.className = "wcpanel"; panel.hidden = true;
-      panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "附近的厕所");
+      panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "附近的卫生间");
       panel.innerHTML =
-        '<div class="wch"><b>厕所</b><span class="n">'+WC.length+' 处 · 都是小红书上有人写过的</span>' +
+        '<div class="wch"><b>卫生间</b>' +
         '<button type="button" class="wcx" aria-label="关掉"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
         '<div class="wcb"><div class="wstat" id="wcStat"></div><div id="wcNear"></div>' +
         '<details class="wall"><summary>按天看全部'+CHEV+'</summary><div id="wcAll"></div></details></div>';
