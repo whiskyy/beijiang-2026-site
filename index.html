@@ -593,19 +593,6 @@ footer{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--rule);font-si
 
 .wcpanel .wmsg{font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink3);margin:12px 0 0}
 
-/* 按天看全部 */
-.wcpanel .wall{margin-top:12px;border-top:1px solid var(--rule)}
-.wcpanel .wall>summary{display:flex;align-items:center;gap:6px;min-height:44px;cursor:pointer;list-style:none;
-  font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2);-webkit-user-select:none;user-select:none}
-.wcpanel .wall>summary::-webkit-details-marker{display:none}
-.wcpanel .wday>summary{display:flex;align-items:baseline;gap:8px;min-height:44px;cursor:pointer;list-style:none;
-  font-size:var(--f-m);line-height:var(--lh);-webkit-user-select:none;user-select:none}
-.wcpanel .wday>summary::-webkit-details-marker{display:none}
-.wcpanel .wday>summary .n{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3)}
-.wcpanel .wday{border-top:1px solid var(--rule)}
-.wcpanel .wday .wrow{grid-template-columns:1fr}
-.wcpanel .wday .wrow:first-of-type{border-top:0}
-.wcpanel .wmore{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:10px 0 4px}
 
 </style>
 </head>
@@ -1875,17 +1862,13 @@ function funBlock(d){
     return '<span class="wst">'+out+'</span>';
   }
   var WC_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
-  /* p 有值就是定位过的行：带方向箭头和距离；没有就是按天列的行 */
   function wcRow(w, p){
     var nav = wcNav(w[1], w[2], w[3]);
-    var head = "";
-    if(p){
-      var brg = wcBearing(p.me, [w[2], w[3]]);
-      var rel = p.head == null ? null : (brg - p.head + 360) % 360;
-      var word = rel == null ? WC_ABS[Math.round(brg/45) % 8] : WC_REL[Math.round(rel/45) % 8];
-      head = '<span class="warr" style="transform:rotate('+Math.round(rel == null ? brg : rel)+'deg)">'+WC_ARROW+'</span>'+
-        '<span class="wkm">'+wcDist(p.km)+' <em>· '+word+'</em></span>';
-    }
+    var brg = wcBearing(p.me, [w[2], w[3]]);
+    var rel = p.head == null ? null : (brg - p.head + 360) % 360;
+    var word = rel == null ? WC_ABS[Math.round(brg/45) % 8] : WC_REL[Math.round(rel/45) % 8];
+    var head = '<span class="warr" style="transform:rotate('+Math.round(rel == null ? brg : rel)+'deg)">'+WC_ARROW+'</span>'+
+      '<span class="wkm">'+wcDist(p.km)+' <em>· '+word+'</em></span>';
     return '<a class="wrow pl"'+nav+'>'+head+
       '<span class="wnm">'+esc(w[1])+(w[4] > 0 ? wcStars(w[4]) : '')+'</span>'+
       (w[5] ? '<span class="wno">'+esc(w[5])+'</span>' : '')+'</a>';
@@ -1896,19 +1879,6 @@ function funBlock(d){
     var host = IS_IOS ? "iosamap://" : IS_AND ? "androidamap://" : "";
     var sch = host ? host+"navi?sourceApplication=beijiang&poiname="+encodeURIComponent(nm)+"&lat="+lat+"&lon="+lng+"&dev=0&style=2" : "";
     return ' href="'+web+'"'+(sch ? ' data-s="'+sch+'" data-n="'+esc(nm)+'"' : '')+' target="_blank" rel="noopener"';
-  }
-  function wcRenderAll(){
-    var byDay = {};
-    DAYS.forEach(function(d){ byDay[d.d] = []; });
-    WC.forEach(function(w){ (byDay[w[0]] = byDay[w[0]] || []).push(w); });
-    document.getElementById("wcAll").innerHTML = DAYS.map(function(d){
-      var list = byDay[d.d] || [];
-      return '<details class="wday"'+(d.d === TODAY_D ? " open" : "")+'><summary><b>D'+d.d+'</b>'+
-        '<span class="n">'+esc(d.r || "")+'</span>'+CHEV+'</summary>'+
-        (list.length ? list.map(function(w){ return wcRow(w, null); }).join("")
-          : '<p class="wmore">这一天沿线没查到有人写过。服务区、加油站、镇上的店进去就能上</p>')+
-        '</details>';
-    }).join("");
   }
   /* 按远近分三组：脚边的、路上的、远的。只有有东西的组才出小标题 */
   function wcRenderNear(pos){
@@ -1937,7 +1907,7 @@ function funBlock(d){
     var st = document.getElementById("wcStat");
     st.hidden = false;
     if(!navigator.geolocation){
-      st.className = "wstat"; st.innerHTML = '<span>这个浏览器不给定位，下面按天列着全部</span>'; return;
+      st.className = "wstat"; st.innerHTML = '<span>这个浏览器不给定位</span>'; return;
     }
     st.className = "wstat live"; st.innerHTML = '<span class="dot"></span><span>定位中…</span>';
     if(WC_WATCH != null) navigator.geolocation.clearWatch(WC_WATCH);
@@ -1965,12 +1935,10 @@ function funBlock(d){
       panel.innerHTML =
         '<div class="wch"><b>卫生间</b>' +
         '<button type="button" class="wcx" aria-label="关掉"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
-        '<div class="wcb"><div class="wstat" id="wcStat"></div><div id="wcNear"></div>' +
-        '<details class="wall"><summary>按天看全部'+CHEV+'</summary><div id="wcAll"></div></details></div>';
+        '<div class="wcb"><div class="wstat" id="wcStat"></div><div id="wcNear"></div></div>';
       document.body.appendChild(mask); document.body.appendChild(panel);
       panel.querySelector(".wcx").addEventListener("click", close);
       mask.addEventListener("click", close);
-      wcRenderAll();
     }
     function open(){
       build(); mask.hidden = false; panel.hidden = false;
