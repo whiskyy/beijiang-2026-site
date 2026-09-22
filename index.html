@@ -71,7 +71,7 @@ b,strong{font-weight:600}
 summary,a{scroll-margin-top:calc(104px + env(safe-area-inset-top))}
 summary{list-style:none}summary::-webkit-details-marker{display:none}
 /* 箭头等行内图标跟着文字大小走，和旁边的字同高 */
-.chev{flex:none;width:1em;height:1em;color:var(--ink3);transition:transform .2s}
+.chev{flex:none;align-self:center;width:1em;height:1em;color:var(--ink3);transition:transform .2s}
 details[open]>summary>.chev{transform:rotate(90deg)}
 section{margin:32px 0;scroll-margin-top:52px}
 .sh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:16px}
@@ -112,7 +112,7 @@ header .sub{font-size:var(--f-m);line-height:var(--lh);color:var(--ink2)}
 .fabaway{transform:translateY(90px);opacity:0;pointer-events:none}
 .tsec{margin:16px 0 0;padding-top:16px;border-top:1px solid var(--rule);scroll-margin-top:58px}
 .tsh{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:var(--f-m);line-height:var(--lh);font-weight:600;color:var(--ink);padding:0 0 4px}
-.tsh i{flex:none;align-self:center;font-style:normal;font-size:var(--f-xs);font-weight:400;color:var(--ink3);line-height:var(--lh-xs)}
+.tsh i{flex:none;font-style:normal;font-size:var(--f-xs);font-weight:400;color:var(--ink3);line-height:var(--lh-xs)}
 .tsh span{margin-left:auto;font-size:var(--f-xs);line-height:var(--lh-xs);font-weight:400;color:var(--ink3);text-align:right}
 .tbody.nopad{padding:0;border-top:0}
 .mapwrap .spur{fill:none;stroke:var(--ink2);stroke-linejoin:round;stroke-linecap:round;opacity:.5}
@@ -120,8 +120,10 @@ header .sub{font-size:var(--f-m);line-height:var(--lh);color:var(--ink2)}
 .mapwrap .spur.dim{opacity:.22}
 /* ---- 一天一条时间轴 ---- */
 .flow{margin-top:12px}
+/* 小标签和旁边的大字一律按基线对齐：两者字号不同，按盒子居中会差 1–4px，眼睛看得出来 */
 .fl,.flh{display:grid;grid-template-columns:44px 1fr;gap:0 16px}
-.fl .flt{font-size:var(--f-xs);line-height:var(--lh-xs);font-weight:600;color:var(--gold);padding-top:4px;text-align:right;font-variant-numeric:tabular-nums}
+.fl{align-items:baseline}
+.fl .flt{font-size:var(--f-xs);line-height:var(--lh-xs);font-weight:600;color:var(--gold);text-align:right;font-variant-numeric:tabular-nums}
 .fl .flc{font-size:var(--f-m);font-weight:600;line-height:var(--lh);color:var(--ink);padding:2px 0 20px 16px;border-left:2px solid var(--rule);position:relative}
 .fl .flc::before{content:"";position:absolute;left:-5px;top:calc(.81em - 3px);width:8px;height:8px;border-radius:50%;background:var(--rule)}
 .fl.li .flc{font-weight:400;padding-bottom:8px}
@@ -143,7 +145,7 @@ header .sub{font-size:var(--f-m);line-height:var(--lh);color:var(--ink2)}
 .flh .flc::after{content:"";position:absolute;left:-2px;top:16px;bottom:0;width:2px;background:var(--rule)}
 .flsec.road .flh .flc::before{background:var(--ink3)}
 .flsec.alt .flh .flc::before{background:var(--blue)}
-.flh i{flex:none;align-self:center;font-style:normal;font-size:var(--f-xs);line-height:var(--lh-xs);font-weight:400;color:var(--ink3)}
+.flh i{flex:none;font-style:normal;font-size:var(--f-xs);line-height:var(--lh-xs);font-weight:400;color:var(--ink3)}
 .flh b{font-size:var(--f-m);font-weight:600;line-height:var(--lh);color:var(--ink)}
 .flh span{flex:0 0 100%;font-size:var(--f-xs);font-weight:400;color:var(--ink3);line-height:var(--lh-xs);margin-top:2px}
 /* 折叠块：景区地图、出片机位默认收着，日程读起来是连着的 */
@@ -169,6 +171,10 @@ header .sub{font-size:var(--f-m);line-height:var(--lh);color:var(--ink2)}
 a.mbn{color:var(--blue)}
 .mbs{color:var(--green)}
 .mbs.alt{color:var(--ink3)}
+/* 「备选 N 家」固定另起一行：挤在店名后面要么把店名折断，要么把间隔点吊在行尾 */
+.mb .mbj{display:block;margin-top:4px}
+.mb .mbj .mbs{display:none}
+.mb .mbj .mbv{margin-left:0}
 .mb .mbv{margin:-13px 0;padding:13px 0;min-height:0;border:0;background:none;color:var(--ink3);font-size:inherit;vertical-align:baseline}
 .mb .mbv::after{content:"\203A";margin-left:4px;font-size:1.15em;line-height:1}
 .jump{margin-left:8px;vertical-align:1px;display:inline-flex;align-items:center;gap:2px;min-height:24px;padding:0 8px;border-radius:999px;border:1px solid var(--rule);background:var(--soft);color:var(--ink3);font-size:var(--f-xs);font-family:inherit;line-height:1;cursor:pointer;white-space:nowrap}
@@ -227,7 +233,7 @@ a.wake{color:var(--blue);text-decoration:none;padding:9px 2px;margin:-9px -2px;b
 
 /* ---- 表格：门票 / 作息 / 费用 ---- */
 .tkt{padding:16px}.cost{padding:16px}.sched{padding:0 16px 8px;margin-bottom:12px}
-.sched>summary{display:flex;align-items:center;gap:8px;min-height:48px;padding:2px 0;cursor:pointer;font-size:var(--f-m);line-height:var(--lh);font-weight:600}
+.sched>summary{display:flex;align-items:baseline;gap:8px;padding:12px 0;cursor:pointer;font-size:var(--f-m);line-height:var(--lh);font-weight:600}
 .sched>summary .tsub{margin-left:auto;font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);font-weight:400}
 .tkt table,.sched table,.cost table,.acct table{width:100%;border-collapse:collapse;font-size:var(--f-s);line-height:var(--lh-s)}
 .tkt th,.sched th,.cost th,.acct th{text-align:left;font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);font-weight:400;padding:8px 8px 8px 0;border-bottom:1px solid var(--rule)}
@@ -304,19 +310,19 @@ dl.tips dd{margin:0 0 16px;font-size:var(--f-m);line-height:var(--lh);color:var(
 
 /* 子卡片：总览 / 沿途 / 景区 / 吃 / 今日 */
 .tour{margin:16px 0 8px;border:1px solid var(--rule);border-radius:var(--r);background:var(--card)}
-.tour>summary{display:flex;align-items:center;gap:8px;padding:12px;min-height:48px;cursor:pointer;font-size:var(--f-m);line-height:var(--lh);font-weight:600;color:var(--ink);-webkit-user-select:none;user-select:none;white-space:nowrap}
+.tour>summary{display:flex;align-items:baseline;gap:8px;padding:12px;cursor:pointer;font-size:var(--f-m);line-height:var(--lh);font-weight:600;color:var(--ink);-webkit-user-select:none;user-select:none;white-space:nowrap}
 .tour>summary::before{flex:none;font-size:var(--f-xs);font-weight:400;color:var(--ink3);line-height:var(--lh-xs)}
 .tour.plan>summary::before{content:"总览"}.tour.food>summary::before{content:"吃饭"}
 .tour>summary .tsub{margin-left:auto;flex:0 1 auto;max-width:55%;font-size:var(--f-xs);font-weight:400;color:var(--ink3);text-align:right;line-height:var(--lh-xs);white-space:normal}
 .tour.sun{border:0;background:transparent;margin:8px 0 0}
-.tour.sun>summary{min-height:44px;padding:8px 4px;font-size:var(--f-s);line-height:var(--lh-s);font-weight:400;color:var(--ink2)}
+.tour.sun>summary{padding:12px 4px;font-size:var(--f-s);line-height:var(--lh-s);font-weight:400;color:var(--ink2)}
 .tour.sun .tbody{padding:4px 4px 8px;border-top:0}
 .tbody{padding:4px 16px 16px;border-top:1px solid var(--rule)}
 .picl{display:grid;gap:4px}.picl>span{display:block;position:relative;padding-left:12px}
 .picl>span::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--ink3)}
-.frow{display:flex;gap:12px;padding:8px 0;border-top:1px dashed var(--rule);font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2)}
+.frow{display:flex;align-items:baseline;gap:12px;padding:8px 0;border-top:1px dashed var(--rule);font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2)}
 .frow:first-child{border-top:0}
-.frow b{flex:none;min-width:2.4em;color:var(--ink3);font-size:var(--f-xs);line-height:var(--lh-xs);font-weight:400;padding-top:2px}
+.frow b{flex:none;min-width:2.4em;color:var(--ink3);font-size:var(--f-xs);line-height:var(--lh-xs);font-weight:400}
 .frow .wxs{display:block;padding:1px 0}
 .frow .wxs b{display:inline;min-width:0;font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink);padding:0;margin-right:2px}
 .frow .wxs i{font-style:normal;color:var(--ink3)}
@@ -465,21 +471,25 @@ footer{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--rule);font-si
 @media (max-width:520px){
   .wrap{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
   .dbody{padding:12px 12px 16px}
-  /* 总览卡收着是一张卡，展开后去掉边框，时间线用满整张日卡的宽度 */
-  .tour.plan[open]{border-color:transparent;border-radius:0;background:transparent;margin:8px -1px 4px}
-  .tour.plan[open]>summary{padding:8px 2px}
-  .tour.plan[open]>.tbody{padding:8px 0}
-  .tbody.meals{padding:0 12px 12px}
+  /* 日卡里的三块（日出、全天总览、吃什么）不再是嵌套的小卡片：
+     去掉边框以后，它们的标题、时间线的轨道线、小地图的内容共用同一条左边缘，
+     块之间靠一条细线分开 */
+  .dbody>.tour{border:0;border-radius:0;background:transparent;margin:0}
+  .dbody>.tour+.tour{border-top:1px solid var(--rule)}
+  .dbody>.tour>summary{padding:12px 0;min-height:0}
+  .dbody>.tour>.tbody{padding:0 0 8px;border-top:0}
+  .tbody.meals{padding:0 0 8px}
+
   .tsec .meal.noimg{grid-template-columns:1fr;grid-template-areas:"n" "x" "o"}
   /* 时间线 */
-  .flow{margin-top:8px;margin-left:4px}
+  .flow{margin-top:8px;margin-left:0}
   .flow .fl,.flow .flh{display:block;position:relative;border-left:2px solid var(--rule);padding-left:16px}
   .flow .flh{border-left-color:transparent}
   .flow .flh::after{content:"";position:absolute;left:-2px;top:16px;bottom:0;width:2px;background:var(--rule)}
   .flh .flc::after{content:none}
   .flnotes{margin-left:0}
   .flow .fl{font-size:var(--f-m);line-height:var(--lh)}
-  .fl .flt{float:left;height:1.5em;margin-right:8px;padding:0;text-align:left;font-size:inherit;line-height:inherit;font-weight:600}
+  .fl .flt{float:left;height:1.5em;margin-right:8px;padding-top:2px;text-align:left;font-size:inherit;line-height:inherit;font-weight:600}
   .fl .flt:empty,.flh .flt{display:none}
   .fl .flc,.flh .flc{border-left:0;padding-left:0}
   .fl .flc::before{left:-21px}
@@ -1494,6 +1504,8 @@ function funBlock(d){
       }
       return out ? '<div class="flnotes"><div class="nbox">'+out+'</div></div>' : "";
     }
+    /* 间隔点和后面那个按钮绑在一起换行，不让「·」单独吊在行尾 */
+    function mbMore(dn, label){ return '<span class="mbj"><span class="mbs alt"> · </span><button type="button" class="jump mbv" data-go="d'+dn+'meals">'+label+'</button></span>'; }
     function mealBar(m){
       var name = PICK["D"+dn+"-"+m.t] || (m.o[0] || [])[0];
       if(!name) return "";
@@ -1503,8 +1515,8 @@ function funBlock(d){
       return '<div class="mb"><span class="mbk">'+kind+'</span>'+
         (C[name] ? '<a class="pl mbn"'+navAttrs(name, "view")+'>'+PIN+name+'</a>' : '<span class="mbn">'+name+'</span>')+
         (m.tag ? '<span class="mbs alt"> · '+m.tag+'</span>' : '')+
-        (booked ? '<span class="mbs"> · 已订</span>'+(more > 0 ? '<span class="mbs alt"> · </span><button type="button" class="jump mbv" data-go="d'+dn+'meals">还有 '+more+' 家备选</button>' : '') :
-          more > 0 ? '<span class="mbs alt"> · </span><button type="button" class="jump mbv" data-go="d'+dn+'meals">备选 '+more+' 家待投票</button>' : '')+
+        (booked ? '<span class="mbs"> · 已订</span>'+(more > 0 ? mbMore(dn, '还有 '+more+' 家备选') : '') :
+          more > 0 ? mbMore(dn, '备选 '+more+' 家待投票') : '')+
         '</div>';
     }
     function rowHtml(r){
