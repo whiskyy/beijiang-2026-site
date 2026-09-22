@@ -538,12 +538,41 @@ footer{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--rule);font-si
   .sched td:nth-child(3)::before{content:"出发"}
   .sched td:nth-child(4)::before{content:"到达"}
 }
+/* ---- 厕所 ---- */
+.wcbox{padding:12px}
+#wc .wlead{font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2);margin:0 0 12px}
+#wc .wtail{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--rule)}
+#wc .wbtn{display:block;width:100%;min-height:44px;font:inherit;font-size:var(--f-m);line-height:var(--lh);
+  color:var(--ink);background:var(--soft);border:1px solid var(--rule);border-radius:var(--r-s);cursor:pointer}
+#wc .wbtn:active{background:var(--rule)}
+#wc .wbtn[disabled]{color:var(--ink3)}
+#wc .wmsg{font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink3);margin:12px 0 0}
+#wc .whd{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:16px 0 4px}
+#wc .wrow{display:grid;grid-template-columns:56px 1fr;gap:0 8px;align-items:baseline;
+  padding:10px 0;border-top:1px solid var(--rule);text-decoration:none;color:inherit}
+#wc .wrow:active{background:var(--soft)}
+#wc .wkm{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--gold);font-variant-numeric:tabular-nums}
+#wc .wday .wrow{grid-template-columns:1fr}
+#wc .wday .wno{grid-column:1}
+#wc .wkm.d{display:none}
+#wc .wnm{font-size:var(--f-m);line-height:var(--lh);font-weight:600}
+#wc .wst{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--gold);margin-left:6px;letter-spacing:.04em}
+#wc .wst.no{color:var(--red)}
+#wc .wno{grid-column:2;font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2)}
+#wc .wday>summary{display:flex;align-items:baseline;gap:8px;min-height:44px;padding:0;cursor:pointer;
+  font-size:var(--f-m);line-height:var(--lh);-webkit-user-select:none;user-select:none;list-style:none}
+#wc .wday>summary::-webkit-details-marker{display:none}
+#wc .wday>summary:active{background:var(--soft)}
+#wc .wday>summary .n{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3)}
+#wc .wday{border-top:1px solid var(--rule)}
+#wc .wday .wrow:first-of-type{border-top:0}
+
 </style>
 </head>
 <body>
 
 <nav class="topnav" id="topnav"><div class="wrap">
-  <a href="#top" class="on">概览</a><a href="#days">行程</a><a href="#todo">待办</a><a href="#tkt">费用</a><a href="#acct">记账</a>
+  <a href="#top" class="on">概览</a><a href="#days">行程</a><a href="#todo">待办</a><a href="#tkt">费用</a><a href="#wc">厕所</a><a href="#acct">记账</a>
 </div></nav>
 
 <main class="wrap">
@@ -623,6 +652,17 @@ footer{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--rule);font-si
   </div>
   <div class="sh" style="margin-top:16px"><h3>门票</h3><span class="n">人均，含区间车</span></div>
   <div class="card tkt" id="tktBox"></div>
+</section>
+
+<section id="wc">
+  <div class="sh"><h2>厕所</h2><span class="n">★ 来自小红书近一年的一手帖</span></div>
+  <div class="card wcbox">
+    <p class="wlead">★ 越多越干净：五星很干净、三星能上、一星应急。没打星的是顺路会停的服务区、加油站、商场。</p>
+    <button type="button" class="wbtn" id="wcBtn">用定位找最近的</button>
+    <div id="wcNear"></div>
+    <div id="wcAll"></div>
+    <p class="wlead wtail">路上遇到加油站就进去一趟，比路边旱厕好很多。新疆很多路段动辄上百公里没有停靠点。</p>
+  </div>
 </section>
 
 <section id="acct">
@@ -919,6 +959,77 @@ var PICK = {"D1-午":"园丁缸子肉烤肉店","D1-晚":"丝路有约","D2-早"
 var POI = {"丝路有约":"poi/03.webp","恰库尔图老奇台拌面王":"poi/11.webp","小吴风味餐厅":"poi/13.webp","吾苏曼江饭馆":"poi/15.webp","库拉西拌面王":"poi/17.webp","金冠牧疆鱼羊宴":"poi/18.webp","黑走马冷水活鱼大盘土鸡":"poi/19.webp","印府冷水鱼":"poi/20.webp","疯长咖啡":"poi/33.webp","喀纳斯生态度假酒店":"poi/38.webp","鑫喀禾过油肉拌面店":"poi/39.webp","贾登峪服务中心":"poi/41.webp","林萍哨子面烧烤康城店":"poi/44.webp","光头强椒麻鸡泽福店":"poi/47.webp","克拉玛依亚朵":"poi/49.webp","晓红特色肉饼幸福里店":"poi/53.webp","奔跑的肉饼子锦福路店":"poi/54.webp","麦尔疆西域美食主题餐厅":"poi/59.webp","麦尔疆碎肉拌面小锅抓饭":"poi/63.webp","原始抓饭江苏路店":"poi/64.webp","阿列克桑德拉面包房":"poi/67.webp","醉满疆特色新疆菜":"poi/69.webp","阿俊牛肉拉面饺子馆":"poi/73.webp","那拉提旅游风景区游客中心":"poi/76.webp","骏原椒麻鸡":"poi/78.webp","牛宫馆丸子汤巴音酒店店":"poi/82.webp","乔尔玛服务区":"poi/85.webp","四十九丸子汤友好店":"poi/94.webp","大十字玲玲米粉友好三中店":"poi/95.webp","禾木桥":"poi/102.webp","黎光街25号咖啡馆":"poi/103.webp","马量鸡肉面":"poi/104.webp","啊臻味道米粉西河坝前街店":"poi/105.webp","米热大妈破包子":"poi/106.webp","强王快餐":"poi/107.webp","白给也餐厅":"poi/109.webp","桃源风味餐厅":"poi/110.webp","疆禾餐厅":"poi/111.webp","贾登峪老猎人餐厅":"poi/113.webp","万财野蘑菇专卖":"poi/114.webp","玲家小院":"poi/115.webp","欣万佳米粉馆":"poi/116.webp","喀纳斯蝴蝶餐厅":"poi/118.webp","泰加餐厅":"poi/119.webp","园丁缸子肉烤肉店":"poi/120.webp","伊沐晨包子":"poi/121.webp","勇哥小厨":"poi/122.webp","温馨家园客栈":"poi/123.webp","辣风芹新疆炒米粉那拉提店":"poi/124.webp"};
 /* @@FOOD-END */
 var FOOD = {"烤包子": "kaobaozi", "馕": "nang", "包尔萨克": "baoersake", "拌面": "banmian", "羊肉串": "yangrouchuan", "大盘鸡": "dapanji", "抓饭": "zhuafan"};
+
+var WC = [
+ [1,"金泉商城",87.62077,43.7846,0,"商场里有"],
+ [1,"国际大巴扎",87.61798,43.78001,0,"夜市和商场里都有"],
+ [2,"天山国际机场",87.48109,43.91701,0,"航站楼里"],
+ [2,"五彩湾服务区",88.83541,44.7519,4,"高速服务区，大而空；之后 130 km 没有服务区"],
+ [2,"恰库尔图",89.54238,46.33175,0,"镇上，拌面店和加油站都有"],
+ [2,"可可苏里",89.76482,47.02887,0,"湖边停车点，高德上有记录"],
+ [2,"伊雷木湖观景台",89.75334,47.21868,0,"路边观景台"],
+ [3,"可可托海景区门票站",89.88421,47.22208,4,"进沟前先在这儿解决"],
+ [3,"可可托海白桦林站",89.88322,47.22135,3,"区间车沿线各站都有"],
+ [3,"神钟山",89.97536,47.29856,3,"区间车终点站；自驾进沟那条线上的两个是关着的"],
+ [3,"富蕴",89.52537,46.99027,0,"县城，店里和加油站"],
+ [3,"北屯",87.80564,47.3622,4,"服务区地方大、干净"],
+ [3,"布尔津",86.87948,47.69752,0,"县城和酒店"],
+ [4,"冲乎尔镇",87.13147,48.11643,0,"主街早餐店"],
+ [4,"禾木门票站大厅",87.52834,48.57146,4,"两个大的，大厅两侧各一个；走入口那侧人少，而且有厕纸"],
+ [4,"禾木桥头站",87.43068,48.57197,3,"坑位少，位置隐蔽，还算干净"],
+ [4,"禾木新村村口超市旁",87.44547,48.58399,4,"有人打扫，傍晚 20:00 关门"],
+ [4,"禾木观景台",87.42857,48.57735,-1,"上山一路到山顶都没有，出门前解决"],
+ [5,"贾登峪直通车服务中心",87.1537,48.50219,2,"门口那个味道大、排队久"],
+ [5,"喀纳斯换乘中心",87.03085,48.69333,5,"冲水、坑位足、有保洁，园里最好的"],
+ [5,"喀纳斯观鱼台",86.99454,48.71977,4,"地方小但明亮，还有单独的补妆区"],
+ [5,"喀纳斯老村",87.03565,48.69544,0,"餐厅里"],
+ [6,"卧龙湾",87.05418,48.62154,3,"湾口有；神仙湾到卧龙湾的栈道上没有，上车前解决"],
+ [6,"神仙湾",87.04085,48.65899,-1,"三湾沿途几乎没有，08:00 在贾登峪上车前排空"],
+ [6,"和什托洛盖",86.00719,46.52028,4,"加油站，比路边旱厕好很多"],
+ [6,"野生雅丹停车场",85.77405,46.00175,3,"停车场东南角，别处没有"],
+ [6,"艾里克湖",85.768089,45.951409,-1,"湖边没有；渔庄那条路 9 月被沙土堵了"],
+ [6,"世界魔鬼城",85.7332,46.13515,4,"景区里干净"],
+ [6,"乌尔禾胡杨林",85.54247,46.00673,3,"景区门口有冲水公厕，河谷里没有"],
+ [6,"克拉玛依",84.90971,45.56452,0,"市区，酒店和店里"],
+ [7,"奎屯服务区",85.11674,44.36347,4,"高速服务区"],
+ [7,"精河服务区",82.79423,44.5626,4,"有保洁坐在旁边，地面有点湿；冰柜的哈萨克斯坦冰淇淋好吃"],
+ [7,"精河县",82.89071,44.5992,0,"下高速加油那儿"],
+ [7,"赛里木湖东门游客中心",81.38651,44.61604,5,"全线最好：超大、明亮、温水洗手。进门先解决一次"],
+ [7,"十里长堤停靠站",81.27192,44.66241,0,"停靠站，高德上有记录"],
+ [7,"点将台",81.07019,44.68824,2,"石头房旧旱厕，旺季排队还没隔断，能忍就到下一站"],
+ [7,"天鹅乐水",80.99106,44.61577,5,"冲水、有隔断、可洗手，环湖途中最好的一个"],
+ [7,"西海草原",80.99198,44.57933,4,"有公厕和取水点"],
+ [7,"克勒涌珠",81.02196,44.56124,4,"木屋厕所，较新"],
+ [7,"金花紫卉",81.08392,44.52889,0,"停靠点"],
+ [7,"松树头 · 南门",81.14203,44.50482,4,"南入口配套全，有餐饮便利店；白天会排队"],
+ [7,"果子沟观景台",81.163375,44.474775,1,"老路段旱厕，脏。出赛湖南门前再解决一次"],
+ [7,"清水河",80.74542,44.18994,0,"镇上，酒店和店里"],
+ [8,"喀赞其",81.33613,43.90403,0,"停车场和景区里"],
+ [8,"六星街",81.30967,43.93243,0,"街区里有"],
+ [8,"新源县",83.233,43.4348,4,"县城加油站、卫生院都干净又好找，是这段最好的补给点"],
+ [8,"巩乃斯河谷观景台",83.98373,43.32548,0,"路边观景台"],
+ [9,"那拉提游客中心",84.02977,43.31986,4,"停车场旁新建的公厕，打扫及时、纸巾常备"],
+ [9,"空中草原服务区",84.02041,43.26756,4,"线上这段的服务区，打扫及时、有纸"],
+ [9,"游牧人家",83.94191,43.20922,0,"空中草原线终点"],
+ [9,"拉尔墩达坂",84.3491,43.16477,0,"垭口停车点"],
+ [9,"巴音布鲁克镇游客中心",84.15916,43.03326,5,"有人说是疆内景区里最干净的"],
+ [9,"巴音布鲁克北门",84.13414,43.01255,3,"检票口这儿，进园前先解决"],
+ [9,"九曲十八弯观景台",84.42771,42.76573,1,"旱厕，简陋异味大；园里别处厕所不少"],
+ [10,"独库那拉提服务区",84.36787,43.35515,4,"装修好、有人清理，还有充电站；到乔尔玛之间没有大服务区"],
+ [10,"玉希莫勒盖达坂",84.44825,43.4731,3,"达坂观景台"],
+ [10,"乔尔玛服务区",84.3829,43.65374,4,"北段最大的一个，我们在这儿吃午饭"],
+ [10,"哈希勒根隧道",84.42111,43.73267,0,"北口停车场"],
+ [10,"独库 640 乌兰萨德克",84.49714,43.879,3,"路边驿站"],
+ [10,"独库 639 号驿站",84.50169,43.88547,2,"评分最低那一档"],
+ [10,"独库 630 将军庙",84.56443,43.94183,3,"路边服务中心"],
+ [10,"老虎口",84.6497,44.01288,0,"观景点旁"],
+ [10,"乌苏驿",84.82348,44.11658,4,"快到独山子，冲水的，北段最干净的几个之一"],
+ [10,"毛溜沟服务区",84.86457,44.33643,3,"G217 边上"],
+ [10,"独山子",84.82929,44.38586,0,"上 G30 前，加油站和服务区都有"],
+ [10,"沙湾",85.62495,44.34083,0,"下高速吃晚饭那儿"],
+ [10,"乌鲁木齐 友好",87.58779,43.8162,0,"市区，酒店和店里"],
+ [11,"天山国际机场",87.48109,43.91701,0,"过安检前后都有"]
+];
 
 var TICKETS = {
   rows:[
@@ -1686,6 +1797,85 @@ function funBlock(d){
       [].forEach.call(document.querySelectorAll(".collapsebtn,.todaybtn"), function(el){ el.classList.toggle("fabaway", away); });
     }, {passive:true});
   })();
+
+  /* ---- 厕所：GPS 找最近的 ----
+     手机定位给的是 WGS-84，页面上所有坐标是高德的 GCJ-02，新疆差 300–600 米，不换算会排错顺序 */
+  function wgs2gcj(lng, lat){
+    var a = 6378245.0, ee = 0.00669342162296594323;
+    if(lng < 72.004 || lng > 137.8347 || lat < 0.8293 || lat > 55.8271) return [lng, lat];
+    function tl(x, y){
+      var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+      r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI)) * 2/3;
+      r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI)) * 2/3;
+      r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30)) * 2/3; return r;
+    }
+    function tg(x, y){
+      var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+      r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI)) * 2/3;
+      r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI)) * 2/3;
+      r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI)) * 2/3; return r;
+    }
+    var dLat = tl(lng-105, lat-35), dLng = tg(lng-105, lat-35);
+    var rLat = lat/180*Math.PI, m = Math.sin(rLat); m = 1 - ee*m*m; var sq = Math.sqrt(m);
+    dLat = (dLat*180) / ((a*(1-ee)) / (m*sq) * Math.PI);
+    dLng = (dLng*180) / (a/sq * Math.cos(rLat) * Math.PI);
+    return [lng+dLng, lat+dLat];
+  }
+  function wcKm(a, b){
+    var R = 6371, r = Math.PI/180, la1 = a[1]*r, la2 = b[1]*r;
+    var dla = (b[1]-a[1])*r, dlo = (b[0]-a[0])*r;
+    var h = Math.sin(dla/2)*Math.sin(dla/2) + Math.cos(la1)*Math.cos(la2)*Math.sin(dlo/2)*Math.sin(dlo/2);
+    return 2*R*Math.asin(Math.sqrt(h));
+  }
+  function wcDist(km){ return km < 1 ? Math.round(km*1000)+" m" : (km < 10 ? km.toFixed(1) : Math.round(km))+" km"; }
+  function wcRow(w, km){
+    var star = w[4] > 0 ? '<span class="wst">'+Array(w[4]+1).join("★")+'</span>'
+             : (w[4] < 0 ? '<span class="wst no">这儿没有</span>' : '');
+    var left = km == null ? "" : wcDist(km);
+    var nav = wcNav(w[1], w[2], w[3]);
+    return '<a class="wrow pl"'+nav+'>'+(km==null?'':'<span class="wkm">'+left+'</span>')+
+      '<span><span class="wnm">'+esc(w[1])+'</span>'+star+'</span>'+
+      '<span class="wno">'+esc(w[5])+'</span></a>';
+  }
+  /* 和 navAttrs 一个路数：手机上只唤起高德 App，唤不起就 toast；C 里没有这些点，所以直接拿坐标拼 */
+  function wcNav(nm, lng, lat){
+    var web = "https://uri.amap.com/marker?position="+lng+","+lat+"&name="+encodeURIComponent(nm)+"&coordinate=gaode&src=beijiang&callnative=1";
+    var host = IS_IOS ? "iosamap://" : IS_AND ? "androidamap://" : "";
+    var sch = host ? host+"navi?sourceApplication=beijiang&poiname="+encodeURIComponent(nm)+"&lat="+lat+"&lon="+lng+"&dev=0&style=2" : "";
+    return ' href="'+web+'"'+(sch ? ' data-s="'+sch+'" data-n="'+esc(nm)+'"' : '')+' target="_blank" rel="noopener"';
+  }
+  function wcRenderAll(){
+    var byDay = {}, order = [];
+    WC.forEach(function(w){ if(!byDay[w[0]]){ byDay[w[0]] = []; order.push(w[0]); } byDay[w[0]].push(w); });
+    var today = TODAY_D;
+    document.getElementById("wcAll").innerHTML = order.map(function(dn){
+      var d = DAYS.filter(function(x){ return x.d === dn; })[0] || {};
+      return '<details class="wday"'+(dn === today ? " open" : "")+'><summary><b>D'+dn+'</b>'+
+        '<span class="n">'+esc(d.r || "")+'</span>'+CHEV+'</summary>'+
+        byDay[dn].map(function(w){ return wcRow(w, null); }).join("")+'</details>';
+    }).join("");
+  }
+  function wcLocate(){
+    var btn = document.getElementById("wcBtn"), box = document.getElementById("wcNear");
+    if(!navigator.geolocation){ box.innerHTML = '<p class="wmsg">这个浏览器不给定位，下面按天列着全部。</p>'; return; }
+    btn.disabled = true; btn.textContent = "定位中…";
+    navigator.geolocation.getCurrentPosition(function(p){
+      btn.disabled = false; btn.textContent = "重新定位";
+      var me = wgs2gcj(p.coords.longitude, p.coords.latitude);
+      var list = WC.map(function(w){ return {w:w, km:wcKm(me, [w[2], w[3]])}; }).sort(function(a, b){ return a.km - b.km; });
+      var warn = list.filter(function(x){ return x.w[4] < 0 && x.km < 6; });
+      var near = list.filter(function(x){ return x.w[4] >= 0; }).slice(0, 8);
+      box.innerHTML = (warn.length ? '<p class="whd">你脚下这一段</p>'+warn.map(function(x){ return wcRow(x.w, x.km); }).join("") : "")+
+        '<p class="whd">离你最近的（定位误差 ±'+Math.round(p.coords.accuracy)+' 米）</p>'+
+        near.map(function(x){ return wcRow(x.w, x.km); }).join("");
+    }, function(err){
+      btn.disabled = false; btn.textContent = "再试一次";
+      box.innerHTML = '<p class="wmsg">'+(err.code === 1 ? "定位被拒了，到系统设置里给浏览器打开定位再试。" :
+        "没拿到定位，到空旷的地方再试。") + '下面按天列着全部。</p>';
+    }, {enableHighAccuracy:true, timeout:15000, maximumAge:60000});
+  }
+  wcRenderAll();
+  document.getElementById("wcBtn").addEventListener("click", wcLocate);
 
   /* 待办：点一下打勾。勾选状态走记账的共享通道（k:"todo"），全车人都看得到；没有云端就存本机 */
   var TODO_LS = "bj_todo_v1";
