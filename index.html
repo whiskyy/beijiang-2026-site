@@ -591,8 +591,6 @@ footer{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--rule);font-si
 .wcpanel .wwarn .d{font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink2);margin-top:2px}
 
 .wcpanel .wmsg{font-size:var(--f-s);line-height:var(--lh-s);color:var(--ink3);margin:12px 0 0}
-.wcpanel .wlead{font-size:var(--f-xs);line-height:var(--lh-xs);color:var(--ink3);margin:0}
-.wcpanel .wfoot{margin-top:16px;padding-top:12px;border-top:1px solid var(--rule)}
 
 /* 按天看全部 */
 .wcpanel .wall{margin-top:12px;border-top:1px solid var(--rule)}
@@ -1968,9 +1966,7 @@ function funBlock(d){
         '<div class="wch"><b>厕所</b><span class="n">'+WC.length+' 处 · 都是小红书上有人写过的</span>' +
         '<button type="button" class="wcx" aria-label="关掉"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
         '<div class="wcb"><div class="wstat" id="wcStat"></div><div id="wcNear"></div>' +
-        '<details class="wall"><summary>按天看全部'+CHEV+'</summary><div id="wcAll"></div></details>' +
-        '<div class="wfoot"><p class="wlead">★ 五星很干净、三星能上、一星应急。地图上有、没人写过的没往里放；酒店、订好的餐厅、加油站也没列，进去就能上。</p>' +
-        '<p class="wlead" style="margin-top:8px">路过加油站就进去一趟，比路边旱厕好很多，新疆很多路段动辄上百公里没有停靠点。大多厕所没纸没洗手液，自己带。</p></div></div>';
+        '<details class="wall"><summary>按天看全部'+CHEV+'</summary><div id="wcAll"></div></details></div>';
       document.body.appendChild(mask); document.body.appendChild(panel);
       panel.querySelector(".wcx").addEventListener("click", close);
       mask.addEventListener("click", close);
